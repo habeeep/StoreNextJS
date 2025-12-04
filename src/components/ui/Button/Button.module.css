@@ -1,0 +1,53 @@
+.button {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    padding: 18px 64px;
+
+    cursor: pointer;
+    border-radius: 100px;
+
+    font-weight: var(--font-weight-bold);
+    font-size: var(--font-size-xl);
+    line-height: var(--line-height-xl);
+}
+
+.button:disabled {
+    opacity: 50%;
+}
+
+.primary {
+    background-color: var(--color-primary-600);
+    color: var(--color-grey-100);
+    border: 2px solid transparent;
+}
+
+.primary:focus:not(:disabled) {
+    background-color: var(--color-primary-600);
+    border-color: var(--color-primary-400);
+}
+
+.primary:hover:not(:disabled),
+.primary:active:not(:disabled) {
+    background-color: var(--color-primary-700);
+    border-color: transparent;
+}
+
+.secondary {
+    background-color: transparent;
+    color: var(--color-primary-600);
+    border: 1px solid var(--color-primary-600);
+}
+
+.secondary:focus:not(:disabled) {
+    border-color: var(--color-primary-400);
+    border-width: 2px;
+}
+
+.secondary:hover:not(:disabled),
+.secondary:active:not(:disabled) {
+    color: var(--color-primary-700);
+    border-color: var(--color-primary-700);
+    border-width: 1px;
+}

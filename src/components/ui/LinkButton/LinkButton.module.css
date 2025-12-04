@@ -1,0 +1,20 @@
+.linkButton {
+    font-size: var(--font-size-small);
+    line-height: var(--line-height-small);
+    color: var(--color-primary-500);
+
+    background-color: transparent;
+    border: none;
+    outline: none;
+    padding: 0;
+
+    cursor: pointer;
+
+    text-decoration: underline;
+    text-decoration-color: var(--color-primary-500);
+}
+
+.linkButton:hover:not(:disabled) {
+    color: var(--color-primary-600);
+    text-decoration-color: var(--color-primary-600);
+}

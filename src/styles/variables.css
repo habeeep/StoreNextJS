@@ -1,0 +1,68 @@
+:root {
+    /* Brand Color */
+    --color-primary-100: #F1F3E0;
+    --color-primary-200: #D6E1B3;
+    --color-primary-300: #B2C7A5;
+    --color-primary-400: #8EB594;
+    --color-primary-500: #6B9B77;
+    --color-primary-600: #426B3A;
+    --color-primary-700: #5B6B3A;
+    --color-primary-800: #3A4D2D;
+    --color-primary-900: #242E1A;
+    /* Neutral color */
+    --color-white: #FFFFFF;
+    --color-grey-100: #F4F4F5;
+    --color-grey-200: #E4E4E7;
+    --color-grey-300: #D4D4D8;
+    --color-grey-400: #A1A1AA;
+    --color-grey-500: #71717A;
+    --color-grey-600: #52525B;
+    --color-grey-700: #3F3F46;
+    --color-grey-800: #27272A;
+    --color-grey-900: #18181B;
+    --color-black: #000000;
+    /* Functional color */
+    --color-functional-50: #FFEFED;
+    --color-functional-300: #FF7573;
+    --color-functional-500: #FF222E;
+
+    /* Font */
+    --font-family-primary: var(--font-barlow), 'Barlow', -apple-system, sans-serif;
+
+    --font-weight-normal: 400;
+    --font-weight-semibold: 600;
+    --font-weight-bold: 700;
+
+    --font-size-5xl: 3rem; /* 48px */
+    --line-height-5xl: 3rem;
+    --font-size-4xl: 2.25rem; /* 36px */
+    --line-height-4xl: 2.5rem;
+    --font-size-3xl: 1.875rem; /* 30px */
+    --line-height-3xl: 2.25rem;
+    --font-size-2xl: 1.5rem; /* 24px */
+    --line-height-2xl: 2rem;
+    --font-size-xl: 1.25rem; /* 20px */
+    --line-height-xl: 1.75rem;
+    --font-size-large: 1.125rem; /* 18px */
+    --line-height-large: 1.75rem;
+    --font-size-base: 1rem; /* 16px */
+    --line-height-base: 1.5rem;
+    --font-size-small: 0.875rem; /* 14px */
+    --line-height-small: 1.25rem;
+    --font-size-extra-small: 0.75rem; /* 12px */
+    --line-height-extra-small: 1rem;
+
+    /* Shadows */
+    --shadow-sm: 1px 2px 4.3px 0px #00000040;
+    --shadow: 2px 4px 8.6px 1px #00000040;
+    --shadow-md: 5px 9px 13.5px -3px #00000040;
+    --shadow-lg: 9px 12px 21.8px -2px #00000040;
+    --shadow-inner: 15px 20px 27px -11px #00000040 inset;
+
+    /* Layout breakpoints */
+    --breakpoint-xs: 360px;
+    --breakpoint-sm: 600px;
+    --breakpoint-md: 905px;
+    --breakpoint-lg: 1280px;
+    --breakpoint-xl: 1440px; 
+}
