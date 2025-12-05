@@ -5,7 +5,7 @@ interface IconProps extends SVGProps<SVGSVGElement> {
   color?: string;
 }
 
-export const CrossIcon = ({ 
+export const NewsIcon = ({ 
   size = 24,
   strokeWidth = 3,
   color = 'currentColor', 
@@ -20,8 +20,8 @@ export const CrossIcon = ({
       xmlns="http://www.w3.org/2000/svg" 
       {...props}
     >
-      <path 
-        d="M33.75 11.25L11.25 33.75M11.25 11.25L33.75 33.75" 
+      <path
+        d="M5.625 16.875H39.375M16.875 39.375V16.875M9.375 5.625H35.625C37.6961 5.625 39.375 7.30393 39.375 9.375V35.625C39.375 37.6961 37.6961 39.375 35.625 39.375H9.375C7.30393 39.375 5.625 37.6961 5.625 35.625V9.375C5.625 7.30393 7.30393 5.625 9.375 5.625Z"
         stroke={color} 
         strokeWidth={strokeWidth} 
         strokeLinecap="round" 

@@ -65,4 +65,13 @@
     --breakpoint-md: 905px;
     --breakpoint-lg: 1280px;
     --breakpoint-xl: 1440px; 
+
+    /* Spacing breakpoints */
+    --spacing-xs: 20px;
+    --spacing-sm: 25px;
+    --spacing-md: 30px;
+    --spacing-lg: 40px;
+
+    /* Additional */
+    --header-height: 60px;
 }

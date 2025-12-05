@@ -2,6 +2,8 @@ import type { Metadata } from "next";
 import "./globals.css";
 import { Barlow } from 'next/font/google';
 import { ReduxProvider } from "@/components/providers/ReduxProvider";
+import { Container } from "@/components/layout/Container/Container";
+import { Header } from "@/components/layout/Header/Header";
 
 const barlow = Barlow({
   weight: ['400', '600', '700'],
@@ -24,7 +26,12 @@ export default function RootLayout({
     <html lang="ru" className={barlow.variable}>
       <body className="antialiased"> 
         <ReduxProvider>
-          {children}
+          <Container>
+            <Header />
+            <main className="main-content">
+              {children}
+            </main>
+          </Container>
         </ReduxProvider>
       </body>
     </html>

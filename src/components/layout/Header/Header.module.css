@@ -1,0 +1,118 @@
+.header {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 200;
+  background-color: var(--color-primary-100);
+  height: var(--header-height);
+}
+
+.container {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  height: 100%;
+  max-width: var(--breakpoint-xl);
+  margin: 0 auto;
+  padding: 0 var(--spacing-lg);
+}
+
+.logo {
+  flex-shrink: 0;
+}
+
+.logoLink {
+  text-decoration: none;
+
+  font-size: var(--font-size-3xl);
+  line-height: var(--line-height-3xl);
+  color: var(--color-primary-800);
+  font-weight: var(--font-weight-bold);
+}
+
+.navList {
+  display: flex;
+  gap: 10px;
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.navLink {
+  position: relative;
+  padding-left: 25px;
+  text-decoration: none;
+
+  font-size: var(--font-size-large);
+  line-height: var(--line-height-large);
+  color: var(--color-primary-800);
+  font-weight: var(--font-weight-semibold);
+}
+
+.navLink:not(.navLinkActive):hover {
+  color: var(--color-primary-700);
+}
+
+.navLinkActive {
+  cursor: default;
+}
+
+.navLinkActive::after {
+  content: '';
+  position: absolute;
+  bottom: -4px;
+  left: 0;
+  width: 100%;
+  height: 2px;
+  background-color: var(--color-primary-800);
+}
+
+.navIcon {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+}
+
+.iconsContainer {
+  display: flex;
+  gap: 10px;
+}
+
+.iconButton {
+  background-color: transparent;
+  color: var(--color-primary-800);
+  border: none;
+  padding: 0;
+}
+
+.iconLink {
+  color: var(--color-primary-800);
+}
+
+.iconLink:hover {
+  color: var(--color-primary-700);
+}
+
+.iconLinkCart {
+  position: relative;
+}
+
+.cartCount {
+  position: absolute;
+  bottom: -4px;
+  right: -9px;
+  
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 14px;
+  height: 14px;
+  border-radius: 50%;
+  background-color: var(--color-primary-800);
+  
+  color: var(--color-primary-100);
+  font-size: 7px;
+  font-weight: var(--font-weight-semibold);
+  line-height: 1;
+}

@@ -1,0 +1,53 @@
+.container {
+  width: 100%;
+  margin: 0 auto;
+  
+  padding: 0 var(--spacing-xs);
+  min-width: var(--breakpoint-xs);
+}
+
+/* Уровень 1: 400px - 649px */
+@media (min-width: 400px) {
+  .container {
+    max-width: var(--breakpoint-xs);
+    padding: 0 var(--spacing-xs);
+  }
+}
+
+/* Уровень 2: 650px - 1024px */
+@media (min-width: 650px) {
+  .container {
+    max-width: var(--breakpoint-sm);
+    padding: 0 var(--spacing-sm);
+  }
+}
+
+/* Уровень 3: 965px - 1359px */
+@media (min-width: 965px) {
+  .container {
+    max-width: var(--breakpoint-md);
+    padding: 0 var(--spacing-md);
+  }
+}
+
+/* Уровень 4: 1360px - 1519px */
+@media (min-width: 1360px) {
+  .container {
+    max-width: var(--breakpoint-lg);
+    padding: 0 var(--spacing-lg);
+  }
+}
+
+/* Уровень 5: 1520px и больше */
+@media (min-width: 1520px) {
+  .container {
+    max-width: var(--breakpoint-xl);
+    padding: 0 var(--spacing-lg);
+  }
+}
+
+/* Вариант без ограничений ширины */
+.fullWidth {
+  max-width: none !important;
+  padding: 0 !important;
+}

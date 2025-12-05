@@ -38,7 +38,7 @@ export const Input = forwardRef<HTMLInputElement, InputProps>(({
             onClick={handleClear}
             aria-label="Очистить поле"
           >
-            <CrossIcon size={24} />
+            <CrossIcon size={24} strokeWidth={7}/>
           </button>
         )}
       </div>

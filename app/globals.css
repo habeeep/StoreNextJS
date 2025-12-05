@@ -82,6 +82,9 @@ html {
 }
 
 body {
+  min-width: var(--breakpoint-xs);
+  overflow-x: auto;
+
   background-color: var(--color-primary-100);
 
   font-family: var(--font-family-primary);
@@ -89,4 +92,8 @@ body {
   font-size: var(--font-size-base);
   line-height: var(--line-height-base);
   color: var(--color-primary-800);
+}
+
+.main-content {
+  margin-top: var(--header-height);
 }
