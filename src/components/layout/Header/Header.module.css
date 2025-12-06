@@ -33,7 +33,7 @@
 
 .navList {
   display: flex;
-  gap: 10px;
+  gap: var(--spacing-xl);
   list-style: none;
   margin: 0;
   padding: 0;

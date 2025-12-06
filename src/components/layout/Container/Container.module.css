@@ -2,15 +2,15 @@
   width: 100%;
   margin: 0 auto;
   
-  padding: 0 var(--spacing-xs);
   min-width: var(--breakpoint-xs);
+  padding: 0 var(--spacing-lg);
 }
 
 /* Уровень 1: 400px - 649px */
 @media (min-width: 400px) {
   .container {
     max-width: var(--breakpoint-xs);
-    padding: 0 var(--spacing-xs);
+    padding: 0 var(--spacing-lg);
   }
 }
 
@@ -18,7 +18,7 @@
 @media (min-width: 650px) {
   .container {
     max-width: var(--breakpoint-sm);
-    padding: 0 var(--spacing-sm);
+    padding: 0 var(--spacing-xl);
   }
 }
 
@@ -26,7 +26,7 @@
 @media (min-width: 965px) {
   .container {
     max-width: var(--breakpoint-md);
-    padding: 0 var(--spacing-md);
+    padding: 0 var(--spacing-2xl);
   }
 }
 
@@ -34,7 +34,7 @@
 @media (min-width: 1360px) {
   .container {
     max-width: var(--breakpoint-lg);
-    padding: 0 var(--spacing-lg);
+    padding: 0 var(--spacing-3xl);
   }
 }
 
@@ -42,7 +42,7 @@
 @media (min-width: 1520px) {
   .container {
     max-width: var(--breakpoint-xl);
-    padding: 0 var(--spacing-lg);
+    padding: 0 var(--spacing-3xl);
   }
 }
 

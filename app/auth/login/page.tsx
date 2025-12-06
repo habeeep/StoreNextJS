@@ -2,13 +2,12 @@
 
 import { useState, useEffect } from 'react';
 import { useSearchParams, useRouter } from 'next/navigation';
-import { useDispatch } from 'react-redux';
 import { Input } from '@/components/ui/Input/Input';
 import { Button } from '@/components/ui/Button/Button';
 import { LinkButton } from '@/components/ui/LinkButton/LinkButton';
 import { loginUser } from '@/store/slices/authSlice';
 import { useAppSelector } from '@/hooks/useAppSelector';
-import { AppDispatch } from '@/store';
+import { useAppDispatch } from '@/hooks/useAppDispatch';
 import styles from './page.module.css'
 
 
@@ -20,7 +19,7 @@ export default function LoginPage() {
   const [email, setEmail] = useState(emailFromUrl);
   const [code, setCode] = useState('');
   
-  const dispatch = useDispatch<AppDispatch>();
+  const dispatch = useAppDispatch();
   const { user, isLoading, error } = useAppSelector((state) => state.auth);
 
   useEffect(() => {
@@ -76,7 +75,7 @@ export default function LoginPage() {
           <LinkButton onClick={() => window.history.back()}>
             ← Ввести другую почту
           </LinkButton>
-          <LinkButton onClick={() => window.history.back()}>
+          <LinkButton>
             Запросить код повторно 57сек
           </LinkButton>
         </div>

@@ -3,8 +3,7 @@
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { useAppSelector } from '@/hooks/useAppSelector';
-import { useDispatch } from 'react-redux';
-import { AppDispatch } from '@/store';
+import { useAppDispatch } from '@/hooks/useAppDispatch';
 import { logout } from '@/store/slices/authSlice';
 import styles from './Header.module.css';
 
@@ -19,7 +18,8 @@ import { CatalogIcon } from '@/components/ui/icons/CatalogIcon';
 
 export const Header = () => {
   const { user } = useAppSelector((state) => state.auth);
-  const dispatch = useDispatch<AppDispatch>();
+  
+  const dispatch = useAppDispatch();
   const pathname = usePathname();
 
   const navItems = [

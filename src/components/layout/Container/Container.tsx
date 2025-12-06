@@ -4,11 +4,23 @@ import styles from './Container.module.css';
 interface ContainerProps {
   children: ReactNode;
   fullWidth?: boolean;
+  className?: string;
 }
 
-export const Container = ({ children, fullWidth = false }: ContainerProps) => {
+export const Container = ({ 
+  children, 
+  fullWidth = false, 
+  className = '' 
+}: ContainerProps) => {
+  
+  const containerClasses = [
+    styles.container,
+    fullWidth && styles.fullWidth,
+    className
+  ].filter(Boolean).join(' ');
+
   return (
-    <div className={`${styles.container} ${fullWidth ? styles.fullWidth : ''}`}>
+    <div className={containerClasses}>
       {children}
     </div>
   );

@@ -1,0 +1,22 @@
+.pageBackground {
+  position: absolute;
+  top: var(--top-offset, 0);
+  left: 0;
+  right: 0;
+  z-index: -1; /* Под контентом */
+  pointer-events: none; /* Не мешает кликам */
+  
+  /* Размеры: ширина = 100%, высота = пропорционально */
+  width: 100%;
+  height: 0;
+  padding-bottom: 122%; /* 1757/1440*100 = 122% соотношение сторон */
+  
+  /* Изображение занимает всю площадь */
+  background-image: var(--bg-image-url);
+  background-repeat: no-repeat;
+  background-position: center;
+  background-size: contain; /* или 'cover' в зависимости от нужного эффекта */
+  
+  /* Скроллится вместе с контентом */
+  background-attachment: scroll;
+}
