@@ -1,15 +1,46 @@
 import { createSlice, PayloadAction, createAsyncThunk } from '@reduxjs/toolkit';
-import { AuthState, User, LoginRequest, LoginResponse } from '@/types/auth';
+import { 
+  AuthState, 
+  User, 
+  VerifyCodeRequest, 
+  VerifyCodeResponse,
+  RequestCodeRequest,
+  ResendCodeRequest
+} from '@/types/auth';
 import { authApi } from '@/lib/api/authApi';
 
-export const loginUser = createAsyncThunk(
-  'auth/login',
-  async (credentials: LoginRequest, { rejectWithValue }) => {
+export const requestCode = createAsyncThunk(
+  'auth/requestCode',
+  async (data: RequestCodeRequest, { rejectWithValue }) => {
     try {
-      const response = await authApi.login(credentials);
+      const response = await authApi.requestCode(data);
       return response;
     } catch (error) {
-      return rejectWithValue(error instanceof Error ? error.message : 'Login failed');
+      return rejectWithValue(error instanceof Error ? error.message : 'Ошибка отправки кода');
+    }
+  }
+);
+
+export const verifyCode = createAsyncThunk(
+  'auth/verifyCode',
+  async (credentials: VerifyCodeRequest, { rejectWithValue }) => {
+    try {
+      const response = await authApi.verifyCode(credentials);
+      return response;
+    } catch (error) {
+      return rejectWithValue(error instanceof Error ? error.message : 'Ошибка входа');
+    }
+  }
+);
+
+export const resendCode = createAsyncThunk(
+  'auth/resendCode',
+  async (data: ResendCodeRequest, { rejectWithValue }) => {
+    try {
+      const response = await authApi.resendCode(data);
+      return response;
+    } catch (error) {
+      return rejectWithValue(error instanceof Error ? error.message : 'Ошибка повторной отправки');
     }
   }
 );
@@ -34,22 +65,44 @@ export const authSlice = createSlice({
       state.error = null;
     },
   },
-
   extraReducers: (builder) => {
     builder
-
-      .addCase(loginUser.pending, (state) => {
+      .addCase(requestCode.pending, (state) => {
         state.isLoading = true;
         state.error = null;
       })
-
-      .addCase(loginUser.fulfilled, (state, action) => {
+      .addCase(requestCode.fulfilled, (state) => {
         state.isLoading = false;
-        state.user = action.payload.user;
-        state.token = action.payload.token;
       })
-
-      .addCase(loginUser.rejected, (state, action) => {
+      .addCase(requestCode.rejected, (state, action) => {
+        state.isLoading = false;
+        state.error = action.payload as string;
+      })
+      
+      .addCase(verifyCode.pending, (state) => {
+        state.isLoading = true;
+        state.error = null;
+      })
+      .addCase(verifyCode.fulfilled, (state, action) => {
+        state.isLoading = false;
+        if (action.payload.user && action.payload.token) {
+          state.user = action.payload.user;
+          state.token = action.payload.token;
+        }
+      })
+      .addCase(verifyCode.rejected, (state, action) => {
+        state.isLoading = false;
+        state.error = action.payload as string;
+      })
+      
+      .addCase(resendCode.pending, (state) => {
+        state.isLoading = true;
+        state.error = null;
+      })
+      .addCase(resendCode.fulfilled, (state) => {
+        state.isLoading = false;
+      })
+      .addCase(resendCode.rejected, (state, action) => {
         state.isLoading = false;
         state.error = action.payload as string;
       });

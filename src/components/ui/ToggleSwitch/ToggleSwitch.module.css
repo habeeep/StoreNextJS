@@ -1,0 +1,49 @@
+.container {
+  display: flex;
+  gap: var(--spacing-sm);
+  align-items: center;
+  cursor: pointer;
+  user-select: none;
+}
+
+.hiddenCheckbox {
+  position: absolute;
+  opacity: 0;
+  width: 0;
+  height: 0;
+}
+
+.toggleTrack {
+  position: relative;
+  width: 47px;
+  height: 23px;
+  background: linear-gradient(to right, var(--color-primary-600) 0%, var(--color-primary-600) 50%, var(--color-primary-200) 50%, var(--color-primary-200) 100%);
+  background-size: 210% 100%;
+  background-position: right bottom;
+  border-radius: var(--radius-xl);
+  transition: all 0.3s ease;
+}
+
+.hiddenCheckbox:checked + .toggleTrack {
+  background-position: left bottom;
+}
+
+.toggleThumb {
+  position: absolute;
+  top: 1.44px;
+  left: 1.44px;
+  width: 20px;
+  height: 20px;
+  background-color: var(--color-primary-100);
+  border-radius: 50%;
+  transition: transform 0.3s ease;
+}
+
+.hiddenCheckbox:checked + .toggleTrack .toggleThumb {
+  transform: translateX(23.56px);
+}
+
+.label {
+  margin: 0;
+  padding: 0;
+}

@@ -1,0 +1,40 @@
+.filters {
+    padding: var(--spacing-md) var(--spacing-sm);
+    display: flex;
+    gap: var(--spacing-xl);
+    align-items: center;
+
+    font-size: var(--font-size-large);
+    line-height: var(--line-height-large);
+    color: var(--color-primary-800);
+    font-weight: var(--font-weight-semibold);
+}
+
+.sortButtons {
+    display: flex;
+    gap: var(--spacing-lg);
+    align-items: center;
+}
+
+.sortLeft,
+.sortRight {
+    display: flex;
+    gap: var(--spacing-xs);
+    align-items: center;
+}
+
+.sortButton {
+    color: var(--color-primary-300);
+    padding: 0;
+    margin: 0;
+    border: none;
+    background: none;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    outline: none;
+}
+
+.active {
+    color: var(--color-primary-600);
+}

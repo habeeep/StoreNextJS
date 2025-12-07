@@ -88,6 +88,7 @@
 
 .iconLink {
   color: var(--color-primary-800);
+  cursor: pointer;
 }
 
 .iconLink:hover {

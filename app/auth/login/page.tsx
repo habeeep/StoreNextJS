@@ -5,11 +5,10 @@ import { useSearchParams, useRouter } from 'next/navigation';
 import { Input } from '@/components/ui/Input/Input';
 import { Button } from '@/components/ui/Button/Button';
 import { LinkButton } from '@/components/ui/LinkButton/LinkButton';
-import { loginUser } from '@/store/slices/authSlice';
+import { verifyCode, resendCode } from '@/store/slices/authSlice';
 import { useAppSelector } from '@/hooks/useAppSelector';
 import { useAppDispatch } from '@/hooks/useAppDispatch';
 import styles from './page.module.css'
-
 
 export default function LoginPage() {
   const router = useRouter();
@@ -18,9 +17,34 @@ export default function LoginPage() {
   
   const [email, setEmail] = useState(emailFromUrl);
   const [code, setCode] = useState('');
+  const [countdown, setCountdown] = useState(0);
   
   const dispatch = useAppDispatch();
   const { user, isLoading, error } = useAppSelector((state) => state.auth);
+
+  useEffect(() => {
+    let timer: NodeJS.Timeout;
+    if (countdown > 0) {
+      timer = setTimeout(() => setCountdown(countdown - 1), 1000);
+    }
+    return () => clearTimeout(timer);
+  }, [countdown]);
+
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    dispatch(verifyCode({ email, code }));
+  };
+
+  const handleResendCode = async () => {
+    if (countdown > 0) return;
+    
+    setCountdown(60);
+    
+    try {
+      await dispatch(resendCode({ email })).unwrap();
+    } catch (error) {
+    }
+  };
 
   useEffect(() => {
     if (user) {
@@ -33,12 +57,6 @@ export default function LoginPage() {
       setEmail(emailFromUrl);
     }
   }, [emailFromUrl]);
-
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
-
-    dispatch(loginUser({ email, code }));
-  };
 
   return (
     <div className={styles.container}>
@@ -61,7 +79,7 @@ export default function LoginPage() {
             disabled={isLoading}
           />
           
-          {error && <p>{error}</p>}
+          {error && <p className={styles.error}>{error}</p>}
           
           <Button
             type="submit"
@@ -75,8 +93,15 @@ export default function LoginPage() {
           <LinkButton onClick={() => window.history.back()}>
             ← Ввести другую почту
           </LinkButton>
-          <LinkButton>
-            Запросить код повторно 57сек
+          
+          <LinkButton 
+            onClick={handleResendCode}
+            disabled={countdown > 0}
+          >
+            {countdown > 0 
+              ? `Запросить код повторно ${countdown}сек` 
+              : 'Запросить код повторно'
+            }
           </LinkButton>
         </div>
       </div>

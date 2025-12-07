@@ -1,0 +1,197 @@
+.newsCard {
+  position: relative;
+  min-height: 365px;
+}
+
+.newsCard:not(:last-child) .divider {
+  position: absolute;
+  bottom: 0;
+  width: 100%;
+  height: 2px;
+  background-color: var(--color-primary-400);
+}
+
+.cardContent {
+  padding: var(--spacing-2xl) 0 var(--spacing-md) 80px;
+  display: flex;
+  gap: var(--spacing-3xl);
+}
+
+.textSection {
+  color: var(--color-grey-900);
+}
+
+.title {
+  font-size: var(--font-size-4xl);
+  line-height: var(--line-height-4xl);
+  font-weight: var(--font-weight-bold);
+}
+
+.description {
+  font-size: var(--font-size-large);
+  line-height: var(--line-height-large);
+  font-weight: var(--font-weight-semibold);
+}
+
+.rightSection {
+  min-width: 585px;
+}
+
+.stats {
+  display: flex;
+  justify-content: space-between;
+}
+
+.buttonsRow {
+  color: var(--color-primary-600);
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-md);
+}
+
+.iconButton {
+  padding: 0;
+  margin: 0;
+  border: none;
+  background: none;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  outline: none;
+  color: var(--color-primary-600);
+}
+
+.iconCounter {
+  display: flex;
+  gap: var(--spacing-xs);
+  align-items: center;
+}
+
+
+
+
+/* .newsCard {
+  margin-bottom: var(--spacing-lg);
+  position: relative;
+}
+
+.divider {
+  height: 4px;
+  background-color: var(--color-primary-600);
+  margin-bottom: var(--spacing-md);
+  border-radius: 2px;
+}
+
+.cardContent {
+  display: flex;
+  gap: var(--spacing-xl);
+  align-items: flex-start;
+}
+
+.textSection {
+  flex: 1;
+  min-width: 0;
+}
+
+.title {
+  font-size: var(--font-size-xl);
+  font-weight: var(--font-weight-bold);
+  color: var(--color-primary-800);
+  margin-bottom: var(--spacing-sm);
+}
+
+.description {
+  font-size: var(--font-size-base);
+  color: var(--color-primary-700);
+  line-height: var(--line-height-base);
+}
+
+.rightSection {
+  flex: 0 0 300px;
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-md);
+}
+
+.images {
+  display: flex;
+  gap: var(--spacing-sm);
+  flex-wrap: wrap;
+}
+
+.imageContainer {
+  flex: 1;
+  min-width: 80px;
+}
+
+.imagePlaceholder {
+  width: 100%;
+  height: 80px;
+  background-color: var(--color-primary-200);
+  border-radius: var(--radius-md);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--color-primary-600);
+  font-size: var(--font-size-small);
+}
+
+.stats {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: var(--spacing-sm);
+}
+
+.buttonsRow {
+  display: flex;
+  gap: var(--spacing-md);
+  align-items: center;
+}
+
+.iconButton {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-xs);
+  background: none;
+  border: none;
+  padding: var(--spacing-xs);
+  cursor: pointer;
+  color: var(--color-primary-600);
+  transition: color var(--transition-fast);
+  border-radius: var(--radius-sm);
+}
+
+.iconButton:hover {
+  background-color: var(--color-primary-100);
+}
+
+.iconButton.liked {
+  color: var(--color-error);
+}
+
+.iconButton.favorited {
+  color: var(--color-warning);
+}
+
+.iconButton.active {
+  background-color: var(--color-primary-100);
+}
+
+.views {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-xs);
+  color: var(--color-primary-600);
+}
+
+.count {
+  font-size: var(--font-size-small);
+  font-weight: var(--font-weight-semibold);
+}
+
+.date {
+  font-size: var(--font-size-small);
+  color: var(--color-primary-500);
+  white-space: nowrap;
+} */

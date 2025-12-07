@@ -1,14 +1,10 @@
-import { SVGProps } from 'react';
-
-interface IconProps extends SVGProps<SVGSVGElement> {
-  size?: number;
-  color?: string;
-}
+import { IconProps } from "@/types/icon";
 
 export const CatalogIcon = ({ 
   size = 24,
   strokeWidth = 3,
-  color = 'currentColor', 
+  color = 'currentColor',
+  isFilled = false ,
   ...props 
 }: IconProps) => {
   return (
@@ -16,7 +12,7 @@ export const CatalogIcon = ({
       width={size} 
       height={size} 
       viewBox="0 0 45 45"
-      fill="none" 
+      fill={isFilled ? color : 'none'}
       xmlns="http://www.w3.org/2000/svg" 
       {...props}
     >

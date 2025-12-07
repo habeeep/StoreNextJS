@@ -78,4 +78,20 @@
 
     /* Additional */
     --header-height: 60px;
+
+    /* Z-index */
+    --z-below: -1;
+    --z-default: 1;
+    --z-above: 10;
+    --z-overlay: 100;
+    --z-modal: 1000;
+    --z-super: 9999;
+
+    /* Border radius */
+    --radius-none: 0;
+    --radius-sm: 4px;
+    --radius-md: 11px;
+    --radius-lg: 15px;
+    --radius-xl: 20px;
+    --radius-full: 9999px; 
 }

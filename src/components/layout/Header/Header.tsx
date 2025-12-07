@@ -67,7 +67,7 @@ export const Header = () => {
                 <UserIcon size={24} />
               </Link>
               
-              <Link href="/cart" className={styles.iconLink} aria-label="Корзина">
+              <Link href="/cart" className={`${styles.iconLink} ${styles.iconLinkCart}`} aria-label="Корзина">
                 <CartIcon size={24} />
                 <span className={styles.cartCount}>0</span>
               </Link>

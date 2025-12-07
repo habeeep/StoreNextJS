@@ -4,7 +4,8 @@ import { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { Input } from '@/components/ui/Input/Input';
 import { Button } from '@/components/ui/Button/Button';
-import { authApi } from '@/lib/api/authApi';
+import { requestCode } from '@/store/slices/authSlice';
+import { useAppDispatch } from '@/hooks/useAppDispatch';
 import styles from './page.module.css'
 
 export default function RequestCodePage() {
@@ -12,6 +13,7 @@ export default function RequestCodePage() {
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState('');
   const router = useRouter();
+  const dispatch = useAppDispatch();
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -19,10 +21,15 @@ export default function RequestCodePage() {
     setError('');
 
     try {
-      await authApi.requestCode({ email });
-      router.push(`/auth/login?email=${encodeURIComponent(email)}`);
-    } catch (err) {
-      setError('Ошибка при отправке кода');
+      const result = await dispatch(requestCode({ email })).unwrap();
+      
+      if (result.success) {
+        router.push(`/auth/login?email=${encodeURIComponent(email)}`);
+      } else {
+        setError(result.message || 'Ошибка при отправке кода');
+      }
+    } catch (err: any) {
+      setError(err || 'Ошибка при отправке кода');
     } finally {
       setIsLoading(false);
     }
@@ -48,7 +55,7 @@ export default function RequestCodePage() {
             disabled={isLoading}
           />
           
-          {error && <p>{error}</p>}
+          {error && <p className={styles.error}>{error}</p>}
           
           <Button
             type="submit"

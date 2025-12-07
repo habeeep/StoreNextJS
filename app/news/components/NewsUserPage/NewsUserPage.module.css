@@ -1,0 +1,5 @@
+.newsList {
+    background-color: var(--color-primary-200);
+    border-radius: var(--radius-xl);
+    padding: 0 var(--spacing-xl) 90px;
+}

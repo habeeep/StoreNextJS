@@ -43,17 +43,17 @@ export const CategoriesCards = () => {
         {cards.map((card) => (
           <div key={card.id} className={styles.card}>
             <Image
-                src={card.imagePath}
-                alt='Растение'
-                fill
-                sizes='(max-width: 490px) 100vw, 1200px'
-                priority
-                className={styles.image}
-              />
+              src={card.imagePath}
+              alt='Растение'
+              fill
+              sizes='(max-width: 490px) 100vw, 1200px'
+              priority
+              className={styles.image}
+            />
             <div className={styles.cardContent}>
               <h3 className={styles.cardTitle}>{card.title}</h3>
               <Link href={card.href} className={styles.cardLink}>
-                  {card.buttonText}
+                {card.buttonText}
               </Link>
             </div>
           </div>
