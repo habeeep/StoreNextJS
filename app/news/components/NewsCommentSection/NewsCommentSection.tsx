@@ -7,15 +7,14 @@ import styles from './NewsCommentSection.module.css';
 
 interface NewsCommentSectionProps {
   newsId: string;
-  commentsCount: number;
+  className?: string;
 }
 
-export const NewsCommentSection = ({ newsId, commentsCount }: NewsCommentSectionProps) => {
+export const NewsCommentSection = ({ newsId, className = '' }: NewsCommentSectionProps) => {
   const [comments, setComments] = useState<Comment[]>([]);
   const [newComment, setNewComment] = useState('');
   const [isLoading, setIsLoading] = useState(false);
 
-  // Моковые комментарии
   const mockComments: Comment[] = [
     {
       id: '1',
@@ -32,7 +31,6 @@ export const NewsCommentSection = ({ newsId, commentsCount }: NewsCommentSection
   ];
 
   useEffect(() => {
-    // TODO: Запрос к API за комментариями
     setComments(mockComments);
   }, [newsId]);
 
@@ -42,7 +40,6 @@ export const NewsCommentSection = ({ newsId, commentsCount }: NewsCommentSection
 
     setIsLoading(true);
     try {
-      // TODO: API запрос на добавление комментария
       const mockNewComment: Comment = {
         id: Date.now().toString(),
         text: newComment,
@@ -60,39 +57,33 @@ export const NewsCommentSection = ({ newsId, commentsCount }: NewsCommentSection
   };
 
   return (
-    <div className={styles.commentSection}>
-      <div className={styles.commentHeader}>
-        <h4 className={styles.title}>Комментарии ({commentsCount})</h4>
-      </div>
-
-      {/* Форма добавления комментария */}
-      <form onSubmit={handleSubmitComment} className={styles.commentForm}>
-        <textarea
-          value={newComment}
-          onChange={(e) => setNewComment(e.target.value)}
-          placeholder="Напишите комментарий..."
-          className={styles.textarea}
-          rows={3}
-          required
-        />
-        <button 
-          type="submit" 
-          className={styles.submitButton}
-          disabled={isLoading || !newComment.trim()}
-        >
-          {isLoading ? 'Отправка...' : 'Добавить комментарий'}
-        </button>
-      </form>
-
-      {/* Список комментариев с отдельным скроллом */}
-      <div className={styles.commentsList}>
-        {comments.length > 0 ? (
-          comments.map((comment) => (
-            <CommentCard key={comment.id} comment={comment} />
-          ))
-        ) : (
-          <p className={styles.noComments}>Комментариев пока нет</p>
-        )}
+    <div className={`${styles.commentSection} ${className}`}>
+      <div className={styles.commentContent}>
+        <div className={styles.commentsList}>
+          {comments.length > 0 ? (
+            comments.map((comment) => (
+              <CommentCard key={comment.id} comment={comment} />
+            ))
+          ) : (
+            <p className={styles.noComments}>Комментариев пока нет</p>
+          )}
+        </div>
+        <form onSubmit={handleSubmitComment} className={styles.commentForm}>
+          <textarea
+            value={newComment}
+            onChange={(e) => setNewComment(e.target.value)}
+            placeholder="Комментарий"
+            className={styles.textarea}
+            required
+          />
+          <button 
+            type="submit" 
+            className={styles.submitButton}
+            disabled={isLoading || !newComment.trim()}
+          >
+            +
+          </button>
+        </form>
       </div>
     </div>
   );

@@ -39,8 +39,6 @@ export const NewsCard = ({ news, onLike, onFavorite }: NewsCardProps) => {
 
   return (
     <div className={styles.newsCard}>
-      
-      
       <div className={styles.cardContent}>
         <div className={styles.textSection}>
           <h3 className={styles.title}>{news.title}</h3>
@@ -99,13 +97,11 @@ export const NewsCard = ({ news, onLike, onFavorite }: NewsCardProps) => {
         </div>
       </div>
 
-      {showComments && (
-        <NewsCommentSection 
-          newsId={news.id}
-          commentsCount={news.commentsCount}
-        />
-      )}
       <div className={styles.divider}></div>
+      <NewsCommentSection
+        newsId={news.id}
+        className={`${styles.commentSection} ${showComments ? styles.commentSectionShow : ''}`}
+      />
     </div>
   );
 };

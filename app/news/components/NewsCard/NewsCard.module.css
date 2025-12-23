@@ -1,17 +1,15 @@
 .newsCard {
   position: relative;
-  min-height: 365px;
 }
 
 .newsCard:not(:last-child) .divider {
-  position: absolute;
-  bottom: 0;
   width: 100%;
   height: 2px;
   background-color: var(--color-primary-400);
 }
 
 .cardContent {
+  min-height: 365px;
   padding: var(--spacing-2xl) 0 var(--spacing-md) 80px;
   display: flex;
   gap: var(--spacing-3xl);
@@ -35,6 +33,9 @@
 
 .rightSection {
   min-width: 585px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
 }
 
 .stats {
@@ -66,6 +67,19 @@
   gap: var(--spacing-xs);
   align-items: center;
 }
+
+.commentSection {
+  max-height: 0;    
+  overflow: hidden;
+  pointer-events: none;
+  transition: max-height 0.3s linear;
+}
+
+.commentSectionShow {
+  max-height: 800px;
+  pointer-events: all;
+}
+
 
 
 
