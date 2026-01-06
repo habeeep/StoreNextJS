@@ -1,0 +1,8 @@
+.content {
+    display: flex;
+    gap: var(--spacing-sm);
+}
+
+.sidebar {
+    max-width: 315px;
+}

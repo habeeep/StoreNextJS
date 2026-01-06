@@ -1,0 +1,89 @@
+.sidebar {
+    background-color: var(--color-primary-200);
+    border-radius: var(--radius-xl);
+    padding: var(--spacing-lg);
+}
+
+.section {
+    display: flex;
+    flex-direction: column;
+    gap: var(--spacing-sm);
+}
+
+.sectionTitle {
+    font-size: var(--font-size-xl);
+    line-height: var(--line-height-xl);
+}
+
+.filters {
+    display: flex;
+    flex-direction: column;
+    gap: var(--spacing-sm);
+    margin-bottom: var(--spacing-4xl);
+}
+
+.categoryHeader,
+.checkboxItem,
+.expandButton {
+    display: flex;
+    gap: var(--spacing-xs);
+    align-items: center;
+    font-size: var(--font-size-large);
+    line-height: var(--line-height-large);
+    color: var(--color-primary-800);
+}
+
+.chevron {
+    transform: rotate(-90deg);
+}
+
+.chevron.expanded {
+    transform: none;
+}
+
+.subCategories {
+    display: flex;
+    flex-direction: column;
+    gap: var(--spacing-xs);
+}
+
+.brandSearch div input,
+.priceInput {
+    background-color: var(--color-primary-100);
+    font-size: var(--font-size-base);
+    line-height: var(--line-height-base);
+}
+
+.brandsList {
+    display: flex;
+    flex-direction: column;
+    gap: var(--spacing-xs);
+}
+
+.expandButton {
+    border: none;
+    padding: 0;
+    background-color: transparent;
+    width: fit-content;
+}
+
+.expandChevron.expanded {
+    transform: rotate(180deg);
+}
+
+.priceRange {
+    display: flex;
+    gap: var(--spacing-sm);
+}
+
+.priceInput {
+    max-width: 144px;
+    max-height: 36px;
+    padding-left: var(--spacing-sm);
+    padding-right: var(--spacing-2xl);
+}
+
+.applyButton {
+    font-size: var(--font-size-small);
+    line-height: var(--line-height-small);
+}
