@@ -1,6 +1,7 @@
 'use client';
 
 import { Comment } from '@/types/news';
+import { UserIcon } from '@/components/ui/icons/UserIcon';
 import styles from './CommentCard.module.css';
 
 interface CommentCardProps {
@@ -18,23 +19,24 @@ export const CommentCard = ({ comment }: CommentCardProps) => {
 
   return (
     <div className={styles.commentCard}>
-      {/* Разделительная полоска */}
-      <div className={styles.divider}></div>
-      
-      <div className={styles.content}>
-        {/* Заголовок с именем и датой */}
-        <div className={styles.header}>
-          <div className={styles.author}>
-            <span className={styles.name}>
-              {comment.author.name} {comment.author.surname}
-            </span>
-            <span className={styles.date}>{formattedDate}</span>
-          </div>
+      <div className={styles.commentWrapper}>
+        <div className={styles.leftDivider}>
+          <UserIcon size={14} className={styles.userIcon}/>
+          <div className={styles.line}></div>
         </div>
-
-        {/* Текст комментария */}
-        <div className={styles.text}>{comment.text}</div>
+        <div className={styles.content}>
+          <div className={styles.header}>
+            <div className={styles.author}>
+              <span className={styles.name}>
+                {comment.author.name} {comment.author.surname}
+              </span>
+              <span className={styles.date}>{formattedDate}</span>
+            </div>
+          </div>
+          <div className={styles.text}>{comment.text}</div>
+        </div>
       </div>
+      <div className={styles.divider}></div>
     </div>
   );
 };

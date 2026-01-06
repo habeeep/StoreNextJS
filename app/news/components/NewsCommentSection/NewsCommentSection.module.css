@@ -4,12 +4,18 @@
     background-color: var(--color-primary-400);
 }
 
+.commentsList {
+    display: flex;
+    flex-direction: column;
+    gap: var(--spacing-md);
+}
+
 .commentContent {
-    height: 400px;
+    height: fit-content;
     padding: var(--spacing-md);
     display: flex;
     flex-direction: column;
-    justify-content: space-between;
+    gap: var(--spacing-lg);
 }
 
 .commentForm {
@@ -25,6 +31,7 @@
     border: none;
     outline: none;
     min-height: 34px;
+    height: 34px;
     padding: var(--spacing-xs) var(--spacing-sm);
     font-size: var(--font-size-base);
     line-height: var(--line-height-base);

@@ -1,0 +1,74 @@
+.commentCard {
+    position: relative;
+    padding-bottom: var(--spacing-sm);
+}
+
+.commentWrapper {
+    display: flex;
+    gap: var(--spacing-sm);
+}
+
+.leftDivider {
+    position: relative;
+}
+
+.userIcon {
+    height: 26px;
+    width: 26px;
+    padding: 6px;
+    border-radius: var(--radius-xl);
+    color: var(--color-primary-400);
+    background-color: var(--color-primary-900);
+}
+
+.line {
+    position: absolute;
+    left: 50%;
+    top: 25px;
+    bottom: 0;
+    transform: translateX(-50%);
+    width: 2px;
+    background-color: var(--color-primary-900);
+    border-radius: var(--radius-md);
+}
+
+.content {
+    display: flex;
+    flex-direction: column;
+    gap: var(--spacing-sm);
+}
+
+.author {
+    display: flex;
+    gap: var(--spacing-xs);
+    align-items: center;
+}
+
+.name {
+    color: var(--color-grey-900);
+    font-size: var(--font-size-small);
+    line-height: var(--line-height-small);
+    font-weight: var(--font-weight-semibold);
+}
+
+.date {
+    color: var(--color-grey-600);
+    font-size: var(--font-size-extra-small);
+    line-height: var(--line-height-extra-small);
+}
+
+.text {
+    color: var(--color-grey-900);
+    font-size: var(--font-size-small);
+    line-height: var(--line-height-small);
+    margin-bottom: var(--spacing-xs);
+}
+
+.divider {
+    position: absolute;
+    left: 0;
+    bottom: 0;
+    width: 100%;
+    height: 1px;
+    background-color: var(--color-primary-800);
+}
