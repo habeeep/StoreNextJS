@@ -1,0 +1,78 @@
+.item {
+    background-color: var(--color-primary-100);
+    border-radius: var(--radius-xl);
+    padding: var(--spacing-xs) var(--spacing-sm);
+    display: flex;
+    align-items: center;
+    box-shadow: 2px 4px 8.6px 1px #00000040;
+}
+
+.checkboxWrapper {
+    position: relative;
+    margin-right: var(--spacing-md);
+}
+
+.checkbox {
+  appearance: none;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  margin: 0;
+  width: 30px;
+  height: 30px;
+  cursor: pointer;
+  border: 2px solid var(--color-primary-600);
+  border-radius: var(--radius-sm);
+  background-color: transparent;
+}
+
+.checkbox:checked {
+  background-color: var(--color-primary-600);
+}
+
+.checkboxIcon {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translateX(-50%) translateY(-50%);
+    pointer-events: none; 
+    color: var(--color-primary-100);
+}
+
+.imageWrapper {
+    overflow: hidden;
+    position: relative;
+    height: 112px;
+    width: 150px;
+    margin-right: var(--spacing-sm);
+    background-color: var(--color-primary-600);
+    border-radius: var(--radius-md);
+}
+
+.imageContainer {
+    position: absolute;
+    top: 0;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 120%;
+    height: 170%;
+}
+
+.info {
+    margin-right: auto;
+}
+
+.quantityControls {
+    margin-right: var(--spacing-sm);
+    display: flex;
+    gap: var(--spacing-xs);
+    align-items: center;
+}
+
+.quantityButton,
+.removeButton {
+    background-color: transparent;
+    color: var(--color-primary-600);
+    border: none;
+    padding: 0;
+    line-height: 0;
+}

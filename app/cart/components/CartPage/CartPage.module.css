@@ -1,0 +1,24 @@
+.content {
+  display: flex;
+  gap: var(--spacing-xl);
+  align-items: flex-start;
+}
+
+.sidebar {
+  flex: 0 0 320px;
+  position: sticky;
+  top: var(--header-height);
+}
+
+.main {
+  flex: 1;
+  background-color: var(--color-primary-200);
+  border-radius: var(--radius-xl);
+  padding: var(--spacing-2xl) var(--spacing-md) 250px;
+}
+
+.itemsList {
+    display: flex;
+    flex-direction: column;
+    gap: var(--spacing-lg);
+}

@@ -1,0 +1,74 @@
+.sidebar {
+    background-color: var(--color-primary-200);
+    border-radius: var(--radius-xl);
+    padding: var(--spacing-md);
+}
+
+.sidebarTitle {
+    font-size: var(--font-size-xl);
+    line-height: var(--line-height-xl);
+    font-weight: var(--font-weight-bold);
+    text-align: center;
+    margin-bottom: var(--spacing-lg);
+}
+
+.orderDetails {
+    display: flex;
+    flex-direction: column;
+    gap: var(--spacing-xs);
+    margin-bottom: var(--spacing-2xl);
+}
+
+.itemsList {
+    position: relative;
+    padding-bottom: var(--spacing-xs);
+}
+
+.itemsList::after {
+    content: "";
+    position: absolute;
+    background-color: var(--color-primary-800);
+    width: 100%;
+    height: 2px;
+    bottom: 0;
+    left: 0;
+}
+
+.itemRow {
+    display: flex;
+    gap: 2px;
+    font-size: var(--font-size-large);
+    line-height: var(--line-height-large);
+}
+
+.dots {
+    height: 22px;
+    width: 100%;
+    border-bottom: 4px dotted var(--color-primary-800);
+    flex: 1;
+}
+
+.totalSection {
+    display: flex;
+    justify-content: space-between;
+    font-size: var(--font-size-large);
+    line-height: var(--line-height-large);
+}
+
+.addressSection {
+    display: flex;
+    justify-content: space-between;
+}
+
+.address {
+    margin-left: var(--spacing-xs);
+    flex: 1;
+    text-align: end;
+}
+
+.checkoutButton {
+    width: 100%;
+    font-weight: var(--font-weight-semibold);
+    font-size: var(--font-size-large);
+    line-height: var(--line-height-large);
+}
