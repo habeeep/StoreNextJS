@@ -8,9 +8,17 @@ interface ProductGridProps {
   products: Product[];
   onAddToCart: (id: string) => void;
   onRemoveFromCart: (id: string) => void;
+  onIncrementQuantity: (id: string) => void;
+  onDecrementQuantity: (id: string) => void;
 }
 
-export const ProductGrid = ({ products, onAddToCart, onRemoveFromCart }: ProductGridProps) => {
+export const ProductGrid = ({
+  products, 
+  onAddToCart, 
+  onRemoveFromCart, 
+  onIncrementQuantity, 
+  onDecrementQuantity 
+}: ProductGridProps) => {
   if (products.length === 0) {
     return <div className={styles.noProducts}>Товары не найдены</div>;
   }
@@ -23,6 +31,8 @@ export const ProductGrid = ({ products, onAddToCart, onRemoveFromCart }: Product
           product={product}
           onAddToCart={onAddToCart}
           onRemoveFromCart={onRemoveFromCart}
+          onIncrementQuantity={onIncrementQuantity}
+          onDecrementQuantity={onDecrementQuantity}
         />
       ))}
     </div>

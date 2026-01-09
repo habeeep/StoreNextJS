@@ -27,7 +27,7 @@ export const CatalogUserPage = () => {
       name: 'Монстера',
       description: 'Тропическое растение с резными листьями',
       price: 2500,
-      imageUrl: '/images/products/monstera.jpg',
+      imagePath: '/images/catalog/plants1.png',
       categoryId: '1',
       subCategoryId: '11',
       brand: 'GreenHouse',
@@ -38,7 +38,7 @@ export const CatalogUserPage = () => {
       name: 'Чики',
       description: 'Тропическое растение с резными листьями',
       price: 2100,
-      imageUrl: '/images/products/monstera.jpg',
+      imagePath: '/images/catalog/plants2.png',
       categoryId: '2',
       subCategoryId: '21',
       brand: 'GreenHouse',
@@ -49,7 +49,7 @@ export const CatalogUserPage = () => {
       name: 'Лоло',
       description: 'Тропическое растение с резными листьями',
       price: 4500,
-      imageUrl: '/images/products/monstera.jpg',
+      imagePath: '/images/catalog/plants3.png',
       categoryId: '1',
       subCategoryId: '13',
       brand: 'GreenHouse',
@@ -60,7 +60,7 @@ export const CatalogUserPage = () => {
       name: 'Амстел',
       description: 'Тропическое растение с резными листьями',
       price: 2600,
-      imageUrl: '/images/products/monstera.jpg',
+      imagePath: '/images/catalog/plants4.png',
       categoryId: '1',
       subCategoryId: '12',
       brand: 'GreenHouse',
@@ -71,7 +71,7 @@ export const CatalogUserPage = () => {
       name: 'Коростик',
       description: 'Тропическое растение с резными листьями',
       price: 2800,
-      imageUrl: '/images/products/monstera.jpg',
+      imagePath: '/images/catalog/plants1.png',
       categoryId: '2',
       subCategoryId: '24',
       brand: 'GreenHouse',
@@ -82,7 +82,7 @@ export const CatalogUserPage = () => {
       name: 'Алекса',
       description: 'Тропическое растение с резными листьями',
       price: 8500,
-      imageUrl: '/images/products/monstera.jpg',
+      imagePath: '/images/catalog/plants2.png',
       categoryId: '2',
       subCategoryId: '22',
       brand: 'GreenHouse',
@@ -168,20 +168,50 @@ export const CatalogUserPage = () => {
   }, [products, filters]);
 
   const handleAddToCart = (id: string) => {
-    setProducts(prev => prev.map(p => 
-      p.id === id 
-        ? { ...p, inCart: true, cartQuantity: 1 }
-        : p
-    ));
-  };
+  setProducts(prev => prev.map(p => 
+    p.id === id 
+      ? { 
+          ...p, 
+          inCart: true, 
+          cartQuantity: 1
+        }
+      : p
+  ));
+};
 
-  const handleRemoveFromCart = (id: string) => {
-    setProducts(prev => prev.map(p => 
-      p.id === id 
-        ? { ...p, inCart: false, cartQuantity: undefined }
-        : p
-    ));
-  };
+const handleRemoveFromCart = (id: string) => {
+  setProducts(prev => prev.map(p => 
+    p.id === id 
+      ? { 
+          ...p, 
+          inCart: false, 
+          cartQuantity: undefined
+        }
+      : p
+  ));
+};
+
+const handleIncrementQuantity = (id: string) => {
+  setProducts(prev => prev.map(p => 
+    p.id === id && p.inCart
+      ? { 
+          ...p, 
+          cartQuantity: (p.cartQuantity || 1) + 1 
+        }
+      : p
+  ));
+};
+
+const handleDecrementQuantity = (id: string) => {
+  setProducts(prev => prev.map(p => 
+    p.id === id && p.inCart
+      ? { 
+          ...p, 
+          cartQuantity: (p.cartQuantity || 1) - 1 
+        }
+      : p
+  ));
+};
 
   return (
     <div className={styles.page}>
@@ -206,6 +236,8 @@ export const CatalogUserPage = () => {
             products={filteredProducts}
             onAddToCart={handleAddToCart}
             onRemoveFromCart={handleRemoveFromCart}
+            onIncrementQuantity={handleIncrementQuantity}
+            onDecrementQuantity={handleDecrementQuantity}
           />
         </main>
       </div>

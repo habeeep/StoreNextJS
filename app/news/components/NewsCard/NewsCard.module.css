@@ -36,6 +36,64 @@
   display: flex;
   flex-direction: column;
   justify-content: space-between;
+  gap: var(--spacing-md);
+}
+
+.images {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--spacing-xs);
+  width: 100%;
+  height: 100%;
+}
+
+.imageContainer {
+  position: relative;
+  overflow: hidden;
+  border-radius: var(--radius-md);
+  background-color: var(--color-primary-500);
+}
+
+.image {
+  object-fit: cover;
+}
+
+.images:has(> .imageContainer:only-child) {
+  display: block;
+}
+
+.images:has(> .imageContainer:only-child) .imageContainer {
+  width: 100%;
+  height: 100%;
+}
+
+.images:has(> .imageContainer:nth-child(2):last-child) {
+  display: flex;
+}
+
+.images:has(> .imageContainer:nth-child(2):last-child) .imageContainer {
+  flex: 1;
+  min-width: 0;
+  height: 100%;
+}
+
+.images:has(> .imageContainer:nth-child(3):last-child) {
+  display: flex;
+  flex-wrap: wrap;
+  height: 100%;
+}
+
+.images:has(> .imageContainer:nth-child(3):last-child) .imageContainer:first-child {
+  width: 100%;
+  height: 65%;
+}
+
+.images:has(> .imageContainer:nth-child(3):last-child) .imageContainer:nth-child(2),
+.images:has(> .imageContainer:nth-child(3):last-child) .imageContainer:nth-child(3) {
+  flex: 1;
+  min-width: 0;
+  height: calc(35% - var(--spacing-xs));
+  width: calc(50% - var(--spacing-xs) / 2);
 }
 
 .stats {

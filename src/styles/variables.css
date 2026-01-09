@@ -86,5 +86,7 @@
     --radius-md: 11px;
     --radius-lg: 15px;
     --radius-xl: 20px;
+    --radius-2xl: 30px;
+    --radius-3xl: 40px;
     --radius-full: 9999px; 
 }

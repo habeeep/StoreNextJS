@@ -3,7 +3,7 @@ export interface News {
   title: string;
   description: string;
   content: string;
-  images: string[]; // URL изображений
+  images: string[];
   createdAt: string;
   updatedAt: string;
   likesCount: number;

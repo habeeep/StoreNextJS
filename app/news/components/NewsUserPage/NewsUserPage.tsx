@@ -15,14 +15,13 @@ export const NewsUserPage = () => {
     showFavoritesOnly: false
   });
 
-  // Моковые данные новостей
   const mockNews: News[] = [
     {
       id: '1',
       title: 'Новое поступление тропических растений',
       description: 'В нашем магазине появились редкие виды растений из тропических лесов',
       content: 'Полный текст новости...',
-      images: ['/images/news/1-1.jpg', '/images/news/1-2.jpg'],
+      images: ['/images/news/hero3.png', '/images/news/hero2.png', '/images/news/hero4.png'],
       createdAt: '2025-01-20T10:00:00Z',
       updatedAt: '2025-01-20T10:00:00Z',
       likesCount: 2,
@@ -37,7 +36,7 @@ export const NewsUserPage = () => {
       title: 'Новое поступление тропических растений',
       description: 'В нашем магазине появились редкие виды растений из тропических лесов',
       content: 'Полный текст новости...',
-      images: ['/images/news/1-1.jpg', '/images/news/1-2.jpg'],
+      images: ['/images/news/hero1.png', '/images/news/hero2.png'],
       createdAt: '2023-01-20T10:00:00Z',
       updatedAt: '2023-01-20T10:00:00Z',
       likesCount: 52,
@@ -52,7 +51,7 @@ export const NewsUserPage = () => {
       title: 'Новое поступление тропических растений',
       description: 'В нашем магазине появились редкие виды растений из тропических лесов',
       content: 'Полный текст новости...',
-      images: ['/images/news/1-1.jpg', '/images/news/1-2.jpg'],
+      images: ['/images/news/hero1.png'],
       createdAt: '2024-01-20T10:00:00Z',
       updatedAt: '2024-01-20T10:00:00Z',
       likesCount: 42,
@@ -67,7 +66,7 @@ export const NewsUserPage = () => {
       title: 'Новое поступление тропических растений',
       description: 'В нашем магазине появились редкие виды растений из тропических лесов',
       content: 'Полный текст новости...',
-      images: ['/images/news/1-1.jpg', '/images/news/1-2.jpg'],
+      images: ['/images/news/hero4.png', '/images/news/hero10.png'],
       createdAt: '2024-01-20T10:00:00Z',
       updatedAt: '2024-01-20T10:00:00Z',
       likesCount: 42,
@@ -82,7 +81,7 @@ export const NewsUserPage = () => {
       title: 'Новое поступление тропических растений',
       description: 'В нашем магазине появились редкие виды растений из тропических лесов',
       content: 'Полный текст новости...',
-      images: ['/images/news/1-1.jpg', '/images/news/1-2.jpg'],
+      images: ['/images/news/hero2.png'],
       createdAt: '2024-01-20T10:00:00Z',
       updatedAt: '2024-01-20T10:00:00Z',
       likesCount: 42,
@@ -92,7 +91,6 @@ export const NewsUserPage = () => {
       isFavorite: true,
       author: { id: '1', name: 'Анна', surname: 'Цветкова' }
     },
-    // Добавь еще новостей...
   ];
 
   useEffect(() => {
@@ -102,18 +100,14 @@ export const NewsUserPage = () => {
   const fetchNews = async () => {
     setIsLoading(true);
     try {
-      // TODO: API запрос с фильтрами
-      // Пока используем моки
-      await new Promise(resolve => setTimeout(resolve, 500)); // Имитация загрузки
+      await new Promise(resolve => setTimeout(resolve, 500));
       
-      // Применяем фильтры к моковым данным
       let filteredNews = [...mockNews];
       
       if (filters.showFavoritesOnly) {
         filteredNews = filteredNews.filter(item => item.isFavorite);
       }
       
-      // Применяем сортировку
       filteredNews.sort((a, b) => {
         switch (filters.sortBy) {
           case 'date-desc':

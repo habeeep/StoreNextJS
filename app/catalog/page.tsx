@@ -4,7 +4,6 @@ import { useAppSelector } from '@/hooks/useAppSelector';
 import { CatalogUserPage } from './components/CatalogUserPage/CatalogUserPage';
 import { Container } from '@/components/layout/Container/Container';
 
-// Компонент для админа пока не создан
 const CatalogAdminPage = () => (
   <div>Админская страница товаров (скоро)</div>
 );

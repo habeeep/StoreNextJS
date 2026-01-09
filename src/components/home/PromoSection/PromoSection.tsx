@@ -10,7 +10,7 @@ export const PromoSection = () => {
         <h2 className={styles.title}>
           Получи бесплатную<br/> инструкцию по уходу за растениями<br/> за подписку на наши новости
         </h2>
-        <Button>
+        <Button className={styles.button}>
           Подписаться
         </Button>
       </div>

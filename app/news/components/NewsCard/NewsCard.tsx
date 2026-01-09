@@ -1,6 +1,7 @@
 'use client';
 
 import { useState } from 'react';
+import Image from 'next/image';
 import { News } from '@/types/news';
 import { NewsCommentSection } from '../NewsCommentSection/NewsCommentSection';
 import styles from './NewsCard.module.css';
@@ -50,9 +51,14 @@ export const NewsCard = ({ news, onLike, onFavorite }: NewsCardProps) => {
             <div className={styles.images}>
               {news.images.slice(0, 3).map((image, index) => (
                 <div key={index} className={styles.imageContainer}>
-                  <div className={styles.imagePlaceholder}>
-                    <span>IMG {index + 1}</span>
-                  </div>
+                  <Image
+                    src={image}
+                    alt='Растение'
+                    fill
+                    sizes='(max-width: 490px) 100vw, 1200px'
+                    priority
+                    className={styles.image}
+                  />
                 </div>
               ))}
             </div>

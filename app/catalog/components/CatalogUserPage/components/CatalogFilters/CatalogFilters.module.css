@@ -2,6 +2,7 @@
     background-color: var(--color-primary-200);
     border-radius: var(--radius-xl);
     padding: var(--spacing-lg);
+    min-width: 240px;
 }
 
 .section {
@@ -86,4 +87,5 @@
 .applyButton {
     font-size: var(--font-size-small);
     line-height: var(--line-height-small);
+    width: 100%;
 }

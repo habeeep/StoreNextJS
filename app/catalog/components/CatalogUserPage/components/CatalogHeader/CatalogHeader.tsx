@@ -48,8 +48,8 @@ export const CatalogHeader = ({ filters, onFiltersChange }: CatalogHeaderProps) 
           <div className={styles.sortRight}>
             <span className={styles.filtersText}>Популярность</span>
             <button
-              className={`${styles.sortButton} ${filters.sortBy === 'popularity-desc' ? styles.active : ''}`}
-              onClick={() => handleSortChange('popularity-desc')}
+              className={`${styles.sortButton} ${filters.sortBy === 'popularity-asc' ? styles.active : ''}`}
+              onClick={() => handleSortChange('popularity-asc')}
               title="По возрастанию популярности"
             >
               <SortAscIcon />

@@ -22,3 +22,7 @@
   font-weight: var(--font-weight-bold);
   text-align: center;
 }
+
+.button {
+  min-width: 200px;
+}
