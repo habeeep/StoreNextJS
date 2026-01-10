@@ -7,8 +7,8 @@ import {
 } from '@/types/auth';
 
 const API_BASE = process.env.NODE_ENV === 'development' 
-  ? '/backend' 
-  : process.env.NEXT_PUBLIC_API_URL;
+  ? '/backend/auth' 
+  : process.env.NEXT_PUBLIC_API_URL_AUTH;
 
 const createMockUser = (email: string) => ({
   id: Date.now().toString(),
@@ -18,7 +18,7 @@ const createMockUser = (email: string) => ({
 
 export const authApi = {
   async requestCode(data: RequestCodeRequest): Promise<BaseResponse> {
-    const response = await fetch(`${API_BASE}/auth/login`, {
+    const response = await fetch(`${API_BASE}/login`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ email: data.email }),
@@ -37,7 +37,7 @@ export const authApi = {
   },
 
   async verifyCode(data: VerifyCodeRequest): Promise<VerifyCodeResponse> {
-    const response = await fetch(`${API_BASE}/auth/code/verify`, {
+    const response = await fetch(`${API_BASE}/code/verify`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ 
@@ -72,7 +72,7 @@ export const authApi = {
   },
 
   async resendCode(data: ResendCodeRequest): Promise<BaseResponse> {
-    const response = await fetch(`${API_BASE}/auth/code/resend`, {
+    const response = await fetch(`${API_BASE}/code/resend`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ email: data.email }),

@@ -39,3 +39,21 @@ export interface CatalogFilters {
     max: number;
   };
 }
+
+export interface CategoryNode {
+  id: string;
+  name: string;
+  parentId: string | null;
+  children: CategoryNode[];
+  level: number;
+  isExpanded?: boolean;
+}
+
+export type CategorySortOrder = 'asc' | 'desc' | 'none';
+
+export interface CategoryFormData {
+  name: string;
+  parentId: string | null;
+}
+
+export type CategoryOperation = 'add' | 'edit' | 'delete' | 'add-subcategory';

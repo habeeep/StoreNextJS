@@ -1,3 +1,22 @@
+export interface NewsResponse {
+  totalCount: number;
+  limit: number;
+  offset: number;
+  currentValues: NewsItem[];
+}
+
+export interface NewsItem {
+  id: string;
+  title: string;
+  text: string;
+  likesCount: number;
+  watchCount: number;
+  commentsCount: number;
+  created: string;
+  updated: string;
+  images?: string[];
+}
+
 export interface News {
   id: string;
   title: string;
