@@ -1,0 +1,17 @@
+.content {
+    display: flex;
+    gap: var(--spacing-sm);
+}
+
+.main {
+    width: 100%;
+}
+
+.sidebar {
+    max-width: 315px;
+    display: flex;
+    flex-direction: column;
+    gap: var(--spacing-md);
+    align-items: center;
+}
+

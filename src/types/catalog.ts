@@ -57,3 +57,35 @@ export interface CategoryFormData {
 }
 
 export type CategoryOperation = 'add' | 'edit' | 'delete' | 'add-subcategory';
+
+export interface Brand {
+  id: string;
+  name: string;
+  country: string;
+  categories: string[]; // IDs категорий
+  description: string;
+}
+
+export interface CategoryForProduct {
+  id: string;
+  name: string;
+}
+
+export interface ProductFormData {
+  name: string;
+  description: string;
+  price: number;
+  categories: string[]; // массив ID категорий
+  brandId: string;
+  images: File[] | string[]; // для формы загрузки
+}
+
+export type AdminProductSortBy = 'name' | 'brand' | 'category' | 'price' | 'created';
+
+export interface AdminProductFilters {
+  sortBy: AdminProductSortBy;
+  sortOrder: 'asc' | 'desc';
+  searchQuery: string;
+  selectedBrands: string[];
+  selectedCategories: string[];
+}

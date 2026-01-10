@@ -1,0 +1,26 @@
+.table {
+    width: 100%;
+    background-color: var(--color-primary-200);
+    border-radius: var(--radius-xl);
+    border-collapse: collapse;
+}
+
+.th {
+    padding: 0;
+    margin: 0;
+    font-size: var(--font-size-xl);
+    line-height: var(--line-height-xl);
+    font-weight: var(--font-weight-bold);
+    padding: var(--spacing-xs);
+    padding-top: var(--spacing-md);
+    border-bottom: 2px solid var(--color-primary-300);
+    text-align: left;
+}
+
+.th:first-child {
+    padding-left: var(--spacing-md);
+}
+
+.th:not(:last-child) {
+    border-right: 2px solid var(--color-primary-300);
+}

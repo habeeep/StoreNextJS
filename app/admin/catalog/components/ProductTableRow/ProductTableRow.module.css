@@ -1,0 +1,40 @@
+.row:not(:last-child) {
+    border-bottom: 2px solid var(--color-primary-300);
+}
+
+.td {
+    padding: var(--spacing-xs);
+    font-size: var(--font-size-large);
+    line-height: var(--line-height-large);
+}
+
+.td:first-child {
+    padding-left: var(--spacing-md);
+}
+
+.td:not(:last-child) {
+    border-right: 2px solid var(--color-primary-300);
+}
+
+.actions {
+    position: relative;
+}
+
+.menuButton,
+.menuItem {
+    margin: 0;
+    padding: 0;
+    background-color: transparent;
+    border: none;
+}
+
+.menu {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    transform: translateY(100%) translateX(-50%);
+    background-color: var(--color-primary-100);
+    padding: var(--spacing-xs) var(--spacing-md);
+    z-index: var(--z-modal);
+    border-radius: var(--radius-xl);
+}

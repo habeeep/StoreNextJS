@@ -1,0 +1,30 @@
+.page {
+    background-color: var(--color-primary-200);
+    border-radius: var(--radius-xl);
+    padding: var(--spacing-md);
+}
+
+.header {
+    display: flex;
+    justify-content: space-between;
+}
+
+.backButton {
+    background-color: transparent;
+    margin: 0;
+    padding: 0;
+    border: none;
+}
+
+.form {
+    display: flex;
+    flex-direction: column;
+    gap: var(--spacing-md);
+}
+
+.label {
+    margin-bottom: var(--spacing-sm);
+    font-size: var(--font-size-2xl);
+    line-height: var(--line-height-2xl);
+    font-weight: var(--font-weight-bold);
+}
