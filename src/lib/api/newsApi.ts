@@ -14,7 +14,6 @@ import {
 const API_BASE = process.env.NEXT_PUBLIC_API_URL_FEED;
 
 export const newsApi = {
-  // Получить все новости с пагинацией
   async getNews(params?: PaginationParams): Promise<NewsResponse> {
     const limit = params?.limit || 100;
     const offset = params?.offset || 0;
@@ -34,7 +33,6 @@ export const newsApi = {
     return await response.json();
   },
 
-  // Получить одну новость по ID
   async getNewsById(feedId: string): Promise<NewsItem> {
     const response = await fetch(
       `${API_BASE}/${feedId}`,
@@ -51,7 +49,6 @@ export const newsApi = {
     return await response.json();
   },
 
-  // Создать новость
   async createNews(data: CreateNewsRequest): Promise<NewsOperationResponse> {
     const response = await fetch(
       `${API_BASE}/`,
@@ -69,7 +66,6 @@ export const newsApi = {
     return await response.json();
   },
 
-  // Обновить новость
   async updateNews(feedId: string, data: UpdateNewsRequest): Promise<NewsOperationResponse> {
     const response = await fetch(
       `${API_BASE}/${feedId}`,
@@ -87,7 +83,6 @@ export const newsApi = {
     return await response.json();
   },
 
-  // Удалить новость
   async deleteNews(feedId: string): Promise<void> {
     const response = await fetch(
       `${API_BASE}/${feedId}`,
@@ -102,7 +97,6 @@ export const newsApi = {
     }
   },
 
-  // Получить избранные новости
   async getFavourites(params: FavouritesParams): Promise<NewsResponse> {
     const limit = params.limit || 100;
     const offset = params.offset || 0;
@@ -123,7 +117,6 @@ export const newsApi = {
     return await response.json();
   },
 
-  // Добавить новость в избранное
   async addToFavourites(feedId: string, userMail: string): Promise<void> {
     const encodedUserMail = encodeURIComponent(userMail);
     
@@ -140,7 +133,6 @@ export const newsApi = {
     }
   },
 
-  // Удалить новость из избранного
   async removeFromFavourites(feedId: string, userMail: string): Promise<void> {
     const encodedUserMail = encodeURIComponent(userMail);
     
@@ -157,7 +149,6 @@ export const newsApi = {
     }
   },
 
-  // Поставить лайк новости
   async likeNews(feedId: string, userMail: string): Promise<void> {
     const encodedUserMail = encodeURIComponent(userMail);
     
@@ -174,7 +165,6 @@ export const newsApi = {
     }
   },
 
-  // Убрать лайк с новости
   async unlikeNews(feedId: string, userMail: string): Promise<void> {
     const encodedUserMail = encodeURIComponent(userMail);
     
@@ -191,7 +181,6 @@ export const newsApi = {
     }
   },
 
-  // Создать комментарий
   async createComment(data: CreateCommentRequest): Promise<ApiComment> {
     const response = await fetch(
       `${API_BASE}/comment`,

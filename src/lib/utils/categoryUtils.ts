@@ -1,22 +1,17 @@
-// lib/utils/categoryUtils.ts
 import { ApiCategory, CategoryNode } from '@/types/category';
 
-// Функция для преобразования плоского списка в дерево
 export function buildCategoryTree(categories: ApiCategory[]): CategoryNode[] {
   const nodesMap = new Map<string, CategoryNode>();
   const rootCategories: CategoryNode[] = [];
   
-  // Сначала создаем все узлы без детей
   categories.forEach(category => {
     const node: CategoryNode = {
-      // Поля из ApiCategory
       id: category.id,
       title: category.title,
       description: category.description,
       parentId: category.parentId,
       created: category.created,
       updated: category.updated,
-      // Дополнительные поля для дерева
       children: [],
       level: 0,
       isExpanded: false,
@@ -24,7 +19,6 @@ export function buildCategoryTree(categories: ApiCategory[]): CategoryNode[] {
     nodesMap.set(category.id, node);
   });
   
-  // Затем распределяем детей по родителям
   nodesMap.forEach(node => {
     if (node.parentId && nodesMap.has(node.parentId)) {
       const parent = nodesMap.get(node.parentId)!;
@@ -38,7 +32,6 @@ export function buildCategoryTree(categories: ApiCategory[]): CategoryNode[] {
   return rootCategories;
 }
 
-// Функция для поиска в дереве
 export function searchInCategoryTree(
   nodes: CategoryNode[], 
   query: string
@@ -48,14 +41,11 @@ export function searchInCategoryTree(
   const filtered: CategoryNode[] = [];
   
   nodes.forEach(node => {
-    // Проверяем текущую категорию
     const matches = node.title.toLowerCase().includes(query.toLowerCase()) ||
                     node.description.toLowerCase().includes(query.toLowerCase());
     
-    // Рекурсивно проверяем детей
     const filteredChildren = searchInCategoryTree(node.children, query);
     
-    // Если категория или её дети подходят, добавляем
     if (matches || filteredChildren.length > 0) {
       filtered.push({
         ...node,
@@ -68,7 +58,6 @@ export function searchInCategoryTree(
   return filtered;
 }
 
-// Функция для сортировки дерева
 export function sortCategoryTree(
   nodes: CategoryNode[], 
   order: 'asc' | 'desc' | 'none'
@@ -84,7 +73,6 @@ export function sortCategoryTree(
   }));
 }
 
-// Функция для нахождения всех детей категории (включая вложенных)
 export function getAllChildrenIds(node: CategoryNode): string[] {
   const ids: string[] = [];
   
@@ -97,7 +85,6 @@ export function getAllChildrenIds(node: CategoryNode): string[] {
   return ids;
 }
 
-// Функция для получения пути к категории (от корня до категории)
 export function getCategoryPath(
   categories: CategoryNode[], 
   categoryId: string
@@ -122,11 +109,24 @@ export function getCategoryPath(
   return findPath(categories, categoryId) || [];
 }
 
-// Функция для нахождения родительских категорий
 export function getParentCategories(
   categories: CategoryNode[],
   categoryId: string
 ): CategoryNode[] {
   const path = getCategoryPath(categories, categoryId);
-  return path.slice(0, -1); // Все кроме самой категории
+  return path.slice(0, -1);
+}
+
+export function isCategoryOrAncestorSelected(
+  categories: CategoryNode[],
+  categoryId: string,
+  selectedIds: string[]
+): boolean {
+  if (!selectedIds || selectedIds.length === 0) return true;
+
+  const path = getCategoryPath(categories, categoryId);
+  for (const node of path) {
+    if (selectedIds.includes(node.id)) return true;
+  }
+  return false;
 }

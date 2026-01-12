@@ -1,4 +1,3 @@
-// app/news/components/NewsCommentSection/NewsCommentSection.tsx
 'use client';
 
 import { useState } from 'react';
@@ -39,14 +38,12 @@ export const NewsCommentSection = ({
     setError(null);
     
     try {
-      // Отправляем реальный комментарий через API
       const response = await newsApi.createComment({
         text: newComment,
         userMail: currentUserEmail,
         feedId: newsId
       });
 
-      // Добавляем новый комментарий в начало списка
       setComments([response, ...comments]);
       setNewComment('');
       
@@ -61,7 +58,6 @@ export const NewsCommentSection = ({
   return (
     <div className={`${styles.commentSection} ${className}`}>
       <div className={styles.commentContent}>
-        {/* Сообщение об ошибке */}
         {error && (
           <div className={styles.error}>
             {error}
@@ -78,7 +74,6 @@ export const NewsCommentSection = ({
           )}
         </div>
         
-        {/* Форма комментария */}
         <form onSubmit={handleSubmitComment} className={styles.commentForm}>
           <textarea
             value={newComment}
@@ -97,7 +92,6 @@ export const NewsCommentSection = ({
           </button>
         </form>
         
-        {/* Предупреждение если пользователь не авторизован */}
         {!currentUserEmail && (
           <p className={styles.authHint}>
             Войдите в систему, чтобы оставлять комментарии

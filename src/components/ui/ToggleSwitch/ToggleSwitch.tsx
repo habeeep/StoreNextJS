@@ -1,4 +1,3 @@
-// components/ui/ToggleSwitch/ToggleSwitch.tsx
 import React from 'react';
 import styles from './ToggleSwitch.module.css';
 

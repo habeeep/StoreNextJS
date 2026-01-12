@@ -1,4 +1,3 @@
-// app/admin/catalog/components/AdminSortHeader/AdminSortHeader.tsx
 'use client';
 
 import { AdminProductSortBy } from '@/types/catalog';

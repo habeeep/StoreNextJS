@@ -1,4 +1,3 @@
-// app/admin/brands/page.tsx
 'use client';
 
 import { useState, useEffect, useMemo } from 'react';
@@ -19,19 +18,16 @@ type SortOrder = 'asc' | 'desc';
 export default function AdminBrandsPage() {
   const router = useRouter();
   
-  // Состояния
   const [brands, setBrands] = useState<Brand[]>([]);
   const [apiBrands, setApiBrands] = useState<ApiBrand[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   
-  // Фильтры и сортировка
   const [searchQuery, setSearchQuery] = useState('');
   const [sortField, setSortField] = useState<SortField>('title');
   const [sortOrder, setSortOrder] = useState<SortOrder>('asc');
   const [selectedCountry, setSelectedCountry] = useState<string>('all');
 
-  // Загрузка брендов
   const fetchBrands = async () => {
     setIsLoading(true);
     setError(null);
@@ -52,7 +48,6 @@ export default function AdminBrandsPage() {
     fetchBrands();
   }, []);
 
-  // Получение уникальных стран для фильтра
   const countries = useMemo(() => {
     const countrySet = new Set<string>();
     apiBrands.forEach(brand => {
@@ -63,27 +58,22 @@ export default function AdminBrandsPage() {
     return Array.from(countrySet).sort();
   }, [apiBrands]);
 
-  // Фильтрация и сортировка
   const filteredAndSortedBrands = useMemo(() => {
     let result = [...brands];
 
-    // Поиск по названию
     if (searchQuery) {
       result = searchBrands(result, searchQuery);
     }
 
-    // Фильтрация по стране
     if (selectedCountry !== 'all') {
       result = result.filter(brand => brand.country === selectedCountry);
     }
 
-    // Сортировка
     result = sortBrands(result, sortField, sortOrder);
 
     return result;
   }, [brands, searchQuery, selectedCountry, sortField, sortOrder]);
 
-  // Обработчики
   const handleSearch = (query: string) => {
     setSearchQuery(query);
   };
@@ -109,7 +99,7 @@ export default function AdminBrandsPage() {
     if (confirm('Удалить бренд?')) {
       try {
         await brandsApi.deleteBrand(brandId);
-        fetchBrands(); // Обновляем список
+        fetchBrands();
       } catch (err) {
         console.error('Ошибка при удалении бренда:', err);
         alert('Не удалось удалить бренд');
@@ -118,7 +108,6 @@ export default function AdminBrandsPage() {
   };
 
   const handleViewBrand = (brandId: string) => {
-    // Можно перейти на детальную страницу или оставить пустым
     console.log('Просмотр бренда:', brandId);
   };
 
@@ -144,7 +133,6 @@ export default function AdminBrandsPage() {
   return (
     <Container>
       <div className={styles.page}>
-        {/* Шапка с сортировкой и поиском */}
         <div className={styles.header}>
           <BrandSortHeader
             sortField={sortField}
@@ -157,7 +145,6 @@ export default function AdminBrandsPage() {
         </div>
 
         <div className={styles.content}>
-          {/* Основная часть с таблицей */}
           <div className={styles.main}>
             <div className={styles.tableHeader}>
               <div className={styles.tableInfo}>
@@ -185,7 +172,6 @@ export default function AdminBrandsPage() {
             </div>
           </div>
 
-          {/* Сайдбар с фильтрами */}
           <aside className={styles.sidebar}>
             <div className={styles.filtersContainer}>
               <div className={styles.filterSection}>
@@ -238,7 +224,6 @@ export default function AdminBrandsPage() {
           </aside>
         </div>
 
-        {/* Состояния загрузки/ошибки */}
         {isLoading && (
           <div className={styles.loading}>Загрузка брендов...</div>
         )}

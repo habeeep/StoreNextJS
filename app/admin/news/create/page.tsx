@@ -28,9 +28,7 @@ export default function CreateNewsPage() {
         text,
       });
       
-      console.log('Новость создана:', response);
-      
-      // router.push('/admin/news');
+      router.push('/admin/news');
       
     } catch (err) {
       console.error('Ошибка при создании новости:', err);

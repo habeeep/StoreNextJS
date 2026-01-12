@@ -1,4 +1,3 @@
-// app/admin/categories/components/CategoryRow/CategoryRow.tsx
 'use client';
 
 import { CategoryNode } from '@/types/category';
@@ -31,7 +30,7 @@ export const CategoryRow = ({
         <div style={{ width: indent }} />
         <div className={styles.rowContent}>
           <div className={styles.name}>
-            {category.title} {/* Изменил с category.name на category.title */}
+            {category.title} 
           </div>
           
           <div className={styles.actions}>

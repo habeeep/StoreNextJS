@@ -1,4 +1,3 @@
-// app/news/components/NewsFilters/NewsFilters.tsx
 'use client';
 
 import { SortOption, NewsFilters as FiltersType } from '@/types/news';

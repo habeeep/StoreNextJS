@@ -1,4 +1,3 @@
-// lib/api/brandsApi.ts
 import { 
   ApiBrand, 
   CreateBrandRequest, 
@@ -6,12 +5,9 @@ import {
   Brand 
 } from '@/types/brand';
 
-const API_BASE = process.env.NODE_ENV === 'development' 
-  ? '/backend/api/v1/brands' 
-  : `${process.env.NEXT_PUBLIC_API_URL}/api/v1/brands`;
+const API_BASE = `${process.env.NEXT_PUBLIC_API_URL_CATALOG}/brands`;
 
 export const brandsApi = {
-  // Получить все бренды
   async getAllBrands(): Promise<ApiBrand[]> {
     const response = await fetch(API_BASE, {
       method: 'GET',
@@ -25,7 +21,6 @@ export const brandsApi = {
     return await response.json();
   },
 
-  // Получить бренд по ID
   async getBrandById(id: string): Promise<ApiBrand> {
     const response = await fetch(`${API_BASE}/${id}`, {
       method: 'GET',
@@ -39,7 +34,6 @@ export const brandsApi = {
     return await response.json();
   },
 
-  // Создать бренд
   async createBrand(data: CreateBrandRequest): Promise<ApiBrand> {
     const response = await fetch(API_BASE, {
       method: 'POST',
@@ -54,7 +48,6 @@ export const brandsApi = {
     return await response.json();
   },
 
-  // Обновить бренд
   async updateBrand(id: string, data: UpdateBrandRequest): Promise<ApiBrand> {
     const response = await fetch(`${API_BASE}/${id}`, {
       method: 'PUT',
@@ -69,7 +62,6 @@ export const brandsApi = {
     return await response.json();
   },
 
-  // Удалить бренд
   async deleteBrand(id: string): Promise<void> {
     const response = await fetch(`${API_BASE}/${id}`, {
       method: 'DELETE',
@@ -81,7 +73,6 @@ export const brandsApi = {
     }
   },
 
-  // Конвертация API бренда в Brand для UI
   convertToBrand(apiBrand: ApiBrand): Brand {
     return {
       id: apiBrand.id,
@@ -91,7 +82,6 @@ export const brandsApi = {
     };
   },
 
-  // Конвертация массива API брендов
   convertToBrands(apiBrands: ApiBrand[]): Brand[] {
     return apiBrands.map(this.convertToBrand);
   },

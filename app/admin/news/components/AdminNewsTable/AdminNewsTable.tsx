@@ -1,4 +1,3 @@
-// app/admin/news/components/AdminNewsTable/AdminNewsTable.tsx
 'use client';
 
 import { NewsItem } from '@/types/news';

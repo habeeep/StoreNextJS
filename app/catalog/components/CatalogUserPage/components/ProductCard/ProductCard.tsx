@@ -42,7 +42,7 @@ export const ProductCard = ({
     <div className={styles.card}>
       <div className={styles.imageContainer}>
         <Image
-          src={product.imagePath}
+          src={product.images?.[0] || ''}
           alt='Растение'
           fill
           sizes='(max-width: 490px) 100vw, 1200px'
@@ -53,7 +53,7 @@ export const ProductCard = ({
       
       <div className={styles.content}>
         <div className={styles.header}>
-          <h3 className={styles.name}>{product.name}</h3>
+          <h3 className={styles.name}>{product.title}</h3>
           <p className={styles.description}>{product.description}</p>
         </div>
         

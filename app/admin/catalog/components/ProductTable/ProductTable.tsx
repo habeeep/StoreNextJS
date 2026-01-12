@@ -1,4 +1,3 @@
-// app/admin/catalog/components/ProductTable/ProductTable.tsx
 'use client';
 
 import { Product } from '@/types/catalog';

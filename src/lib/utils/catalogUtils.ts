@@ -1,8 +1,8 @@
 import { Product, ApiProduct } from '@/types/catalog';
 import { Brand } from '@/types/brand';
 import { CategoryNode } from '@/types/category';
+import { isCategoryOrAncestorSelected } from '@/lib/utils/categoryUtils';
 
-// Конвертация API товара в Product для UI
 export function convertApiProductToProduct(apiProduct: ApiProduct): Product {
   return {
     id: apiProduct.id,
@@ -12,18 +12,16 @@ export function convertApiProductToProduct(apiProduct: ApiProduct): Product {
     categoryId: apiProduct.categoryId,
     brandId: apiProduct.brandId,
     amount: apiProduct.amount,
-    images: apiProduct.images || ['/images/catalog/plants1.png'], // Хардкод изображения
+    images: apiProduct.images || ['/images/catalog/plants1.png'],
     inCart: false,
     cartQuantity: 0,
   };
 }
 
-// Конвертация массива API товаров
 export function convertApiProductsToProducts(apiProducts: ApiProduct[]): Product[] {
   return apiProducts.map(convertApiProductToProduct);
 }
 
-// Поиск товаров по названию или описанию
 export function searchProducts(products: Product[], query: string): Product[] {
   if (!query.trim()) return products;
 
@@ -34,47 +32,54 @@ export function searchProducts(products: Product[], query: string): Product[] {
   );
 }
 
-// Сортировка товаров
-export function sortProducts(
-  products: ApiProduct[],
+export function sortProducts<T extends { title?: string; price?: number; amount?: number; created?: string }>(
+  products: T[],
   field: 'title' | 'price' | 'amount' | 'created',
   order: 'asc' | 'desc' = 'asc'
-): ApiProduct[] {
+): T[] {
   return [...products].sort((a, b) => {
     let comparison = 0;
-    
+
     switch (field) {
       case 'title':
-        comparison = a.title.localeCompare(b.title);
+        comparison = (a.title || '').localeCompare(b.title || '');
         break;
       case 'price':
-        comparison = a.price - b.price;
+        comparison = (a.price || 0) - (b.price || 0);
         break;
       case 'amount':
-        comparison = a.amount - b.amount;
+        comparison = (a.amount || 0) - (b.amount || 0);
         break;
       case 'created':
         comparison = new Date(a.created || '').getTime() - new Date(b.created || '').getTime();
         break;
     }
-    
+
     return order === 'asc' ? comparison : -comparison;
   });
 }
 
-// Фильтрация по брендам
 export function filterByBrands(products: Product[], brandIds: string[]): Product[] {
   if (brandIds.length === 0) return products;
   return products.filter(product => brandIds.includes(product.brandId));
 }
 
-// Фильтрация по категориям
-export function filterByCategories(products: Product[], categoryIds: string[]): Product[] {
-  if (categoryIds.length === 0) return products;
+export function filterByCategories(
+  products: Product[],
+  categoryIds: string[],
+  categories?: CategoryNode[]
+): Product[] {
+  if (!categoryIds || categoryIds.length === 0) return products;
+
+  if (categories && categories.length > 0) {
+    return products.filter(product =>
+      isCategoryOrAncestorSelected(categories, product.categoryId, categoryIds)
+    );
+  }
+
   return products.filter(product => categoryIds.includes(product.categoryId));
 }
 
-// Фильтрация по цене
 export function filterByPriceRange(products: Product[], min?: number, max?: number): Product[] {
   return products.filter(product => {
     const price = product.price;
@@ -84,7 +89,6 @@ export function filterByPriceRange(products: Product[], min?: number, max?: numb
   });
 }
 
-// Фильтрация по количеству
 export function filterByAmountRange(products: Product[], min?: number, max?: number): Product[] {
   return products.filter(product => {
     const amount = product.amount;
@@ -94,13 +98,11 @@ export function filterByAmountRange(products: Product[], min?: number, max?: num
   });
 }
 
-// Получение названия бренда для товара
 export function getBrandNameForProduct(product: Product, brands: Brand[]): string {
   const brand = brands.find(b => b.id === product.brandId);
   return brand?.title || 'Неизвестный бренд';
 }
 
-// Получение названия категории для товара
 export function getCategoryNameForProduct(
   product: Product, 
   categories: CategoryNode[]
@@ -122,7 +124,6 @@ export function getCategoryNameForProduct(
   return category?.title || 'Неизвестная категория';
 }
 
-// Получение пути категории (для хлебных крошек)
 export function getCategoryPathForProduct(
   product: Product,
   categories: CategoryNode[]
@@ -147,7 +148,6 @@ export function getCategoryPathForProduct(
   return findPath(categories, product.categoryId) || [];
 }
 
-// Группировка товаров по брендам
 export function groupProductsByBrand(products: Product[], brands: Brand[]): Record<string, Product[]> {
   const grouped: Record<string, Product[]> = {};
   
@@ -158,7 +158,6 @@ export function groupProductsByBrand(products: Product[], brands: Brand[]): Reco
   return grouped;
 }
 
-// Группировка товаров по категориям
 export function groupProductsByCategory(products: Product[], categories: CategoryNode[]): Record<string, Product[]> {
   const grouped: Record<string, Product[]> = {};
   

@@ -1,4 +1,3 @@
-// app/admin/catalog/page.tsx
 'use client';
 
 import { useState, useEffect, useMemo, useCallback } from 'react';
@@ -37,7 +36,6 @@ import styles from './page.module.css';
 export default function AdminCatalogPage() {
   const router = useRouter();
   
-  // Состояния данных
   const [products, setProducts] = useState<Product[]>([]);
   const [apiProducts, setApiProducts] = useState<ApiProduct[]>([]);
   const [brands, setBrands] = useState<Brand[]>([]);
@@ -45,9 +43,8 @@ export default function AdminCatalogPage() {
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
-  // Фильтры
   const [sortingFilters, setSortingFilters] = useState<AdminProductFilters>({
-    sortBy: 'title', // Изменяю 'name' на 'title'
+    sortBy: 'title',
     sortOrder: 'asc',
     searchQuery: '',
     selectedBrands: [],
@@ -58,27 +55,23 @@ export default function AdminCatalogPage() {
     sortBy: 'price-asc', 
     searchQuery: '',
     selectedCategories: [],
-    selectedBrands: [], // Теперь это названия брендов для совместимости с CatalogFilters
+    selectedBrands: [],
     priceRange: { min: 0, max: 0 }
   });
 
-  // Загрузка данных
   const fetchData = useCallback(async () => {
     setIsLoading(true);
     setError(null);
     try {
-      // Загружаем товары
       const productsResponse = await catalogApi.getProducts({ limit: 100, offset: 0 });
       setApiProducts(productsResponse.items);
       const convertedProducts = catalogApi.convertToProducts(productsResponse.items);
       setProducts(convertedProducts);
 
-      // Загружаем бренды
       const apiBrands = await brandsApi.getAllBrands();
       const convertedBrands = convertApiBrandsToBrands(apiBrands);
       setBrands(convertedBrands);
 
-      // Загружаем категории
       const apiCategories = await categoriesApi.getAllCategories();
       const categoryTree = buildCategoryTree(apiCategories);
       setCategories(categoryTree);
@@ -95,29 +88,17 @@ export default function AdminCatalogPage() {
     fetchData();
   }, [fetchData]);
 
-  // Преобразование ID брендов в названия для CatalogFilters
   const brandNames = useMemo(() => {
     return brands.map(brand => brand.title);
   }, [brands]);
 
-  // Преобразование категорий в старый формат для CatalogFilters
-  const legacyCategories = useMemo(() => {
-    return categories.map(category => ({
-      id: category.id,
-      name: category.title,
-      subCategories: category.children.map(child => ({
-        id: child.id,
-        name: child.title,
-      })),
-    }));
-  }, [categories]);
+  const categoryTree = useMemo(() => categories, [categories]);
 
   const handleSidebarFiltersChange = (newFilters: CatalogFiltersType) => {
     setSidebarFilters(newFilters);
   };
 
   const handleApplyFilters = () => {
-    // Конвертируем названия брендов в ID
     const brandIds = sidebarFilters.selectedBrands.map(brandName => {
       const brand = brands.find(b => b.title === brandName);
       return brand?.id || '';
@@ -130,26 +111,21 @@ export default function AdminCatalogPage() {
     }));
   };
 
-  // Фильтрация и сортировка товаров
   const filteredProducts = useMemo(() => {
     let result = [...products];
 
-    // Поиск по названию
     if (sortingFilters.searchQuery) {
       result = searchProducts(result, sortingFilters.searchQuery);
     }
 
-    // Фильтрация по брендам (по ID)
     if (sortingFilters.selectedBrands.length > 0) {
       result = filterByBrands(result, sortingFilters.selectedBrands);
     }
 
-    // Фильтрация по категориям
     if (sortingFilters.selectedCategories.length > 0) {
       result = filterByCategories(result, sortingFilters.selectedCategories);
     }
 
-    // Фильтрация по цене из сайдбара
     if (sidebarFilters.priceRange.min > 0 || sidebarFilters.priceRange.max > 0) {
       result = filterByPriceRange(
         result, 
@@ -158,11 +134,10 @@ export default function AdminCatalogPage() {
       );
     }
 
-    // Сортировка
     const sortFieldMap: Record<AdminProductSortBy, 'title' | 'price' | 'amount' | 'created'> = {
       'title': 'title',
-      'brand': 'title', // Для сортировки по бренду нужна отдельная логика
-      'category': 'title', // Для сортировки по категории нужна отдельная логика
+      'brand': 'title',
+      'category': 'title',
       'price': 'price',
       'created': 'created',
       'amount': 'amount',
@@ -170,7 +145,6 @@ export default function AdminCatalogPage() {
 
     const sortField = sortFieldMap[sortingFilters.sortBy];
     
-    // Если сортировка по бренду или категории - особая логика
     if (sortingFilters.sortBy === 'brand') {
       result.sort((a, b) => {
         const brandA = getBrandNameForProduct(a, brands);
@@ -216,7 +190,7 @@ export default function AdminCatalogPage() {
     if (confirm('Удалить товар?')) {
       try {
         await catalogApi.deleteProduct(productId);
-        fetchData(); // Обновляем данные
+        fetchData();
       } catch (err) {
         console.error('Ошибка при удалении товара:', err);
         alert('Не удалось удалить товар');
@@ -302,7 +276,7 @@ export default function AdminCatalogPage() {
             <div className={styles.filtersContainer}>
               <CatalogFilters
                 filters={sidebarFilters}
-                categories={legacyCategories}
+                categories={categoryTree}
                 brands={brandNames}
                 onFiltersChange={handleSidebarFiltersChange}
                 onApplyFilters={handleApplyFilters}

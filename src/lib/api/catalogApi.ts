@@ -1,4 +1,3 @@
-// lib/api/catalogApi.ts
 import {
   Product,
   ApiProduct,
@@ -9,12 +8,9 @@ import {
   ProductFiltersParams,
 } from '@/types/catalog';
 
-const API_BASE = process.env.NODE_ENV === 'development' 
-  ? '/backend/api/v1/goods' 
-  : `${process.env.NEXT_PUBLIC_API_URL}/api/v1/goods`;
+const API_BASE = `${process.env.NEXT_PUBLIC_API_URL_CATALOG}/goods`;
 
 export const catalogApi = {
-  // Получить товары с пагинацией
   async getProducts(params?: PaginationParams): Promise<ProductsResponse> {
     const limit = params?.limit || 100;
     const offset = params?.offset || 0;
@@ -34,7 +30,6 @@ export const catalogApi = {
     return await response.json();
   },
 
-  // Получить товар по ID
   async getProductById(id: string): Promise<ApiProduct> {
     const response = await fetch(
       `${API_BASE}/${id}`,
@@ -51,7 +46,6 @@ export const catalogApi = {
     return await response.json();
   },
 
-  // Создать товар
   async createProduct(data: CreateProductRequest): Promise<ApiProduct> {
     const response = await fetch(
       API_BASE,
@@ -69,7 +63,6 @@ export const catalogApi = {
     return await response.json();
   },
 
-  // Обновить товар
   async updateProduct(id: string, data: UpdateProductRequest): Promise<ApiProduct> {
     const response = await fetch(
       `${API_BASE}/${id}`,
@@ -87,7 +80,6 @@ export const catalogApi = {
     return await response.json();
   },
 
-  // Удалить товар
   async deleteProduct(id: string): Promise<void> {
     const response = await fetch(
       `${API_BASE}/${id}`,
@@ -126,7 +118,6 @@ export const catalogApi = {
   //   return await response.json();
   // },
 
-  // Конвертация API товара в Product для UI
   convertToProduct(apiProduct: ApiProduct): Product {
     return {
       id: apiProduct.id,
@@ -142,12 +133,10 @@ export const catalogApi = {
     };
   },
 
-  // Конвертация массива API товаров
   convertToProducts(apiProducts: ApiProduct[]): Product[] {
     return apiProducts.map(this.convertToProduct);
   },
 
-  // Получение всех товаров (рекурсивно через пагинацию)
   async getAllProducts(): Promise<Product[]> {
     const allProducts: ApiProduct[] = [];
     let offset = 0;

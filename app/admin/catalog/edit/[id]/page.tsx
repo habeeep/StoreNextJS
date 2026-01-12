@@ -1,4 +1,3 @@
-// app/admin/catalog/create/page.tsx
 'use client';
 
 import { useState, useEffect } from 'react';
@@ -13,6 +12,7 @@ import { catalogApi } from '@/lib/api/catalogApi';
 import { brandsApi } from '@/lib/api/brandsApi';
 import { categoriesApi } from '@/lib/api/categoriesApi';
 import { buildCategoryTree } from '@/lib/utils/categoryUtils';
+import CategoryTreeSelect from '../../components/CategoryTreeSelect/CategoryTreeSelect';
 import styles from './page.module.css';
 
 interface ProductFormData {
@@ -42,7 +42,6 @@ export default function CreateProductPage() {
     amount: 0,
   });
 
-  // Загрузка брендов и категорий
   useEffect(() => {
     const fetchData = async () => {
       setIsLoadingData(true);
@@ -107,7 +106,6 @@ export default function CreateProductPage() {
     );
   }
 
-  // Функция для получения всех категорий (включая вложенные) для выпадающего списка
   const getAllCategoriesForSelect = (nodes: CategoryNode[], level = 0): Array<{ id: string; title: string; indent: string }> => {
     let result: Array<{ id: string; title: string; indent: string }> = [];
     
@@ -147,7 +145,6 @@ export default function CreateProductPage() {
         )}
 
         <form onSubmit={handleSubmit} className={styles.form}>
-          {/* Название */}
           <div className={styles.field}>
             <label className={styles.label}>Название товара *</label>
             <Input
@@ -159,7 +156,6 @@ export default function CreateProductPage() {
             />
           </div>
 
-          {/* Описание */}
           <div className={styles.field}>
             <label className={styles.label}>Описание *</label>
             <textarea
@@ -173,7 +169,6 @@ export default function CreateProductPage() {
             />
           </div>
 
-          {/* Цена */}
           <div className={styles.field}>
             <label className={styles.label}>Цена (₽) *</label>
             <Input
@@ -188,7 +183,6 @@ export default function CreateProductPage() {
             />
           </div>
 
-          {/* Количество */}
           <div className={styles.field}>
             <label className={styles.label}>Количество на складе *</label>
             <Input
@@ -203,26 +197,22 @@ export default function CreateProductPage() {
             />
           </div>
 
-          {/* Категория */}
           <div className={styles.field}>
             <label className={styles.label}>Категория *</label>
-            <select
-              value={formData.categoryId}
-              onChange={(e) => handleInputChange('categoryId', e.target.value)}
-              className={styles.select}
-              required
-              disabled={isSubmitting}
-            >
-              <option value="">Выберите категорию</option>
-              {allCategories.map(category => (
-                <option key={category.id} value={category.id}>
-                  {category.title}
-                </option>
-              ))}
-            </select>
+            <div className={styles.categoryTree}>
+              {categories.length === 0 ? (
+                <div>Категории не загружены</div>
+              ) : (
+                <CategoryTreeSelect
+                  nodes={categories}
+                  value={formData.categoryId}
+                  onChange={(id: string) => handleInputChange('categoryId', id)}
+                  disabled={isSubmitting}
+                />
+              )}
+            </div>
           </div>
 
-          {/* Бренд */}
           <div className={styles.field}>
             <label className={styles.label}>Бренд *</label>
             <select
@@ -241,7 +231,6 @@ export default function CreateProductPage() {
             </select>
           </div>
 
-          {/* Кнопки */}
           <div className={styles.actions}>
             <Button 
               type="submit" 

@@ -1,4 +1,3 @@
-// app/admin/brands/create/page.tsx
 'use client';
 
 import { useState } from 'react';
@@ -48,7 +47,6 @@ export default function CreateBrandPage() {
   return (
     <Container>
       <div className={styles.page}>
-        {/* Кнопка назад */}
         <button 
           className={styles.backButton}
           onClick={handleCancel}
@@ -67,7 +65,6 @@ export default function CreateBrandPage() {
         )}
 
         <form onSubmit={handleSubmit} className={styles.form}>
-          {/* Название */}
           <div className={styles.field}>
             <label className={styles.label}>Название *</label>
             <Input
@@ -79,7 +76,6 @@ export default function CreateBrandPage() {
             />
           </div>
 
-          {/* Страна */}
           <div className={styles.field}>
             <label className={styles.label}>Страна *</label>
             <Input
@@ -91,7 +87,6 @@ export default function CreateBrandPage() {
             />
           </div>
 
-          {/* Описание */}
           <div className={styles.field}>
             <label className={styles.label}>Описание *</label>
             <textarea
@@ -105,7 +100,6 @@ export default function CreateBrandPage() {
             />
           </div>
 
-          {/* Кнопки */}
           <div className={styles.actions}>
             <Button 
               type="submit" 

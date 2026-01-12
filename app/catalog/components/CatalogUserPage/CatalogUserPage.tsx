@@ -1,15 +1,28 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
+import { useSearchParams, useRouter, usePathname } from 'next/navigation';
 import { Product, CatalogFilters } from '@/types/catalog';
-import { Category } from '@/types/category';
+import { CategoryNode } from '@/types/category';
 import { CatalogHeader } from './components/CatalogHeader/CatalogHeader';
 import { CatalogFilters as FiltersComponent } from './components/CatalogFilters/CatalogFilters';
 import { ProductGrid } from './components/ProductGrid/ProductGrid';
 import styles from './CatalogUserPage.module.css';
+import { catalogApi } from '@/lib/api/catalogApi';
+import { categoriesApi } from '@/lib/api/categoriesApi';
+import { brandsApi } from '@/lib/api/brandsApi';
+import { buildCategoryTree } from '@/lib/utils/categoryUtils';
 
 export const CatalogUserPage = () => {
-  const [filters, setFilters] = useState<CatalogFilters>({
+  const [sidebarFilters, setSidebarFilters] = useState<CatalogFilters>({
+    sortBy: 'price-asc',
+    searchQuery: '',
+    selectedCategories: [],
+    selectedBrands: [],
+    priceRange: { min: 0, max: 0 }
+  });
+
+  const [appliedFilters, setAppliedFilters] = useState<CatalogFilters>({
     sortBy: 'price-asc',
     searchQuery: '',
     selectedCategories: [],
@@ -19,135 +32,122 @@ export const CatalogUserPage = () => {
 
   const [products, setProducts] = useState<Product[]>([]);
   const [filteredProducts, setFilteredProducts] = useState<Product[]>([]);
-  const [categories, setCategories] = useState<Category[]>([]);
+  const [categories, setCategories] = useState<CategoryNode[]>([]);
   const [brands, setBrands] = useState<string[]>([]);
-
-  const mockProducts: Product[] = [
-    {
-      id: '1',
-      name: 'Монстера',
-      description: 'Тропическое растение с резными листьями',
-      price: 2500,
-      imagePath: '/images/catalog/plants1.png',
-      categoryId: '1',
-      subCategoryId: '11',
-      brand: 'GreenHouse',
-      inCart: false
-    },
-    {
-      id: '2',
-      name: 'Чики',
-      description: 'Тропическое растение с резными листьями',
-      price: 2100,
-      imagePath: '/images/catalog/plants2.png',
-      categoryId: '2',
-      subCategoryId: '21',
-      brand: 'GreenHouse',
-      inCart: false
-    },
-    {
-      id: '3',
-      name: 'Лоло',
-      description: 'Тропическое растение с резными листьями',
-      price: 4500,
-      imagePath: '/images/catalog/plants3.png',
-      categoryId: '1',
-      subCategoryId: '13',
-      brand: 'GreenHouse',
-      inCart: false
-    },
-    {
-      id: '4',
-      name: 'Амстел',
-      description: 'Тропическое растение с резными листьями',
-      price: 2600,
-      imagePath: '/images/catalog/plants4.png',
-      categoryId: '1',
-      subCategoryId: '12',
-      brand: 'GreenHouse',
-      inCart: false
-    },
-    {
-      id: '5',
-      name: 'Коростик',
-      description: 'Тропическое растение с резными листьями',
-      price: 2800,
-      imagePath: '/images/catalog/plants1.png',
-      categoryId: '2',
-      subCategoryId: '24',
-      brand: 'GreenHouse',
-      inCart: false
-    },
-    {
-      id: '6',
-      name: 'Алекса',
-      description: 'Тропическое растение с резными листьями',
-      price: 8500,
-      imagePath: '/images/catalog/plants2.png',
-      categoryId: '2',
-      subCategoryId: '22',
-      brand: 'GreenHouse',
-      inCart: false
-    },
-  ];
-
-  const mockCategories: Category[] = [
-    {
-      id: '1',
-      name: 'Комнатные растения',
-      subCategories: [
-        { id: '11', name: 'Декоративно-лиственные' },
-        { id: '12', name: 'Цветущие' },
-        { id: '13', name: 'Кактусы и суккуленты' },
-        { id: '14', name: 'Пальмы' }
-      ]
-    },
-    {
-      id: '2',
-      name: 'Садовые растения',
-      subCategories: [
-        { id: '21', name: 'Хвойные' },
-        { id: '22', name: 'Лиственные деревья' },
-        { id: '23', name: 'Кустарники' },
-        { id: '24', name: 'Многолетники' }
-      ]
-    }
-  ];
-
-  const mockBrands = ['GreenHouse', 'PlantShop', 'Botanic', 'Flora', 'Qel', 'Popo'];
+  const [isLoading, setIsLoading] = useState(true);
+  const searchParams = useSearchParams();
+  const router = useRouter();
+  const pathname = usePathname();
+  const initialCategoryParam = useRef<string | null>(null);
 
   useEffect(() => {
-    setProducts(mockProducts);
-    setCategories(mockCategories);
-    setBrands(mockBrands);
+    let mounted = true;
+
+    const fetchData = async () => {
+      setIsLoading(true);
+      try {
+        const [productsList, apiCategories, apiBrands] = await Promise.all([
+          catalogApi.getAllProducts(),
+          categoriesApi.getAllCategories(),
+          brandsApi.getAllBrands(),
+        ]);
+
+        if (!mounted) return;
+
+        setProducts(productsList);
+        const tree = buildCategoryTree(apiCategories);
+        setCategories(tree);
+        setBrands(apiBrands.map(b => b.title));
+      } catch (err) {
+        console.error('Ошибка при загрузке данных каталога:', err);
+      } finally {
+        if (mounted) setIsLoading(false);
+      }
+    };
+
+    fetchData();
+
+    return () => { mounted = false; };
   }, []);
+
+  useEffect(() => {
+    const param = searchParams?.get ? searchParams.get('category') : null;
+    if (!param) return;
+    if (isLoading) return;
+
+    const exists = (nodes: CategoryNode[], id: string): boolean => {
+      for (const n of nodes) {
+        if (n.id === id) return true;
+        if (n.children.length > 0 && exists(n.children, id)) return true;
+      }
+      return false;
+    };
+
+    if (categories.length > 0 && exists(categories, param)) {
+      setSidebarFilters(prev => ({ ...prev, selectedCategories: [param] }));
+      setAppliedFilters(prev => ({ ...prev, selectedCategories: [param] }));
+      initialCategoryParam.current = param;
+    }
+  }, [searchParams, isLoading, categories]);
+
+  useEffect(() => {
+    if (!initialCategoryParam.current) return;
+
+    try {
+      const param = searchParams?.get ? searchParams.get('category') : null;
+      if (!param) return;
+
+      if (appliedFilters.selectedCategories.length === 1 && appliedFilters.selectedCategories[0] === param) return;
+
+      const params = new URLSearchParams(Array.from(searchParams.entries()));
+      params.delete('category');
+      const q = params.toString();
+      const newUrl = q ? `${pathname}?${q}` : pathname;
+      router.replace(newUrl);
+    } catch (err) {
+      console.warn('Не удалось очистить параметр category из URL', err);
+    }
+  }, [appliedFilters.selectedCategories, searchParams, router, pathname]);
 
   const applyFilters = () => {
     let result = [...products];
 
-    if (filters.searchQuery) {
-      const query = filters.searchQuery.toLowerCase();
-      result = result.filter(p => p.name.toLowerCase().includes(query));
+    if (appliedFilters.searchQuery) {
+      const query = appliedFilters.searchQuery.toLowerCase();
+      result = result.filter(p => p.title.toLowerCase().includes(query));
     }
 
-    if (filters.selectedCategories.length > 0) {
-      result = result.filter(p => 
-        filters.selectedCategories.includes(p.categoryId) || 
-        filters.selectedCategories.includes(p.subCategoryId)
-      );
+    if (appliedFilters.selectedCategories.length > 0) {
+      result = result.filter(p => {
+        const findPath = (nodes: CategoryNode[], targetId: string, path: CategoryNode[] = []): CategoryNode[] | null => {
+          for (const node of nodes) {
+            const currentPath = [...path, node];
+            if (node.id === targetId) return currentPath;
+            if (node.children.length > 0) {
+              const found = findPath(node.children, targetId, currentPath);
+              if (found) return found;
+            }
+          }
+          return null;
+        };
+
+        const path = findPath(categories, p.categoryId) || [];
+        if (path.length === 0) return false;
+        return path.some(node => appliedFilters.selectedCategories.includes(node.id));
+      });
     }
 
-    if (filters.selectedBrands.length > 0) {
-      result = result.filter(p => filters.selectedBrands.includes(p.brand));
+    if (appliedFilters.selectedBrands.length > 0) {
+      result = result.filter(p => appliedFilters.selectedBrands.includes(p.brandId));
     }
 
     result = result.filter(p => 
-      p.price >= (filters.priceRange.min || 0) && 
-      p.price <= (filters.priceRange.max || Infinity)
+      p.price >= (appliedFilters.priceRange.min || 0) && 
+      p.price <= (appliedFilters.priceRange.max || Infinity)
     );
 
     result.sort((a, b) => {
-      switch (filters.sortBy) {
+      switch (appliedFilters.sortBy) {
         case 'price-asc':
           return a.price - b.price;
         case 'price-desc':
@@ -166,7 +166,7 @@ export const CatalogUserPage = () => {
 
   useEffect(() => {
     applyFilters();
-  }, [products, filters]);
+  }, [products, appliedFilters]);
 
   const handleAddToCart = (id: string) => {
   setProducts(prev => prev.map(p => 
@@ -217,18 +217,18 @@ const handleDecrementQuantity = (id: string) => {
   return (
     <div className={styles.page}>
       <CatalogHeader 
-        filters={filters}
-        onFiltersChange={setFilters}
+        filters={appliedFilters}
+        onFiltersChange={setAppliedFilters}
       />
 
       <div className={styles.content}>
         <aside className={styles.sidebar}>
           <FiltersComponent
-            filters={filters}
+            filters={sidebarFilters}
             categories={categories}
             brands={brands}
-            onFiltersChange={setFilters}
-            onApplyFilters={applyFilters}
+            onFiltersChange={setSidebarFilters}
+            onApplyFilters={() => setAppliedFilters(sidebarFilters)}
           />
         </aside>
 

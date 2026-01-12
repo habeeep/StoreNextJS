@@ -1,4 +1,3 @@
-// app/admin/brands/components/BrandTable/BrandTable.tsx
 'use client';
 
 import { Brand } from '@/types/brand';

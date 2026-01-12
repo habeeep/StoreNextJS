@@ -1,4 +1,3 @@
-// app/admin/brands/edit/[id]/page.tsx
 'use client';
 
 import { useState, useEffect } from 'react';
@@ -116,7 +115,6 @@ export default function EditBrandPage() {
   return (
     <Container>
       <div className={styles.page}>
-        {/* Кнопка назад */}
         <button 
           className={styles.backButton}
           onClick={handleCancel}
@@ -135,7 +133,6 @@ export default function EditBrandPage() {
         )}
 
         <form onSubmit={handleSave} className={styles.form}>
-          {/* Название */}
           <div className={styles.field}>
             <label className={styles.label}>Название *</label>
             <Input
@@ -147,7 +144,6 @@ export default function EditBrandPage() {
             />
           </div>
 
-          {/* Страна */}
           <div className={styles.field}>
             <label className={styles.label}>Страна *</label>
             <Input
@@ -159,7 +155,6 @@ export default function EditBrandPage() {
             />
           </div>
 
-          {/* Описание */}
           <div className={styles.field}>
             <label className={styles.label}>Описание *</label>
             <textarea
@@ -173,7 +168,6 @@ export default function EditBrandPage() {
             />
           </div>
 
-          {/* Кнопки */}
           <div className={styles.actions}>
             <Button 
               type="submit" 

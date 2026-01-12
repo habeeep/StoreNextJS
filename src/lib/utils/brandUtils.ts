@@ -1,7 +1,5 @@
-// lib/utils/brandUtils.ts
 import { ApiBrand, Brand } from '@/types/brand';
 
-// Конвертация API бренда в Brand для UI
 export function convertApiBrandToBrand(apiBrand: ApiBrand): Brand {
   return {
     id: apiBrand.id,
@@ -11,12 +9,10 @@ export function convertApiBrandToBrand(apiBrand: ApiBrand): Brand {
   };
 }
 
-// Конвертация массива API брендов
 export function convertApiBrandsToBrands(apiBrands: ApiBrand[]): Brand[] {
   return apiBrands.map(convertApiBrandToBrand);
 }
 
-// Поиск брендов
 export function searchBrands(brands: Brand[], query: string): Brand[] {
   if (!query.trim()) return brands;
 
@@ -28,7 +24,6 @@ export function searchBrands(brands: Brand[], query: string): Brand[] {
   );
 }
 
-// Сортировка брендов
 export function sortBrands(
   brands: Brand[], 
   field: 'title' | 'country' = 'title',
@@ -42,12 +37,10 @@ export function sortBrands(
   });
 }
 
-// Получение бренда по ID
 export function getBrandById(brands: Brand[], id: string): Brand | undefined {
   return brands.find(brand => brand.id === id);
 }
 
-// Получение названий брендов для выпадающих списков
 export function getBrandOptions(brands: Brand[]): Array<{ value: string; label: string }> {
   return brands.map(brand => ({
     value: brand.id,

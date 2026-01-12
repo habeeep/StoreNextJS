@@ -1,4 +1,3 @@
-// app/news/components/NewsCard/NewsCard.tsx
 'use client';
 
 import { useState } from 'react';
@@ -53,17 +52,14 @@ export const NewsCard = ({
     setShowComments(!showComments);
   };
 
-  // Используем текст новости как описание (первые 150 символов)
   const description = news.text.length > 150 
     ? news.text.substring(0, 150) + '...' 
     : news.text;
     
-  // Если нет изображений, используем дефолтное
   const images = news.images && news.images.length > 0 
     ? news.images 
     : ['/images/news/hero1.png'];
 
-  // Условные поля, если не пришли с бэкенда
   const isLiked = news.isLiked || false;
   const isFavorite = news.isFavorite || false;
 

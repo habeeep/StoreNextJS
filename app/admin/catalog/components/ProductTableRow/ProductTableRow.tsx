@@ -1,4 +1,3 @@
-// app/admin/catalog/components/ProductTableRow/ProductTableRow.tsx
 'use client';
 
 import { useState, useEffect, useRef } from 'react';
@@ -59,7 +58,7 @@ export const ProductTableRow = ({
     <tr className={styles.row}>
       <td className={styles.td}>
         <div className={styles.productName}>
-          {product.title} {/* Изменяю product.name на product.title */}
+          {product.title}
         </div>
         <div className={styles.productDescription}>
           {product.description}

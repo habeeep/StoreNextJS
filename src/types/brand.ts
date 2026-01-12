@@ -1,16 +1,12 @@
-// types/brand.ts
-
-// Бренд из API
 export interface ApiBrand {
   id: string;
-  title: string; // Изменяю name на title
+  title: string;
   country: string;
   description: string;
   created: string;
   updated: string | null;
 }
 
-// Запрос на создание/обновление бренда
 export interface CreateBrandRequest {
   title: string;
   country: string;
@@ -23,7 +19,6 @@ export interface UpdateBrandRequest {
   description: string;
 }
 
-// Бренд для UI (без полей created/updated если не нужны)
 export interface Brand {
   id: string;
   title: string;
@@ -31,14 +26,12 @@ export interface Brand {
   description: string;
 }
 
-// Форма для создания/редактирования бренда
 export interface BrandFormData {
   title: string;
   country: string;
   description: string;
 }
 
-// Для совместимости со старым кодом (если нужно)
 export interface BrandForProduct {
   id: string;
   title: string;

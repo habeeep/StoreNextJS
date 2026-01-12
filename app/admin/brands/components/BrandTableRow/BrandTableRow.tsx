@@ -1,4 +1,3 @@
-// app/admin/brands/components/BrandTableRow/BrandTableRow.tsx
 'use client';
 
 import { useState } from 'react';
@@ -73,7 +72,6 @@ export const BrandTableRow = ({
             </button>
           </div>
           
-          {/* Альтернативный вариант с меню */}
           <div className={styles.menuContainer}>
             <button 
               className={styles.menuButton}

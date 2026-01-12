@@ -1,4 +1,3 @@
-// app/admin/categories/page.tsx
 'use client';
 
 import { useState, useEffect, useMemo, useCallback } from 'react';
@@ -14,7 +13,6 @@ import { buildCategoryTree, searchInCategoryTree, sortCategoryTree } from '@/lib
 import styles from './page.module.css';
 
 export default function CategoriesTreePage() {
-  // Состояния
   const [categories, setCategories] = useState<CategoryNode[]>([]);
   const [searchQuery, setSearchQuery] = useState('');
   const [sortOrder, setSortOrder] = useState<CategorySortOrder>('none');
@@ -22,7 +20,6 @@ export default function CategoriesTreePage() {
   const [error, setError] = useState<string | null>(null);
   const [isAddingCategory, setIsAddingCategory] = useState(false);
 
-  // Загрузка категорий
   const fetchCategories = useCallback(async () => {
     setIsLoading(true);
     setError(null);
@@ -42,16 +39,13 @@ export default function CategoriesTreePage() {
     fetchCategories();
   }, [fetchCategories]);
 
-  // Обработанные категории с поиском и сортировкой
   const processedCategories = useMemo(() => {
     let result = categories;
     
-    // Применяем поиск
     if (searchQuery.trim()) {
       result = searchInCategoryTree(categories, searchQuery);
     }
     
-    // Применяем сортировку
     if (sortOrder !== 'none') {
       result = sortCategoryTree(result, sortOrder);
     }
@@ -59,7 +53,6 @@ export default function CategoriesTreePage() {
     return result;
   }, [categories, searchQuery, sortOrder]);
 
-  // Обработчики действий
   const handleAddSubcategory = (parentId: string) => {
     console.log('Добавить подкатегорию для', parentId);
     setIsAddingCategory(true);
@@ -73,7 +66,7 @@ export default function CategoriesTreePage() {
     if (confirm('Удалить категорию? Все подкатегории также будут удалены.')) {
       try {
         await categoriesApi.deleteCategory(categoryId);
-        fetchCategories(); // Обновляем список
+        fetchCategories();
       } catch (err) {
         console.error('Ошибка удаления:', err);
         alert('Не удалось удалить категорию');
@@ -113,7 +106,6 @@ export default function CategoriesTreePage() {
   return (
     <Container>
       <div className={styles.page}>
-        {/* Заголовок и кнопки */}
         <div className={styles.header}>
           <div className={styles.headerTop}>
             <h1 className={styles.title}>Дерево категорий товаров</h1>
@@ -128,7 +120,6 @@ export default function CategoriesTreePage() {
             </div>
           </div>
 
-          {/* Сортировка и поиск */}
           <div className={styles.headerBottom}>
             <CategorySortHeader
               sortOrder={sortOrder}
@@ -143,7 +134,6 @@ export default function CategoriesTreePage() {
           </div>
         </div>
 
-        {/* Состояния загрузки/ошибки */}
         {isLoading && (
           <div className={styles.loading}>Загрузка категорий...</div>
         )}
@@ -157,16 +147,13 @@ export default function CategoriesTreePage() {
           </div>
         )}
 
-        {/* Основная часть с деревом категорий */}
         {!isLoading && !error && (
           <div className={styles.treeContainer}>
-            {/* Заголовки столбцов */}
             <div className={styles.columnsHeader}>
               <div className={styles.columnName}>Название категории</div>
               <div className={styles.columnActions}>Действия</div>
             </div>
 
-            {/* Список категорий */}
             <div className={styles.categoriesList}>
               {processedCategories.length === 0 ? (
                 <div className={styles.emptyState}>
@@ -190,7 +177,6 @@ export default function CategoriesTreePage() {
           </div>
         )}
 
-        {/* TODO: Модальное окно для добавления/редактирования категории */}
         {isAddingCategory && (
           <div className={styles.modalOverlay}>
             <div className={styles.modal}>

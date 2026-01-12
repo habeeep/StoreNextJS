@@ -1,4 +1,3 @@
-// app/admin/categories/components/CategorySortHeader/CategorySortHeader.tsx
 'use client';
 
 import { CategorySortOrder } from '@/types/category';

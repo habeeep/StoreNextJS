@@ -1,4 +1,3 @@
-// app/news/components/CommentCard/CommentCard.tsx
 'use client';
 
 import { ApiComment } from '@/types/news';
@@ -18,7 +17,6 @@ export const CommentCard = ({ comment }: CommentCardProps) => {
     minute: '2-digit'
   });
 
-  // Извлекаем имя из email (все до @)
   const userName = comment.userMail.split('@')[0];
 
   return (

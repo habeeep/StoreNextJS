@@ -6,8 +6,6 @@ import { NewsItem } from '@/types/news';
 import { newsApi } from '@/lib/api/newsApi';
 import { Container } from '@/components/layout/Container/Container';
 import { Button } from '@/components/ui/Button/Button';
-// import { EditIcon } from '@/components/ui/icons/EditIcon';
-// import { ArrowLeftIcon } from '@/components/ui/icons/ArrowLeftIcon';
 import styles from './page.module.css';
 
 export default function NewsDetailPage() {
@@ -82,7 +80,6 @@ export default function NewsDetailPage() {
             className={styles.backButton}
             onClick={() => router.push('/admin/news')}
           >
-            {/* <ArrowLeftIcon size={20} /> */}
             ← Назад к списку
           </button>
           
@@ -91,7 +88,6 @@ export default function NewsDetailPage() {
               onClick={() => router.push(`/admin/news/${newsId}/edit`)}
               className={styles.editButton}
             >
-              {/* <EditIcon size={20} /> */}
               Редактировать
             </Button>
             

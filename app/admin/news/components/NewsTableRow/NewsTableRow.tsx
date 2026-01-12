@@ -1,12 +1,10 @@
-// app/admin/news/components/NewsTableRow/NewsTableRow.tsx
 'use client';
 
 import { useState } from 'react';
 import Link from 'next/link';
 import { NewsItem } from '@/types/news';
-// import { MoreVerticalIcon } from '@/components/ui/icons/MoreVerticalIcon';
 import { EyeIcon } from '@/components/ui/icons/EyeIcon';
-// import { EditIcon } from '@/components/ui/icons/EditIcon';
+import { EditIcon } from '@/components/ui/icons/EditIcon';
 import { TrashIcon } from '@/components/ui/icons/TrashIcon';
 import styles from './NewsTableRow.module.css';
 
@@ -86,8 +84,7 @@ export const NewsTableRow = ({ news, index, onDelete }: NewsTableRowProps) => {
               className={styles.actionButton}
               title="Редактировать"
             >
-              {/* <EditIcon size={18} /> */}
-              d
+              <EditIcon size={18} />
             </Link>
             
             <button 

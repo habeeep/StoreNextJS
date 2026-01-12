@@ -77,7 +77,6 @@ export default function EditNewsPage() {
       await newsApi.deleteNews(newsId);
       console.log('Новость удалена');
       
-      // После успешного удаления переходим на список новостей
       router.push('/admin/news');
       
     } catch (err) {
