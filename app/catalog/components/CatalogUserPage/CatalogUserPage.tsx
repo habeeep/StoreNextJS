@@ -1,7 +1,8 @@
 'use client';
 
 import { useState, useEffect } from 'react';
-import { Product, Category, CatalogFilters } from '@/types/catalog';
+import { Product, CatalogFilters } from '@/types/catalog';
+import { Category } from '@/types/category';
 import { CatalogHeader } from './components/CatalogHeader/CatalogHeader';
 import { CatalogFilters as FiltersComponent } from './components/CatalogFilters/CatalogFilters';
 import { ProductGrid } from './components/ProductGrid/ProductGrid';

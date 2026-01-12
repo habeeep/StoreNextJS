@@ -1,14 +1,18 @@
+// app/admin/catalog/components/ProductTableRow/ProductTableRow.tsx
 'use client';
 
 import { useState, useEffect, useRef } from 'react';
-import { Product, Brand, Category } from '@/types/catalog';
-import { DotsIcon } from '@/components/ui/icons/Dots';
+import { Product } from '@/types/catalog';
+import { Brand } from '@/types/brand';
+import { CategoryNode } from '@/types/category';
+import { DotsIcon } from '@/components/ui/icons/DotsIcon';
+import { getBrandNameForProduct, getCategoryNameForProduct } from '@/lib/utils/catalogUtils';
 import styles from './ProductTableRow.module.css';
 
 interface ProductTableRowProps {
   product: Product;
   brands: Brand[];
-  categories: Category[];
+  categories: CategoryNode[];
   onEdit: (product: Product) => void;
   onDelete: (productId: string) => void;
   onView: (productId: string) => void;
@@ -26,21 +30,8 @@ export const ProductTableRow = ({
   const menuRef = useRef<HTMLDivElement>(null);
   const buttonRef = useRef<HTMLButtonElement>(null);
 
-  const getBrandName = (brandId: string) => {
-    const brand = brands.find(b => b.name === product.brand);
-    return brand?.name || product.brand;
-  };
-
-  const getCategoryNames = () => {
-    const category = categories.find(c => c.id === product.categoryId);
-    const subCategory = category?.subCategories.find(s => s.id === product.subCategoryId);
-    
-    const names: string[] = [];
-    if (category) names.push(category.name);
-    if (subCategory) names.push(subCategory.name);
-    
-    return names.join(' / ');
-  };
+  const brandName = getBrandNameForProduct(product, brands);
+  const categoryName = getCategoryNameForProduct(product, categories);
 
   const toggleMenu = () => {
     setShowMenu(!showMenu);
@@ -68,25 +59,31 @@ export const ProductTableRow = ({
     <tr className={styles.row}>
       <td className={styles.td}>
         <div className={styles.productName}>
-          {product.name}
+          {product.title} {/* Изменяю product.name на product.title */}
+        </div>
+        <div className={styles.productDescription}>
+          {product.description}
         </div>
       </td>
       
       <td className={styles.td}>
         <div className={styles.brand}>
-          {getBrandName(product.brand)}
+          {brandName}
         </div>
       </td>
       
       <td className={styles.td}>
         <div className={styles.categories}>
-          {getCategoryNames()}
+          {categoryName}
         </div>
       </td>
 
       <td className={styles.td}>
         <div className={styles.productPrice}>
           {product.price} ₽
+        </div>
+        <div className={styles.productAmount}>
+          В наличии: {product.amount} шт.
         </div>
       </td>
       
@@ -114,6 +111,26 @@ export const ProductTableRow = ({
                 }}
               >
                 Редактировать
+              </button>
+              
+              <button 
+                className={styles.menuItem}
+                onClick={() => {
+                  onDelete(product.id);
+                  setShowMenu(false);
+                }}
+              >
+                Удалить
+              </button>
+              
+              <button 
+                className={styles.menuItem}
+                onClick={() => {
+                  onView(product.id);
+                  setShowMenu(false);
+                }}
+              >
+                Просмотреть
               </button>
             </div>
           )}

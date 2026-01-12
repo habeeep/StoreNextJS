@@ -1,3 +1,4 @@
+// app/admin/catalog/components/AdminSortHeader/AdminSortHeader.tsx
 'use client';
 
 import { AdminProductSortBy } from '@/types/catalog';
@@ -34,18 +35,18 @@ export const AdminSortHeader = ({
           <span className={styles.sortLabel}>Названию</span>
           <button
             className={`${styles.sortButton} ${
-              currentSortBy === 'name' && sortOrder === 'asc' ? styles.active : ''
+              currentSortBy === 'title' && sortOrder === 'asc' ? styles.active : ''
             }`}
-            onClick={() => handleSortClick('name')}
+            onClick={() => handleSortClick('title')}
             title="По названию (А-Я)"
           >
             <SortAscIcon />
           </button>
           <button
             className={`${styles.sortButton} ${
-              currentSortBy === 'name' && sortOrder === 'desc' ? styles.active : ''
+              currentSortBy === 'title' && sortOrder === 'desc' ? styles.active : ''
             }`}
-            onClick={() => handleSortClick('name')}
+            onClick={() => handleSortClick('title')}
             title="По названию (Я-А)"
           >
             <SortDescIcon />
@@ -113,6 +114,28 @@ export const AdminSortHeader = ({
             }`}
             onClick={() => handleSortClick('price')}
             title="По убыванию цены"
+          >
+            <SortDescIcon />
+          </button>
+        </div>
+
+        <div className={styles.sortGroup}>
+          <span className={styles.sortLabel}>Количеству</span>
+          <button
+            className={`${styles.sortButton} ${
+              currentSortBy === 'amount' && sortOrder === 'asc' ? styles.active : ''
+            }`}
+            onClick={() => handleSortClick('amount')}
+            title="По возрастанию количества"
+          >
+            <SortAscIcon />
+          </button>
+          <button
+            className={`${styles.sortButton} ${
+              currentSortBy === 'amount' && sortOrder === 'desc' ? styles.active : ''
+            }`}
+            onClick={() => handleSortClick('amount')}
+            title="По убыванию количества"
           >
             <SortDescIcon />
           </button>

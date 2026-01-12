@@ -1,13 +1,16 @@
+// app/admin/catalog/components/ProductTable/ProductTable.tsx
 'use client';
 
-import { Product, Brand, Category } from '@/types/catalog';
+import { Product } from '@/types/catalog';
+import { Brand } from '@/types/brand';
+import { CategoryNode } from '@/types/category';
 import { ProductTableRow } from '../ProductTableRow/ProductTableRow';
 import styles from './ProductTable.module.css';
 
 interface ProductTableProps {
   products: Product[];
   brands: Brand[];
-  categories: Category[];
+  categories: CategoryNode[];
   onEdit: (product: Product) => void;
   onDelete: (productId: string) => void;
   onView: (productId: string) => void;
@@ -32,8 +35,8 @@ export const ProductTable = ({
           <tr>
             <th className={styles.th}>Название</th>
             <th className={styles.th}>Бренд</th>
-            <th className={styles.th}>Категории</th>
-            <th className={styles.th}>Цена</th>
+            <th className={styles.th}>Категория</th>
+            <th className={styles.th}>Цена и наличие</th>
             <th className={styles.th}></th>
           </tr>
         </thead>
