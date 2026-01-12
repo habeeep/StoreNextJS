@@ -13,10 +13,19 @@ export const requestCode = createAsyncThunk(
   'auth/requestCode',
   async (data: RequestCodeRequest, { rejectWithValue }) => {
     try {
-      const response = await authApi.requestCode(data);
+      const response = await authApi.requestCodeLogin(data);
       return response;
     } catch (error) {
-      return rejectWithValue(error instanceof Error ? error.message : 'Ошибка отправки кода');
+      try {
+        const registerResponse = await authApi.requstCodeRegister(data);
+        return registerResponse;
+      } catch (registerError) {
+        return rejectWithValue(
+          registerError instanceof Error 
+            ? registerError.message 
+            : 'Ошибка регистрации'
+        );
+      }
     }
   }
 );

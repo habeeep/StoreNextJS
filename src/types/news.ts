@@ -5,16 +5,67 @@ export interface NewsResponse {
   currentValues: NewsItem[];
 }
 
+export interface ApiComment {
+  id: string;
+  text: string;
+  userMail: string;
+  feedId: string;
+  created: string;
+  updated: string | null;
+}
+
 export interface NewsItem {
   id: string;
   title: string;
   text: string;
+  comments: ApiComment[] | null;
   likesCount: number;
   watchCount: number;
   commentsCount: number;
   created: string;
-  updated: string;
+  updated: string | null;
   images?: string[];
+}
+
+export interface CreateNewsRequest {
+  title: string;
+  text: string;
+}
+
+export interface UpdateNewsRequest {
+  title: string;
+  text: string;
+}
+
+export interface CreateCommentRequest {
+  text: string;
+  userMail: string;
+  feedId: string;
+}
+
+export interface UserActionRequest {
+  userMail: string;
+}
+
+export interface PaginationParams {
+  limit?: number;
+  offset?: number;
+}
+
+export interface FavouritesParams extends PaginationParams {
+  user_mail: string;
+}
+
+export interface NewsOperationResponse {
+  id: string;
+  title: string;
+  text: string;
+  comments: ApiComment[] | null;
+  likesCount: number;
+  watchCount: number;
+  commentsCount: number;
+  created: string;
+  updated: string | null;
 }
 
 export interface News {

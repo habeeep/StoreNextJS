@@ -1,6 +1,7 @@
+// app/admin/categories/components/CategorySortHeader/CategorySortHeader.tsx
 'use client';
 
-import { CategorySortOrder } from '@/types/catalog';
+import { CategorySortOrder } from '@/types/category';
 import { SortAscIcon } from '@/components/ui/icons/SortAscIcon';
 import { SortDescIcon } from '@/components/ui/icons/SortDescIcon';
 import styles from './CategorySortHeader.module.css';

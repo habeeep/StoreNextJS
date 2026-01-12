@@ -1,185 +1,210 @@
+// app/news/components/NewsUserPage/NewsUserPage.tsx
 'use client';
 
-import { useState, useEffect } from 'react';
-import { News, NewsFilters as FiltersType, SortOption } from '@/types/news';
-import { SliderSection } from "../SliderSection/SliderSection";
-import { NewsFilters } from '../NewsFilters/NewsFilters';
+import { useState, useEffect, useMemo, useCallback } from 'react';
+import { useAppSelector } from '@/hooks/useAppSelector';
+import { NewsItem, NewsFilters as NewsFiltersType, SortOption } from '@/types/news';
+import { newsApi } from '@/lib/api/newsApi';
 import { NewsCard } from '../NewsCard/NewsCard';
+import { NewsFilters } from '../NewsFilters/NewsFilters';
+import { SliderSection } from '../SliderSection/SliderSection';
 import styles from './NewsUserPage.module.css';
 
 export const NewsUserPage = () => {
-  const [news, setNews] = useState<News[]>([]);
-  const [isLoading, setIsLoading] = useState(true);
-  const [filters, setFilters] = useState<FiltersType>({
+  const [filters, setFilters] = useState<NewsFiltersType>({
     sortBy: 'date-desc',
     showFavoritesOnly: false
   });
 
-  const mockNews: News[] = [
-    {
-      id: '1',
-      title: 'Новое поступление тропических растений',
-      description: 'В нашем магазине появились редкие виды растений из тропических лесов',
-      content: 'Полный текст новости...',
-      images: ['/images/news/hero3.png', '/images/news/hero2.png', '/images/news/hero4.png'],
-      createdAt: '2025-01-20T10:00:00Z',
-      updatedAt: '2025-01-20T10:00:00Z',
-      likesCount: 2,
-      viewsCount: 156,
-      commentsCount: 7,
-      isLiked: false,
-      isFavorite: true,
-      author: { id: '1', name: 'Анна', surname: 'Цветкова' }
-    },
-    {
-      id: '2',
-      title: 'Новое поступление тропических растений',
-      description: 'В нашем магазине появились редкие виды растений из тропических лесов',
-      content: 'Полный текст новости...',
-      images: ['/images/news/hero1.png', '/images/news/hero2.png'],
-      createdAt: '2023-01-20T10:00:00Z',
-      updatedAt: '2023-01-20T10:00:00Z',
-      likesCount: 52,
-      viewsCount: 156,
-      commentsCount: 7,
-      isLiked: false,
-      isFavorite: true,
-      author: { id: '1', name: 'Анна', surname: 'Цветкова' }
-    },
-    {
-      id: '3',
-      title: 'Новое поступление тропических растений',
-      description: 'В нашем магазине появились редкие виды растений из тропических лесов',
-      content: 'Полный текст новости...',
-      images: ['/images/news/hero1.png'],
-      createdAt: '2024-01-20T10:00:00Z',
-      updatedAt: '2024-01-20T10:00:00Z',
-      likesCount: 42,
-      viewsCount: 156,
-      commentsCount: 7,
-      isLiked: false,
-      isFavorite: true,
-      author: { id: '1', name: 'Анна', surname: 'Цветкова' }
-    },
-    {
-      id: '4',
-      title: 'Новое поступление тропических растений',
-      description: 'В нашем магазине появились редкие виды растений из тропических лесов',
-      content: 'Полный текст новости...',
-      images: ['/images/news/hero4.png', '/images/news/hero10.png'],
-      createdAt: '2024-01-20T10:00:00Z',
-      updatedAt: '2024-01-20T10:00:00Z',
-      likesCount: 42,
-      viewsCount: 156,
-      commentsCount: 7,
-      isLiked: false,
-      isFavorite: true,
-      author: { id: '1', name: 'Анна', surname: 'Цветкова' }
-    },
-    {
-      id: '5',
-      title: 'Новое поступление тропических растений',
-      description: 'В нашем магазине появились редкие виды растений из тропических лесов',
-      content: 'Полный текст новости...',
-      images: ['/images/news/hero2.png'],
-      createdAt: '2024-01-20T10:00:00Z',
-      updatedAt: '2024-01-20T10:00:00Z',
-      likesCount: 42,
-      viewsCount: 156,
-      commentsCount: 7,
-      isLiked: false,
-      isFavorite: true,
-      author: { id: '1', name: 'Анна', surname: 'Цветкова' }
-    },
-  ];
+  const [news, setNews] = useState<NewsItem[]>([]);
+  const [favorites, setFavorites] = useState<NewsItem[]>([]);
+  const [isLoading, setIsLoading] = useState(true);
+  const [isLoadingFavorites, setIsLoadingFavorites] = useState(false);
+  const [error, setError] = useState<string | null>(null);
 
-  useEffect(() => {
-    fetchNews();
-  }, [filters]);
+  const currentUser = useAppSelector((state) => state.auth.user);
+  const userEmail = currentUser?.email;
 
-  const fetchNews = async () => {
+  const fetchNews = useCallback(async () => {
     setIsLoading(true);
+    setError(null);
     try {
-      await new Promise(resolve => setTimeout(resolve, 500));
-      
-      let filteredNews = [...mockNews];
-      
-      if (filters.showFavoritesOnly) {
-        filteredNews = filteredNews.filter(item => item.isFavorite);
-      }
-      
-      filteredNews.sort((a, b) => {
-        switch (filters.sortBy) {
-          case 'date-desc':
-            return new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime();
-          case 'date-asc':
-            return new Date(a.createdAt).getTime() - new Date(b.createdAt).getTime();
-          case 'popularity-desc':
-            return b.likesCount - a.likesCount;
-          case 'popularity-asc':
-            return a.likesCount - b.likesCount;
-          default:
-            return 0;
-        }
-      });
-      
-      setNews(filteredNews);
-    } catch (error) {
-      console.error('Error fetching news:', error);
+      const response = await newsApi.getNews({ limit: 100, offset: 0 });
+      setNews(response.currentValues);
+    } catch (err) {
+      console.error('Ошибка при загрузке новостей:', err);
+      setError('Не удалось загрузить новости');
     } finally {
       setIsLoading(false);
     }
-  };
+  }, []);
 
-  const handleLike = (id: string) => {
-    setNews(prev => prev.map(item => 
-      item.id === id 
-        ? { 
-            ...item, 
-            isLiked: !item.isLiked,
-            likesCount: item.isLiked ? item.likesCount - 1 : item.likesCount + 1
-          }
-        : item
-    ));
-  };
+  const fetchFavorites = useCallback(async () => {
+    if (!userEmail) {
+      setFavorites([]);
+      return;
+    }
 
-  const handleFavorite = (id: string) => {
-    setNews(prev => prev.map(item => 
-      item.id === id 
-        ? { ...item, isFavorite: !item.isFavorite }
-        : item
-    ));
-  };
+    setIsLoadingFavorites(true);
+    try {
+      const response = await newsApi.getFavourites({
+        user_mail: userEmail,
+        limit: 100,
+        offset: 0
+      });
+      setFavorites(response.currentValues);
+    } catch (err) {
+      console.error('Ошибка при загрузке избранных:', err);
+      setFavorites([]);
+    } finally {
+      setIsLoadingFavorites(false);
+    }
+  }, [userEmail]);
+
+
+  useEffect(() => {
+    fetchNews();
+  }, [fetchNews]);
+
+  useEffect(() => {
+    fetchFavorites();
+  }, [fetchFavorites]);
+
+  const handleLike = useCallback(async (id: string) => {
+    if (!userEmail) {
+      alert('Для лайка нужно войти в систему');
+      return;
+    }
+
+    try {
+      await newsApi.likeNews(id, userEmail);
+      
+      setNews(prev => prev.map(item => 
+        item.id === id 
+          ? { ...item, likesCount: item.likesCount + 1 }
+          : item
+      ));
+      
+      setFavorites(prev => prev.map(item => 
+        item.id === id 
+          ? { ...item, likesCount: item.likesCount + 1 }
+          : item
+      ));
+      
+    } catch (err) {
+      console.error('Ошибка при лайке:', err);
+      alert('Не удалось поставить лайк');
+    }
+  }, [userEmail]);
+
+  const handleFavorite = useCallback(async (id: string) => {
+    if (!userEmail) {
+      alert('Для добавления в избранное нужно войти в систему');
+      return;
+    }
+
+    try {
+      const newsItem = news.find(item => item.id === id);
+      const isFavorite = favorites.some(item => item.id === id);
+
+      if (isFavorite) {
+        await newsApi.removeFromFavourites(id, userEmail);
+        setFavorites(prev => prev.filter(item => item.id !== id));
+      } else {
+        await newsApi.addToFavourites(id, userEmail);
+        if (newsItem) {
+          setFavorites(prev => [newsItem, ...prev]);
+        }
+      }
+    } catch (err) {
+      console.error('Ошибка при работе с избранным:', err);
+      alert('Не удалось изменить избранное');
+    }
+  }, [userEmail, news, favorites]);
+
+  const filteredAndSortedNews = useMemo(() => {
+    let result = filters.showFavoritesOnly ? [...favorites] : [...news];
+
+    if (filters.showFavoritesOnly && !userEmail) {
+      return [];
+    }
+
+    result.sort((a, b) => {
+      switch (filters.sortBy) {
+        case 'date-desc':
+          return new Date(b.created).getTime() - new Date(a.created).getTime();
+        case 'date-asc':
+          return new Date(a.created).getTime() - new Date(b.created).getTime();
+        case 'popularity-desc':
+          return b.likesCount - a.likesCount || b.watchCount - a.watchCount;
+        case 'popularity-asc':
+          return a.likesCount - b.likesCount || a.watchCount - b.watchCount;
+        default:
+          return 0;
+      }
+    });
+
+    return result;
+  }, [news, favorites, filters, userEmail]);
+
+  const getNewsWithUserData = useCallback((newsItem: NewsItem) => {
+    const isLiked = false;
+    const isFavorite = favorites.some(item => item.id === newsItem.id);
+    
+    return {
+      ...newsItem,
+      isLiked,
+      isFavorite,
+    };
+  }, [favorites]);
+
+  if (isLoading) {
+    return <div className={styles.loading}>Загрузка новостей...</div>;
+  }
+
+  if (error) {
+    return <div className={styles.error}>{error}</div>;
+  }
 
   return (
-    <>
-        <SliderSection/>
-        <div className={styles.newsUserPage}>
-            <NewsFilters filters={filters} onFiltersChange={setFilters}/>
-            { isLoading ? (
-            <div className={styles.loading}>Загрузка новостей...</div>
-            ) : (
-            <div className={styles.newsList}>
-                {news.length > 0 ? (
-                news.map((item) => (
-                    <NewsCard
-                    key={item.id}
-                    news={item}
-                    onLike={handleLike}
-                    onFavorite={handleFavorite}
-                    />
-                ))
-                ) : (
-                <div className={styles.noNews}>
-                    {filters.showFavoritesOnly 
-                    ? 'В избранном пока нет новостей' 
-                    : 'Новостей пока нет'
-                    }
-                </div>
-                )}
+    <div className={styles.page}>
+      <SliderSection />
+      
+      <div className={styles.content}>
+        <NewsFilters
+          filters={filters}
+          onFiltersChange={setFilters}
+          isLoggedIn={!!userEmail}
+        />
+        
+        {filters.showFavoritesOnly && !userEmail && (
+          <div className={styles.authWarning}>
+            Для просмотра избранных новостей нужно войти в систему
+          </div>
+        )}
+        
+        {filters.showFavoritesOnly && isLoadingFavorites && (
+          <div className={styles.loading}>Загрузка избранных...</div>
+        )}
+        
+        <div className={styles.newsList}>
+          {filteredAndSortedNews.length > 0 ? (
+            filteredAndSortedNews.map((newsItem) => (
+              <NewsCard
+                key={newsItem.id}
+                news={getNewsWithUserData(newsItem)}
+                onLike={handleLike}
+                onFavorite={handleFavorite}
+                currentUserEmail={userEmail}
+              />
+            ))
+          ) : (
+            <div className={styles.noNews}>
+              {filters.showFavoritesOnly ? 'В избранном пока ничего нет' : 'Новостей пока нет'}
             </div>
-            )}
+          )}
         </div>
-    </> 
+      </div>
+    </div>
   );
 };

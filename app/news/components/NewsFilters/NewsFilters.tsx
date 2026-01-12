@@ -1,22 +1,33 @@
+// app/news/components/NewsFilters/NewsFilters.tsx
 'use client';
 
 import { SortOption, NewsFilters as FiltersType } from '@/types/news';
 import { SortAscIcon } from '@/components/ui/icons/SortAscIcon';
 import { SortDescIcon } from '@/components/ui/icons/SortDescIcon';
-import { ToggleSwitch } from '@/components/ui/ToggleSwitch/ToggleSwitch'
+import { ToggleSwitch } from '@/components/ui/ToggleSwitch/ToggleSwitch';
 import styles from './NewsFilters.module.css';
 
 interface NewsFiltersProps {
   filters: FiltersType;
   onFiltersChange: (filters: FiltersType) => void;
+  isLoggedIn?: boolean;
 }
 
-export const NewsFilters = ({ filters, onFiltersChange }: NewsFiltersProps) => {
+export const NewsFilters = ({ 
+  filters, 
+  onFiltersChange, 
+  isLoggedIn = false 
+}: NewsFiltersProps) => {
   const handleSortChange = (sortBy: SortOption) => {
     onFiltersChange({ ...filters, sortBy });
   };
 
   const handleFavoritesToggle = () => {
+    if (!isLoggedIn) {
+      alert('Для работы с избранным нужно войти в систему');
+      return;
+    }
+    
     onFiltersChange({ 
       ...filters, 
       showFavoritesOnly: !filters.showFavoritesOnly 
@@ -72,7 +83,11 @@ export const NewsFilters = ({ filters, onFiltersChange }: NewsFiltersProps) => {
           onChange={handleFavoritesToggle}
           label='Избранное'
           labelClassName={styles.checkboxLabel}
+          disabled={!isLoggedIn}
         />
+        {!isLoggedIn && (
+          <span className={styles.loginHint}>(требуется вход)</span>
+        )}
       </div>
     </div>
   );

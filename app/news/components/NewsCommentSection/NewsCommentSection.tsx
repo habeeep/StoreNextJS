@@ -1,56 +1,58 @@
+// app/news/components/NewsCommentSection/NewsCommentSection.tsx
 'use client';
 
-import { useState, useEffect } from 'react';
-import { Comment } from '@/types/news';
+import { useState } from 'react';
+import { ApiComment } from '@/types/news';
+import { newsApi } from '@/lib/api/newsApi';
 import { CommentCard } from '../CommentCard/CommentCard';
 import styles from './NewsCommentSection.module.css';
 
 interface NewsCommentSectionProps {
   newsId: string;
+  newsComments: ApiComment[] | null;
+  currentUserEmail?: string;
   className?: string;
 }
 
-export const NewsCommentSection = ({ newsId, className = '' }: NewsCommentSectionProps) => {
-  const [comments, setComments] = useState<Comment[]>([]);
+export const NewsCommentSection = ({ 
+  newsId, 
+  newsComments, 
+  currentUserEmail,
+  className = '' 
+}: NewsCommentSectionProps) => {
+  const [comments, setComments] = useState<ApiComment[]>(newsComments || []);
   const [newComment, setNewComment] = useState('');
   const [isLoading, setIsLoading] = useState(false);
-
-  const mockComments: Comment[] = [
-    {
-      id: '1',
-      text: 'Отличная новость! Ждем еще такие статьи.',
-      createdAt: '2024-01-15T10:30:00Z',
-      author: { id: '1', name: 'Иван', surname: 'Петров' }
-    },
-    {
-      id: '2',
-      text: 'Интересный материал, спасибо!',
-      createdAt: '2024-01-14T15:45:00Z',
-      author: { id: '2', name: 'Мария', surname: 'Сидорова' }
-    }
-  ];
-
-  useEffect(() => {
-    setComments(mockComments);
-  }, [newsId]);
+  const [error, setError] = useState<string | null>(null);
 
   const handleSubmitComment = async (e: React.FormEvent) => {
     e.preventDefault();
+    
     if (!newComment.trim()) return;
+    
+    if (!currentUserEmail) {
+      alert('Для отправки комментария нужно войти в систему');
+      return;
+    }
 
     setIsLoading(true);
+    setError(null);
+    
     try {
-      const mockNewComment: Comment = {
-        id: Date.now().toString(),
+      // Отправляем реальный комментарий через API
+      const response = await newsApi.createComment({
         text: newComment,
-        createdAt: new Date().toISOString(),
-        author: { id: 'current-user', name: 'Вы', surname: '' }
-      };
+        userMail: currentUserEmail,
+        feedId: newsId
+      });
 
-      setComments([mockNewComment, ...comments]);
+      // Добавляем новый комментарий в начало списка
+      setComments([response, ...comments]);
       setNewComment('');
-    } catch (error) {
-      console.error('Error adding comment:', error);
+      
+    } catch (err) {
+      console.error('Ошибка при отправке комментария:', err);
+      setError(err instanceof Error ? err.message : 'Не удалось отправить комментарий');
     } finally {
       setIsLoading(false);
     }
@@ -59,6 +61,13 @@ export const NewsCommentSection = ({ newsId, className = '' }: NewsCommentSectio
   return (
     <div className={`${styles.commentSection} ${className}`}>
       <div className={styles.commentContent}>
+        {/* Сообщение об ошибке */}
+        {error && (
+          <div className={styles.error}>
+            {error}
+          </div>
+        )}
+        
         <div className={styles.commentsList}>
           {comments.length > 0 ? (
             comments.map((comment) => (
@@ -68,22 +77,32 @@ export const NewsCommentSection = ({ newsId, className = '' }: NewsCommentSectio
             <p className={styles.noComments}>Комментариев пока нет</p>
           )}
         </div>
+        
+        {/* Форма комментария */}
         <form onSubmit={handleSubmitComment} className={styles.commentForm}>
           <textarea
             value={newComment}
             onChange={(e) => setNewComment(e.target.value)}
-            placeholder="Комментарий"
+            placeholder={currentUserEmail ? "Оставьте комментарий..." : "Для комментария нужно войти в систему"}
             className={styles.textarea}
             required
+            disabled={!currentUserEmail || isLoading}
           />
           <button 
             type="submit" 
             className={styles.submitButton}
-            disabled={isLoading || !newComment.trim()}
+            disabled={isLoading || !newComment.trim() || !currentUserEmail}
           >
-            +
+            {isLoading ? '...' : '+'}
           </button>
         </form>
+        
+        {/* Предупреждение если пользователь не авторизован */}
+        {!currentUserEmail && (
+          <p className={styles.authHint}>
+            Войдите в систему, чтобы оставлять комментарии
+          </p>
+        )}
       </div>
     </div>
   );

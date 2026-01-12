@@ -2,7 +2,8 @@
 
 import { useState, useEffect } from 'react';
 import { useParams, useRouter } from 'next/navigation';
-import { News } from '@/types/news';
+import { NewsItem } from '@/types/news';
+import { newsApi } from '@/lib/api/newsApi';
 import { Container } from '@/components/layout/Container/Container';
 import { Button } from '@/components/ui/Button/Button';
 // import { EditIcon } from '@/components/ui/icons/EditIcon';
@@ -12,64 +13,122 @@ import styles from './page.module.css';
 export default function NewsDetailPage() {
   const params = useParams();
   const router = useRouter();
-  const [news, setNews] = useState<News | null>(null);
+  const [news, setNews] = useState<NewsItem | null>(null);
   const [isLoading, setIsLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
 
   const newsId = params.id as string;
 
+  const fetchNews = async () => {
+    setIsLoading(true);
+    setError(null);
+    try {
+      const newsData = await newsApi.getNewsById(newsId);
+      setNews(newsData);
+    } catch (err) {
+      console.error('Ошибка при загрузке новости:', err);
+      setError(err instanceof Error ? err.message : 'Не удалось загрузить новость');
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
   useEffect(() => {
-    // TODO: Запрос к API
-    // Моковые данные
-    const mockNews: News = {
-      id: newsId,
-      title: 'Новое поступление тропических растений',
-      description: 'В нашем магазине появились редкие виды растений из тропических лесов',
-      content: 'Полный текст новости...',
-      images: ['/images/news/hero1.png', '/images/news/hero2.png'],
-      createdAt: '2025-01-20T10:00:00Z',
-      updatedAt: '2025-01-20T10:00:00Z',
-      likesCount: 42,
-      viewsCount: 156,
-      commentsCount: 7,
-      isLiked: false,
-      isFavorite: false,
-      author: { id: '1', name: 'Анна', surname: 'Цветкова' }
-    };
-    
-    setNews(mockNews);
-    setIsLoading(false);
+    fetchNews();
   }, [newsId]);
 
-  if (isLoading) return <div>Загрузка...</div>;
-  if (!news) return <div>Новость не найдена</div>;
+  const formatDate = (dateString: string | null) => {
+    if (!dateString) return 'Дата не указана';
+    return new Date(dateString).toLocaleDateString('ru-RU', {
+      day: '2-digit',
+      month: '2-digit',
+      year: 'numeric',
+      hour: '2-digit',
+      minute: '2-digit',
+    });
+  };
+
+  if (isLoading) return <div className={styles.loading}>Загрузка новости...</div>;
+  
+  if (error) return (
+    <Container>
+      <div className={styles.error}>
+        <h2>Ошибка</h2>
+        <p>{error}</p>
+        <Button onClick={() => router.push('/admin/news')}>
+          Вернуться к списку
+        </Button>
+      </div>
+    </Container>
+  );
+  
+  if (!news) return (
+    <Container>
+      <div className={styles.notFound}>
+        <h2>Новость не найдена</h2>
+        <p>Новость с ID {newsId} не существует</p>
+        <Button onClick={() => router.push('/admin/news')}>
+          Вернуться к списку
+        </Button>
+      </div>
+    </Container>
+  );
 
   return (
     <Container>
       <div className={styles.page}>
-        {/* Заголовок и кнопки */}
         <div className={styles.header}>
           <button 
             className={styles.backButton}
             onClick={() => router.push('/admin/news')}
           >
             {/* <ArrowLeftIcon size={20} /> */}
-            Назад к списку
+            ← Назад к списку
           </button>
           
-          <Button
-            onClick={() => router.push(`/admin/news/${newsId}/edit`)}
-          >
-            {/* <EditIcon size={20} /> */}
-            Редактировать
-          </Button>
+          <div className={styles.headerActions}>
+            <Button
+              onClick={() => router.push(`/admin/news/${newsId}/edit`)}
+              className={styles.editButton}
+            >
+              {/* <EditIcon size={20} /> */}
+              Редактировать
+            </Button>
+            
+            <Button
+              onClick={fetchNews}
+              variant="secondary"
+              className={styles.refreshButton}
+            >
+              Обновить
+            </Button>
+          </div>
         </div>
 
-        {/* Контент новости (можно переиспользовать NewsCard или сделать упрощенную версию) */}
         <div className={styles.content}>
           <h1 className={styles.title}>{news.title}</h1>
-          <p className={styles.description}>{news.description}</p>
           
-          {news.images.length > 0 && (
+          <div className={styles.meta}>
+            <span className={styles.date}>
+              Создано: {formatDate(news.created)}
+            </span>
+            {news.updated && (
+              <span className={styles.date}>
+                Обновлено: {formatDate(news.updated)}
+              </span>
+            )}
+          </div>
+          
+          <div className={styles.textContent}>
+            {news.text.split('\n').map((paragraph, index) => (
+              <p key={index} className={styles.paragraph}>
+                {paragraph}
+              </p>
+            ))}
+          </div>
+          
+          {/* TODO: Добавить отображение изображений, когда API будет их поддерживать */}
+          {/* {news.images && news.images.length > 0 && (
             <div className={styles.images}>
               {news.images.map((image, index) => (
                 <img 
@@ -80,13 +139,52 @@ export default function NewsDetailPage() {
                 />
               ))}
             </div>
-          )}
+          )} */}
           
           <div className={styles.stats}>
-            <span>❤️ {news.likesCount}</span>
-            <span>👁️ {news.viewsCount}</span>
-            <span>💬 {news.commentsCount}</span>
+            <div className={styles.statItem}>
+              <span className={styles.statIcon}>❤️</span>
+              <span className={styles.statCount}>{news.likesCount}</span>
+              <span className={styles.statLabel}>лайков</span>
+            </div>
+            
+            <div className={styles.statItem}>
+              <span className={styles.statIcon}>👁️</span>
+              <span className={styles.statCount}>{news.watchCount}</span>
+              <span className={styles.statLabel}>просмотров</span>
+            </div>
+            
+            <div className={styles.statItem}>
+              <span className={styles.statIcon}>💬</span>
+              <span className={styles.statCount}>{news.commentsCount}</span>
+              <span className={styles.statLabel}>комментариев</span>
+            </div>
           </div>
+          
+          {news.comments && news.comments.length > 0 && (
+            <div className={styles.commentsSection}>
+              <h3 className={styles.commentsTitle}>Комментарии ({news.comments.length})</h3>
+              
+              <div className={styles.commentsList}>
+                {news.comments.map((comment) => (
+                  <div key={comment.id} className={styles.comment}>
+                    <div className={styles.commentHeader}>
+                      <span className={styles.commentAuthor}>
+                        {comment.userMail}
+                      </span>
+                      <span className={styles.commentDate}>
+                        {formatDate(comment.created)}
+                      </span>
+                    </div>
+                    
+                    <div className={styles.commentText}>
+                      {comment.text}
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </div>
+          )}
         </div>
       </div>
     </Container>

@@ -24,7 +24,10 @@ export default function AdminNewsPage() {
     setIsLoading(true);
     setError(null);
     try {
-      const response = await newsApi.getNews(pagination.limit, pagination.offset);
+      const response = await newsApi.getNews({ 
+        limit: pagination.limit, 
+        offset: pagination.offset 
+      });
       setNews(response.currentValues);
       setPagination({
         totalCount: response.totalCount,
@@ -46,10 +49,12 @@ export default function AdminNewsPage() {
   const handleDelete = async (id: string) => {
     if (confirm('Удалить новость?')) {
       try {
-        setNews(prev => prev.filter(item => item.id !== id));
+        await newsApi.deleteNews(id);
+        fetchNews();
       } catch (err) {
         console.error('Failed to delete news:', err);
         alert('Ошибка при удалении новости');
+        fetchNews();
       }
     }
   };

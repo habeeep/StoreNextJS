@@ -11,8 +11,8 @@ const nextConfig: NextConfig = {
         destination: `${process.env.NEXT_PUBLIC_API_URL_AUTH}/:path*`,
       },
       {
-        source: '/backend/news/:path*',
-        destination: `${process.env.NEXT_PUBLIC_API_URL_NEWS}/:path*`,
+        source: '/backend/feed/:path*',
+        destination: `${process.env.NEXT_PUBLIC_API_URL_FEED}/:path*`,
       },
     ];
   },

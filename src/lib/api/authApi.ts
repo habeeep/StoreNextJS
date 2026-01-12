@@ -6,9 +6,7 @@ import {
   BaseResponse 
 } from '@/types/auth';
 
-const API_BASE = process.env.NODE_ENV === 'development' 
-  ? '/backend/auth' 
-  : process.env.NEXT_PUBLIC_API_URL_AUTH;
+const API_BASE = '/backend/auth';
 
 const createMockUser = (email: string) => ({
   id: Date.now().toString(),
@@ -17,8 +15,27 @@ const createMockUser = (email: string) => ({
 });
 
 export const authApi = {
-  async requestCode(data: RequestCodeRequest): Promise<BaseResponse> {
+  async requestCodeLogin(data: RequestCodeRequest): Promise<BaseResponse> {
     const response = await fetch(`${API_BASE}/login`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ email: data.email }),
+    });
+    
+    if (!response.ok) {
+      throw new Error('Ошибка при отправке кода');
+    }
+    
+    try {
+      const result = await response.json();
+      return result;
+    } catch {
+      return { success: true };
+    }
+  },
+
+  async requstCodeRegister(data: RequestCodeRequest): Promise<BaseResponse> {
+    const response = await fetch(`${API_BASE}/register`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ email: data.email }),

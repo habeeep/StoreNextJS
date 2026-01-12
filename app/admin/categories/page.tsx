@@ -1,85 +1,83 @@
+// app/admin/categories/page.tsx
 'use client';
 
-import { useState, useMemo, useCallback } from 'react';
+import { useState, useEffect, useMemo, useCallback } from 'react';
 import { Container } from '@/components/layout/Container/Container';
 import { Button } from '@/components/ui/Button/Button';
 import { InputSearch } from '@/components/ui/InputSearch/InputSearch';
 import { PlusIcon } from '@/components/ui/icons/PlusIcon';
 import { CategoryRow } from './components/CategoryRow/CategoryRow';
 import { CategorySortHeader } from './components/CategorySortHeader/CategorySortHeader';
-import { CategoryNode, CategorySortOrder } from '@/types/catalog';
-import { mockCategories } from '@/lib/mocks/categories';
+import { CategoryNode, CategorySortOrder } from '@/types/category';
+import { categoriesApi } from '@/lib/api/categoriesApi';
+import { buildCategoryTree, searchInCategoryTree, sortCategoryTree } from '@/lib/utils/categoryUtils';
 import styles from './page.module.css';
 
 export default function CategoriesTreePage() {
-  const [categories, setCategories] = useState<CategoryNode[]>(mockCategories);
+  // Состояния
+  const [categories, setCategories] = useState<CategoryNode[]>([]);
   const [searchQuery, setSearchQuery] = useState('');
   const [sortOrder, setSortOrder] = useState<CategorySortOrder>('none');
+  const [isLoading, setIsLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
   const [isAddingCategory, setIsAddingCategory] = useState(false);
 
-  const searchInTree = useCallback((nodes: CategoryNode[], query: string): CategoryNode[] => {
-    if (!query.trim()) return nodes;
-
-    const filtered: CategoryNode[] = [];
-    
-    nodes.forEach((node) => {
-      const matches = node.name.toLowerCase().includes(query.toLowerCase());
-      
-      const filteredChildren = searchInTree(node.children, query);
-      
-      if (matches || filteredChildren.length > 0) {
-        filtered.push({
-          ...node,
-          children: filteredChildren,
-          isExpanded: filteredChildren.length > 0 ? true : node.isExpanded,
-        });
-      }
-    });
-    
-    return filtered;
+  // Загрузка категорий
+  const fetchCategories = useCallback(async () => {
+    setIsLoading(true);
+    setError(null);
+    try {
+      const apiCategories = await categoriesApi.getAllCategories();
+      const categoryTree = buildCategoryTree(apiCategories);
+      setCategories(categoryTree);
+    } catch (err) {
+      console.error('Ошибка загрузки категорий:', err);
+      setError(err instanceof Error ? err.message : 'Ошибка загрузки категорий');
+    } finally {
+      setIsLoading(false);
+    }
   }, []);
 
-  const sortTree = useCallback((nodes: CategoryNode[], order: CategorySortOrder): CategoryNode[] => {
-    if (order === 'none') return nodes;
+  useEffect(() => {
+    fetchCategories();
+  }, [fetchCategories]);
 
-    return [...nodes].sort((a, b) => {
-      const comparison = a.name.localeCompare(b.name);
-      return order === 'asc' ? comparison : -comparison;
-    }).map((node) => ({
-      ...node,
-      children: sortTree(node.children, order),
-    }));
-  }, []);
-
+  // Обработанные категории с поиском и сортировкой
   const processedCategories = useMemo(() => {
     let result = categories;
     
+    // Применяем поиск
     if (searchQuery.trim()) {
-      result = searchInTree(categories, searchQuery);
+      result = searchInCategoryTree(categories, searchQuery);
     }
     
+    // Применяем сортировку
     if (sortOrder !== 'none') {
-      result = sortTree(result, sortOrder);
+      result = sortCategoryTree(result, sortOrder);
     }
     
     return result;
-  }, [categories, searchQuery, sortOrder, searchInTree, sortTree]);
+  }, [categories, searchQuery, sortOrder]);
 
+  // Обработчики действий
   const handleAddSubcategory = (parentId: string) => {
-    // TODO: Реализовать модальное окно добавления
     console.log('Добавить подкатегорию для', parentId);
     setIsAddingCategory(true);
   };
 
   const handleEditCategory = (category: CategoryNode) => {
-    // TODO: Реализовать модальное окно редактирования
     console.log('Редактировать категорию', category.id);
   };
 
-  const handleDeleteCategory = (categoryId: string) => {
+  const handleDeleteCategory = async (categoryId: string) => {
     if (confirm('Удалить категорию? Все подкатегории также будут удалены.')) {
-      // TODO: Реализовать удаление
-      console.log('Удалить категорию', categoryId);
+      try {
+        await categoriesApi.deleteCategory(categoryId);
+        fetchCategories(); // Обновляем список
+      } catch (err) {
+        console.error('Ошибка удаления:', err);
+        alert('Не удалось удалить категорию');
+      }
     }
   };
 
@@ -100,7 +98,6 @@ export default function CategoriesTreePage() {
   };
 
   const handleAddRootCategory = () => {
-    // TODO: Реализовать добавление корневой категории
     console.log('Добавить корневую категорию');
     setIsAddingCategory(true);
   };
@@ -109,17 +106,29 @@ export default function CategoriesTreePage() {
     setSearchQuery(query);
   };
 
+  const handleRefresh = () => {
+    fetchCategories();
+  };
+
   return (
     <Container>
       <div className={styles.page}>
+        {/* Заголовок и кнопки */}
         <div className={styles.header}>
           <div className={styles.headerTop}>
             <h1 className={styles.title}>Дерево категорий товаров</h1>
-            <Button onClick={handleAddRootCategory}>
-              Добавить категорию
-            </Button>
+            <div className={styles.topButtons}>
+              <Button onClick={handleRefresh} variant="secondary">
+                Обновить
+              </Button>
+              <Button onClick={handleAddRootCategory}>
+                <PlusIcon size={20} />
+                Добавить категорию
+              </Button>
+            </div>
           </div>
 
+          {/* Сортировка и поиск */}
           <div className={styles.headerBottom}>
             <CategorySortHeader
               sortOrder={sortOrder}
@@ -134,33 +143,52 @@ export default function CategoriesTreePage() {
           </div>
         </div>
 
-        <div className={styles.treeContainer}>
-          <div className={styles.columnsHeader}>
-            <div className={styles.columnName}>Название категории</div>
-            <div className={styles.columnActions}>Действия</div>
-          </div>
+        {/* Состояния загрузки/ошибки */}
+        {isLoading && (
+          <div className={styles.loading}>Загрузка категорий...</div>
+        )}
 
-          <div className={styles.categoriesList}>
-            {processedCategories.length === 0 ? (
-              <div className={styles.emptyState}>
-                {searchQuery.trim()
-                  ? 'Категории по вашему запросу не найдены'
-                  : 'Категорий пока нет'}
-              </div>
-            ) : (
-              processedCategories.map((category) => (
-                <CategoryRow
-                  key={category.id}
-                  category={category}
-                  onAddSubcategory={handleAddSubcategory}
-                  onEdit={handleEditCategory}
-                  onDelete={handleDeleteCategory}
-                  onToggleExpand={handleToggleExpand}
-                />
-              ))
-            )}
+        {error && (
+          <div className={styles.error}>
+            <p>{error}</p>
+            <Button onClick={handleRefresh} variant="secondary">
+              Попробовать снова
+            </Button>
           </div>
-        </div>
+        )}
+
+        {/* Основная часть с деревом категорий */}
+        {!isLoading && !error && (
+          <div className={styles.treeContainer}>
+            {/* Заголовки столбцов */}
+            <div className={styles.columnsHeader}>
+              <div className={styles.columnName}>Название категории</div>
+              <div className={styles.columnActions}>Действия</div>
+            </div>
+
+            {/* Список категорий */}
+            <div className={styles.categoriesList}>
+              {processedCategories.length === 0 ? (
+                <div className={styles.emptyState}>
+                  {searchQuery.trim()
+                    ? 'Категории по вашему запросу не найдены'
+                    : 'Категорий пока нет'}
+                </div>
+              ) : (
+                processedCategories.map((category) => (
+                  <CategoryRow
+                    key={category.id}
+                    category={category}
+                    onAddSubcategory={handleAddSubcategory}
+                    onEdit={handleEditCategory}
+                    onDelete={handleDeleteCategory}
+                    onToggleExpand={handleToggleExpand}
+                  />
+                ))
+              )}
+            </div>
+          </div>
+        )}
 
         {/* TODO: Модальное окно для добавления/редактирования категории */}
         {isAddingCategory && (

@@ -6,29 +6,44 @@ import { Container } from '@/components/layout/Container/Container';
 import { Input } from '@/components/ui/Input/Input';
 import { Button } from '@/components/ui/Button/Button';
 import { CrossIcon } from '@/components/ui/icons/CrossIcon';
+import { newsApi } from '@/lib/api/newsApi';
 import styles from './page.module.css';
 
 export default function CreateNewsPage() {
   const router = useRouter();
   const [title, setTitle] = useState('');
-  const [description, setDescription] = useState('');
+  const [text, setText] = useState('');
   const [images, setImages] = useState<string[]>([]);
+  const [isLoading, setIsLoading] = useState(false);
+  const [error, setError] = useState<string | null>(null);
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    setIsLoading(true);
+    setError(null);
     
-    // TODO: Отправка на бекенд
-    console.log('Создание новости:', { title, description, images });
-    
-    // После создания переходим обратно
-    router.push('/admin/news');
+    try {
+      const response = await newsApi.createNews({
+        title,
+        text,
+      });
+      
+      console.log('Новость создана:', response);
+      
+      // router.push('/admin/news');
+      
+    } catch (err) {
+      console.error('Ошибка при создании новости:', err);
+      setError(err instanceof Error ? err.message : 'Произошла ошибка при создании новости');
+    } finally {
+      setIsLoading(false);
+    }
   };
 
   const handleImageUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
-    // TODO: Загрузка изображений
+    // TODO: Реализовать загрузку изображений на сервер
     const files = e.target.files;
     if (files) {
-      // Моковая загрузка
       const newImages = Array.from(files).map(file => 
         URL.createObjectURL(file)
       );
@@ -40,62 +55,76 @@ export default function CreateNewsPage() {
     setImages(prev => prev.filter((_, i) => i !== index));
   };
 
+  const handleCancel = () => {
+    router.push('/admin/news');
+  };
+
   return (
     <Container>
       <div className={styles.page}>
-        {/* Кнопка назад */}
         <button 
           className={styles.backButton}
-          onClick={() => router.back()}
+          onClick={handleCancel}
           aria-label="Назад"
+          disabled={isLoading}
         >
           <CrossIcon size={24} />
         </button>
 
         <h1 className={styles.title}>Создание новости</h1>
 
+        {error && (
+          <div className={styles.error}>
+            {error}
+          </div>
+        )}
+
         <form onSubmit={handleSubmit} className={styles.form}>
-          {/* Название */}
           <div className={styles.field}>
-            <label className={styles.label}>Название</label>
+            <label className={styles.label}>Название *</label>
             <Input
               value={title}
               onChange={(e) => setTitle(e.target.value)}
               placeholder="Введите название новости"
               required
+              disabled={isLoading}
             />
           </div>
 
-          {/* Описание */}
           <div className={styles.field}>
-            <label className={styles.label}>Описание</label>
-            <Input
-              value={description}
-              onChange={(e) => setDescription(e.target.value)}
-              placeholder="Введите описание новости"
+            <label className={styles.label}>Текст новости *</label>
+            <textarea
+              value={text}
+              onChange={(e) => setText(e.target.value)}
+              placeholder="Введите текст новости"
               required
+              disabled={isLoading}
+              rows={6}
+              className={styles.textarea}
             />
           </div>
 
-          {/* Изображения */}
           <div className={styles.field}>
             <label className={styles.label}>Изображения</label>
             
-            <div className={styles.imagesPreview}>
-              {images.map((image, index) => (
-                <div key={index} className={styles.imageItem}>
-                  <img src={image} alt={`Изображение ${index + 1}`} />
-                  <button
-                    type="button"
-                    className={styles.removeImage}
-                    onClick={() => removeImage(index)}
-                    aria-label="Удалить изображение"
-                  >
-                    ×
-                  </button>
-                </div>
-              ))}
-            </div>
+            {images.length > 0 && (
+              <div className={styles.imagesPreview}>
+                {images.map((image, index) => (
+                  <div key={index} className={styles.imageItem}>
+                    <img src={image} alt={`Изображение ${index + 1}`} />
+                    <button
+                      type="button"
+                      className={styles.removeImage}
+                      onClick={() => removeImage(index)}
+                      aria-label="Удалить изображение"
+                      disabled={isLoading}
+                    >
+                      ×
+                    </button>
+                  </div>
+                ))}
+              </div>
+            )}
 
             <input
               type="file"
@@ -104,16 +133,32 @@ export default function CreateNewsPage() {
               onChange={handleImageUpload}
               className={styles.fileInput}
               id="imageUpload"
+              disabled={isLoading}
             />
             <label htmlFor="imageUpload" className={styles.uploadButton}>
               + Добавить изображения
             </label>
+            <p className={styles.imageHint}>
+              Примечание: Загрузка изображений пока не поддерживается API
+            </p>
           </div>
 
-          {/* Кнопка создания */}
           <div className={styles.actions}>
-            <Button type="submit" variant="primary">
-              Создать новость
+            <Button 
+              type="submit" 
+              variant="primary"
+              disabled={isLoading}
+            >
+              {isLoading ? 'Создание...' : 'Создать новость'}
+            </Button>
+            
+            <Button 
+              type="button" 
+              variant="secondary"
+              onClick={handleCancel}
+              disabled={isLoading}
+            >
+              Отмена
             </Button>
           </div>
         </form>

@@ -1,7 +1,7 @@
+// app/admin/categories/components/CategoryRow/CategoryRow.tsx
 'use client';
 
-import { CategoryNode } from '@/types/catalog';
-import { Button } from '@/components/ui/Button/Button';
+import { CategoryNode } from '@/types/category';
 import { PlusIcon } from '@/components/ui/icons/PlusIcon';
 import { EditIcon } from '@/components/ui/icons/EditIcon';
 import { TrashIcon } from '@/components/ui/icons/TrashIcon';
@@ -31,7 +31,7 @@ export const CategoryRow = ({
         <div style={{ width: indent }} />
         <div className={styles.rowContent}>
           <div className={styles.name}>
-            {category.name}
+            {category.title} {/* Изменил с category.name на category.title */}
           </div>
           
           <div className={styles.actions}>
@@ -39,6 +39,7 @@ export const CategoryRow = ({
               <button
                 onClick={() => onAddSubcategory(category.id)}
                 className={styles.actionButton}
+                title="Добавить подкатегорию"
               >
                 <PlusIcon size={24} />
               </button>
@@ -46,6 +47,7 @@ export const CategoryRow = ({
               <button
                 onClick={() => onEdit(category)}
                 className={styles.actionButton}
+                title="Редактировать"
               >
                 <EditIcon size={24} />
               </button>
@@ -53,6 +55,7 @@ export const CategoryRow = ({
               <button
                 onClick={() => onDelete(category.id)}
                 className={styles.actionButton}
+                title="Удалить"
               >
                 <TrashIcon size={24} />
               </button>
@@ -63,6 +66,7 @@ export const CategoryRow = ({
                 className={`${styles.expandButton} ${styles.actionButton}`}
                 onClick={() => onToggleExpand(category.id)}
                 aria-label={category.isExpanded ? 'Свернуть' : 'Развернуть'}
+                title={category.isExpanded ? 'Свернуть' : 'Развернуть'}
               >
                 <ChevronDownIcon 
                   className={`${styles.chevron} ${category.isExpanded ? styles.expanded : ''}`}
@@ -71,9 +75,9 @@ export const CategoryRow = ({
               </button>
             ) : (
               <ChevronDownIcon 
-                  className={`${styles.chevron} ${styles.chevronHidden}`}
-                  size={24} 
-                />
+                className={`${styles.chevron} ${styles.chevronHidden}`}
+                size={24} 
+              />
             )}
           </div>
         </div>

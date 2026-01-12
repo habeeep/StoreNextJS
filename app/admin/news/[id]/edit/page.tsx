@@ -6,47 +6,89 @@ import { Container } from '@/components/layout/Container/Container';
 import { Input } from '@/components/ui/Input/Input';
 import { Button } from '@/components/ui/Button/Button';
 import { CrossIcon } from '@/components/ui/icons/CrossIcon';
+import { newsApi } from '@/lib/api/newsApi';
+import { NewsItem } from '@/types/news';
 import styles from './page.module.css';
 
 export default function EditNewsPage() {
   const params = useParams();
   const router = useRouter();
+  const newsId = params.id as string;
+  
   const [title, setTitle] = useState('');
-  const [description, setDescription] = useState('');
+  const [text, setText] = useState('');
   const [images, setImages] = useState<string[]>([]);
   const [isLoading, setIsLoading] = useState(true);
-
-  const newsId = params.id as string;
+  const [isSaving, setIsSaving] = useState(false);
+  const [isDeleting, setIsDeleting] = useState(false);
+  const [error, setError] = useState<string | null>(null);
+  const [saveError, setSaveError] = useState<string | null>(null);
 
   useEffect(() => {
-    // TODO: Запрос к API за данными новости
-    // Моковые данные
-    setTitle('Новое поступление тропических растений');
-    setDescription('В нашем магазине появились редкие виды растений из тропических лесов');
-    setImages(['/images/news/hero1.png']);
-    setIsLoading(false);
+    const fetchNews = async () => {
+      setIsLoading(true);
+      setError(null);
+      try {
+        const newsData = await newsApi.getNewsById(newsId);
+        setTitle(newsData.title);
+        setText(newsData.text);
+        setImages(newsData.images || []);
+      } catch (err) {
+        console.error('Ошибка при загрузке новости:', err);
+        setError(err instanceof Error ? err.message : 'Не удалось загрузить новость');
+      } finally {
+        setIsLoading(false);
+      }
+    };
+
+    fetchNews();
   }, [newsId]);
 
-  const handleSave = (e: React.FormEvent) => {
+  const handleSave = async (e: React.FormEvent) => {
     e.preventDefault();
+    setIsSaving(true);
+    setSaveError(null);
     
-    // TODO: Отправка на бекенд
-    console.log('Сохранение новости:', { title, description, images });
-    
-    router.push(`/admin/news/${newsId}`);
+    try {
+      await newsApi.updateNews(newsId, {
+        title,
+        text,
+      });
+      
+      console.log('Новость обновлена');
+      
+      router.push(`/admin/news/${newsId}`);
+      
+    } catch (err) {
+      console.error('Ошибка при сохранении новости:', err);
+      setSaveError(err instanceof Error ? err.message : 'Произошла ошибка при сохранении новости');
+    } finally {
+      setIsSaving(false);
+    }
   };
 
-  const handleDelete = () => {
-    if (confirm('Удалить новость?')) {
-      // TODO: Отправка на бекенд
-      console.log('Удаление новости:', newsId);
+  const handleDelete = async () => {
+    if (!confirm('Удалить новость? Это действие нельзя отменить.')) {
+      return;
+    }
+    
+    setIsDeleting(true);
+    try {
+      await newsApi.deleteNews(newsId);
+      console.log('Новость удалена');
       
+      // После успешного удаления переходим на список новостей
       router.push('/admin/news');
+      
+    } catch (err) {
+      console.error('Ошибка при удалении новости:', err);
+      alert('Не удалось удалить новость. Попробуйте снова.');
+      setIsDeleting(false);
     }
   };
 
   const handleImageUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
-    // TODO: Загрузка изображений
+    // TODO: Реализовать загрузку изображений на сервер
     const files = e.target.files;
     if (files) {
       const newImages = Array.from(files).map(file => 
@@ -60,62 +102,102 @@ export default function EditNewsPage() {
     setImages(prev => prev.filter((_, i) => i !== index));
   };
 
-  if (isLoading) return <div>Загрузка...</div>;
+  const handleCancel = () => {
+    router.push(`/admin/news/${newsId}`);
+  };
+
+  if (isLoading) return (
+    <Container>
+      <div className={styles.loading}>Загрузка новости...</div>
+    </Container>
+  );
+
+  if (error) return (
+    <Container>
+      <div className={styles.errorContainer}>
+        <h2>Ошибка загрузки</h2>
+        <p className={styles.errorMessage}>{error}</p>
+        <div className={styles.errorActions}>
+          <Button onClick={() => router.push('/admin/news')}>
+            Вернуться к списку
+          </Button>
+          <Button 
+            onClick={() => window.location.reload()}
+            variant="secondary"
+          >
+            Попробовать снова
+          </Button>
+        </div>
+      </div>
+    </Container>
+  );
 
   return (
     <Container>
       <div className={styles.page}>
-        {/* Кнопка назад */}
         <button 
           className={styles.backButton}
-          onClick={() => router.push(`/admin/news/${newsId}`)}
+          onClick={handleCancel}
           aria-label="Назад"
+          disabled={isSaving || isDeleting}
         >
           <CrossIcon size={24} />
         </button>
 
         <h1 className={styles.title}>Редактирование новости</h1>
 
+        {saveError && (
+          <div className={styles.saveError}>
+            {saveError}
+          </div>
+        )}
+
         <form onSubmit={handleSave} className={styles.form}>
-          {/* Название */}
           <div className={styles.field}>
-            <label className={styles.label}>Название</label>
+            <label className={styles.label}>Название *</label>
             <Input
               value={title}
               onChange={(e) => setTitle(e.target.value)}
               required
+              disabled={isSaving || isDeleting}
+              placeholder="Введите название новости"
             />
           </div>
 
-          {/* Описание */}
           <div className={styles.field}>
-            <label className={styles.label}>Описание</label>
-            <Input
-              value={description}
-              onChange={(e) => setDescription(e.target.value)}
+            <label className={styles.label}>Текст новости *</label>
+            <textarea
+              value={text}
+              onChange={(e) => setText(e.target.value)}
               required
+              disabled={isSaving || isDeleting}
+              rows={8}
+              className={styles.textarea}
+              placeholder="Введите текст новости"
             />
           </div>
 
-          {/* Изображения */}
           <div className={styles.field}>
             <label className={styles.label}>Изображения</label>
             
-            <div className={styles.imagesPreview}>
-              {images.map((image, index) => (
-                <div key={index} className={styles.imageItem}>
-                  <img src={image} alt={`Изображение ${index + 1}`} />
-                  <button
-                    type="button"
-                    className={styles.removeImage}
-                    onClick={() => removeImage(index)}
-                    aria-label="Удалить изображение"
-                  >
-                    ×
-                  </button>
-                </div>
-              ))}
-            </div>
+            {images.length > 0 && (
+              <div className={styles.imagesPreview}>
+                {images.map((image, index) => (
+                  <div key={index} className={styles.imageItem}>
+                    <img src={image} alt={`Изображение ${index + 1}`} />
+                    <button
+                      type="button"
+                      className={styles.removeImage}
+                      onClick={() => removeImage(index)}
+                      aria-label="Удалить изображение"
+                      disabled={isSaving || isDeleting}
+                    >
+                      ×
+                    </button>
+                  </div>
+                ))}
+              </div>
+            )}
 
             <input
               type="file"
@@ -124,24 +206,44 @@ export default function EditNewsPage() {
               onChange={handleImageUpload}
               className={styles.fileInput}
               id="imageUpload"
+              disabled={isSaving || isDeleting}
             />
-            <label htmlFor="imageUpload" className={styles.uploadButton}>
+            <label 
+              htmlFor="imageUpload" 
+              className={`${styles.uploadButton} ${(isSaving || isDeleting) ? styles.disabled : ''}`}
+            >
               + Добавить изображения
             </label>
+            <p className={styles.imageHint}>
+              Примечание: Загрузка изображений пока не поддерживается API
+            </p>
           </div>
 
-          {/* Кнопки */}
           <div className={styles.actions}>
-            <Button type="submit" variant="primary">
-              Сохранить изменения
+            <Button 
+              type="submit" 
+              variant="primary"
+              disabled={isSaving || isDeleting}
+            >
+              {isSaving ? 'Сохранение...' : 'Сохранить изменения'}
             </Button>
             
             <Button 
               type="button" 
-              // variant="danger"
-              onClick={handleDelete}
+              variant="secondary"
+              onClick={handleCancel}
+              disabled={isSaving || isDeleting}
             >
-              Удалить новость
+              Отмена
+            </Button>
+            
+            <Button 
+              type="button"
+              onClick={handleDelete}
+              disabled={isSaving || isDeleting}
+              className={styles.deleteButton}
+            >
+              {isDeleting ? 'Удаление...' : 'Удалить новость'}
             </Button>
           </div>
         </form>
