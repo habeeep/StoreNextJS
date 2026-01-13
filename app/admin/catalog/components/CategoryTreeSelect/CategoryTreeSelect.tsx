@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { CategoryNode } from '@/types/category';
 
 interface Props {
@@ -12,6 +12,26 @@ interface Props {
 
 export const CategoryTreeSelect = ({ nodes, value, onChange, disabled }: Props) => {
   const [expandedIds, setExpandedIds] = useState<Set<string>>(new Set());
+
+  // When a value is provided (editing an existing product), expand all parent nodes
+  // so the selected child is visible in the tree.
+  useEffect(() => {
+    if (!value) return;
+
+    const findPath = (nodes: CategoryNode[], targetId: string, acc: string[] = []): { found: boolean; path: string[] } => {
+      for (const node of nodes) {
+        if (node.id === targetId) return { found: true, path: acc };
+        if (node.children && node.children.length > 0) {
+          const res = findPath(node.children, targetId, [...acc, node.id]);
+          if (res.found) return res;
+        }
+      }
+      return { found: false, path: [] };
+    };
+
+    const { found, path } = findPath(nodes, value, []);
+    if (found) setExpandedIds(new Set(path));
+  }, [value, nodes]);
 
   const toggle = (id: string) => {
     setExpandedIds(prev => {

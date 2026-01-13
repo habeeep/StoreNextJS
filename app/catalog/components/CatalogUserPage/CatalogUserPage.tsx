@@ -11,6 +11,7 @@ import styles from './CatalogUserPage.module.css';
 import { catalogApi } from '@/lib/api/catalogApi';
 import { categoriesApi } from '@/lib/api/categoriesApi';
 import { brandsApi } from '@/lib/api/brandsApi';
+import { convertApiBrandsToBrands, getBrandOptions } from '@/lib/utils/brandUtils';
 import { buildCategoryTree } from '@/lib/utils/categoryUtils';
 
 export const CatalogUserPage = () => {
@@ -33,7 +34,7 @@ export const CatalogUserPage = () => {
   const [products, setProducts] = useState<Product[]>([]);
   const [filteredProducts, setFilteredProducts] = useState<Product[]>([]);
   const [categories, setCategories] = useState<CategoryNode[]>([]);
-  const [brands, setBrands] = useState<string[]>([]);
+  const [brands, setBrands] = useState<Array<{ value: string; label: string }>>([]);
   const [isLoading, setIsLoading] = useState(true);
   const searchParams = useSearchParams();
   const router = useRouter();
@@ -57,7 +58,8 @@ export const CatalogUserPage = () => {
         setProducts(productsList);
         const tree = buildCategoryTree(apiCategories);
         setCategories(tree);
-        setBrands(apiBrands.map(b => b.title));
+        const converted = convertApiBrandsToBrands(apiBrands);
+        setBrands(getBrandOptions(converted));
       } catch (err) {
         console.error('Ошибка при загрузке данных каталога:', err);
       } finally {

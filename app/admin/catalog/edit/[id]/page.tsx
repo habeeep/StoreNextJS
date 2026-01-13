@@ -1,7 +1,7 @@
 'use client';
 
 import { useState, useEffect } from 'react';
-import { useRouter } from 'next/navigation';
+import { useRouter, useParams } from 'next/navigation';
 import { Container } from '@/components/layout/Container/Container';
 import { Input } from '@/components/ui/Input/Input';
 import { Button } from '@/components/ui/Button/Button';
@@ -26,6 +26,8 @@ interface ProductFormData {
 
 export default function CreateProductPage() {
   const router = useRouter();
+  const params = useParams();
+  const productId = params?.id as string | undefined;
   
   const [brands, setBrands] = useState<ApiBrand[]>([]);
   const [categories, setCategories] = useState<CategoryNode[]>([]);
@@ -46,17 +48,35 @@ export default function CreateProductPage() {
     const fetchData = async () => {
       setIsLoadingData(true);
       try {
-        const [apiBrands, apiCategories] = await Promise.all([
+        const promises: Promise<any>[] = [
           brandsApi.getAllBrands(),
           categoriesApi.getAllCategories(),
-        ]);
-        
+        ];
+
+        // If editing an existing product, also fetch it
+        if (productId) {
+          promises.push(catalogApi.getProductById(productId));
+        }
+
+        const [apiBrands, apiCategories, apiProduct] = await Promise.all(promises as any);
+
         setBrands(apiBrands);
         const categoryTree = buildCategoryTree(apiCategories);
         setCategories(categoryTree);
+
+        if (productId && apiProduct) {
+          setFormData({
+            title: apiProduct.title,
+            description: apiProduct.description,
+            price: apiProduct.price,
+            categoryId: apiProduct.categoryId,
+            brandId: apiProduct.brandId,
+            amount: apiProduct.amount,
+          });
+        }
       } catch (err) {
         console.error('Ошибка при загрузке данных:', err);
-        setError('Не удалось загрузить бренды и категории');
+        setError('Не удалось загрузить бренды, категории или товар');
       } finally {
         setIsLoadingData(false);
       }
@@ -75,15 +95,26 @@ export default function CreateProductPage() {
     setError(null);
     
     try {
-      await catalogApi.createProduct({
-        title: formData.title,
-        description: formData.description,
-        price: formData.price,
-        categoryId: formData.categoryId,
-        brandId: formData.brandId,
-        amount: formData.amount,
-      });
-      
+      if (productId) {
+        await catalogApi.updateProduct(productId, {
+          title: formData.title,
+          description: formData.description,
+          price: formData.price,
+          categoryId: formData.categoryId,
+          brandId: formData.brandId,
+          amount: formData.amount,
+        });
+      } else {
+        await catalogApi.createProduct({
+          title: formData.title,
+          description: formData.description,
+          price: formData.price,
+          categoryId: formData.categoryId,
+          brandId: formData.brandId,
+          amount: formData.amount,
+        });
+      }
+
       router.push('/admin/catalog');
       
     } catch (err) {

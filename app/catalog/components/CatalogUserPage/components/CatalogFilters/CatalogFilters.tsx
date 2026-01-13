@@ -10,10 +10,16 @@ import { InputSearch } from '@/components/ui/InputSearch/InputSearch';
 import { Button } from '@/components/ui/Button/Button';
 import styles from './CatalogFilters.module.css';
 
+interface BrandOption {
+  value: string;
+  label: string;
+}
+
 interface CatalogFiltersProps {
   filters: FiltersType;
   categories: CategoryNode[];
-  brands: string[];
+  // Accept either array of brand title strings (legacy admin) or option objects (value=id, label=title)
+  brands: Array<BrandOption | string>;
   onFiltersChange: (filters: FiltersType) => void;
   onApplyFilters: () => void;
 }
@@ -29,23 +35,28 @@ export const CatalogFilters = ({
   const [isBrandsExpanded, setIsBrandsExpanded] = useState(false);
   const [brandSearch, setBrandSearch] = useState('');
 
+  // normalize brands to option objects so component works with both string[] and {value,label}[]
+  const brandOptions: BrandOption[] = useMemo(() => {
+    return brands.map(b => typeof b === 'string' ? { value: b, label: b } : b);
+  }, [brands]);
+
   const filteredAndSortedBrands = useMemo(() => {
-    let result = [...brands];
-    
+    let result = [...brandOptions];
+
     if (brandSearch) {
       const searchLower = brandSearch.toLowerCase();
-      result = result.filter(brand => 
-        brand.toLowerCase().includes(searchLower)
+      result = result.filter(b =>
+        b.label.toLowerCase().includes(searchLower)
       );
     }
-    
+
     return result.sort((a, b) => {
-      const aSelected = filters.selectedBrands.includes(a);
-      const bSelected = filters.selectedBrands.includes(b);
-      
+      const aSelected = filters.selectedBrands.includes(a.value);
+      const bSelected = filters.selectedBrands.includes(b.value);
+
       if (aSelected && !bSelected) return -1;
       if (!aSelected && bSelected) return 1;
-      return a.localeCompare(b);
+      return a.label.localeCompare(b.label);
     });
   }, [brands, brandSearch, filters.selectedBrands]);
 
@@ -92,11 +103,11 @@ export const CatalogFilters = ({
     onFiltersChange({ ...filters, selectedCategories: newSelected });
   };
 
-  const handleBrandSelect = (brand: string) => {
-    const newSelected = filters.selectedBrands.includes(brand)
-      ? filters.selectedBrands.filter(b => b !== brand)
-      : [...filters.selectedBrands, brand];
-    
+  const handleBrandSelect = (brandValue: string) => {
+    const newSelected = filters.selectedBrands.includes(brandValue)
+      ? filters.selectedBrands.filter(b => b !== brandValue)
+      : [...filters.selectedBrands, brandValue];
+
     onFiltersChange({ ...filters, selectedBrands: newSelected });
   };
 
@@ -129,8 +140,8 @@ export const CatalogFilters = ({
     setBrandSearch('');
   };
 
-  const visibleBrands = isBrandsExpanded 
-    ? filteredAndSortedBrands 
+  const visibleBrands = isBrandsExpanded
+    ? filteredAndSortedBrands
     : filteredAndSortedBrands.slice(0, 5);
 
   const renderNode = (node: CategoryNode, level = 0) => {
@@ -208,18 +219,18 @@ export const CatalogFilters = ({
           <div className={styles.brandsList}>
             {visibleBrands.length > 0 ? (
               <>
-                {visibleBrands.map(brand => (
-                  <label key={brand} className={styles.checkboxItem}>
+                {visibleBrands.map(b => (
+                  <label key={b.value} className={styles.checkboxItem}>
                     <input
                       type="checkbox"
-                      checked={filters.selectedBrands.includes(brand)}
-                      onChange={() => handleBrandSelect(brand)}
+                      checked={filters.selectedBrands.includes(b.value)}
+                      onChange={() => handleBrandSelect(b.value)}
                     />
                     <span className={`
                       ${styles.brandName} 
-                      ${filters.selectedBrands.includes(brand) ? styles.selected : ''}
+                      ${filters.selectedBrands.includes(b.value) ? styles.selected : ''}
                     `}>
-                      {brand}
+                      {b.label}
                     </span>
                   </label>
                 ))}
