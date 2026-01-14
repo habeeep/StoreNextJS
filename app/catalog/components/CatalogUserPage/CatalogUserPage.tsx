@@ -44,25 +44,36 @@ export const CatalogUserPage = () => {
   const pathname = usePathname();
   const initialCategoryParam = useRef<string | null>(null);
 
+  const [offset, setOffset] = useState(0);
+  const offsetRef = useRef(0);
+  const [limit] = useState(100);
+  const [hasMore, setHasMore] = useState(true);
+
   useEffect(() => {
     let mounted = true;
 
-    const fetchData = async () => {
+    const fetchInitial = async () => {
       setIsLoading(true);
       try {
-        const [productsList, apiCategories, apiBrands] = await Promise.all([
-          catalogApi.getAllProducts(),
+        const [productsResp, apiCategories, apiBrands] = await Promise.all([
+          catalogApi.getProducts({ limit, offset: 0 }),
           categoriesApi.getAllCategories(),
           brandsApi.getAllBrands(),
         ]);
 
         if (!mounted) return;
 
-        setProducts(productsList);
+          const convertedProducts = catalogApi.convertToProducts(productsResp.items);
+          setProducts(convertedProducts);
+        setHasMore(productsResp.hasMore);
+        const newOffset = (productsResp.items?.length || 0);
+        setOffset(newOffset);
+        offsetRef.current = newOffset;
+
         const tree = buildCategoryTree(apiCategories);
         setCategories(tree);
-        const converted = convertApiBrandsToBrands(apiBrands);
-        setBrands(getBrandOptions(converted));
+          const convertedBrands = convertApiBrandsToBrands(apiBrands);
+          setBrands(getBrandOptions(convertedBrands));
       } catch (err) {
         console.error('Ошибка при загрузке данных каталога:', err);
       } finally {
@@ -70,10 +81,36 @@ export const CatalogUserPage = () => {
       }
     };
 
-    fetchData();
+    fetchInitial();
 
     return () => { mounted = false; };
-  }, []);
+  }, [limit]);
+
+  const loadNextPage = async () => {
+    if (!hasMore) return;
+    setIsLoading(true);
+    try {
+      const requestOffset = products.length;
+      const resp = await catalogApi.getProducts({ limit, offset: requestOffset });
+      const incoming = catalogApi.convertToProducts(resp.items);
+      setProducts(prev => {
+        const map = new Map<string, Product>();
+        prev.forEach(p => map.set(p.id, p));
+        incoming.forEach(p => {
+          if (!map.has(p.id)) map.set(p.id, p);
+        });
+        return Array.from(map.values());
+      });
+      setHasMore(resp.hasMore);
+      const newOffset = requestOffset + (resp.items?.length || 0);
+      setOffset(newOffset);
+      offsetRef.current = newOffset;
+    } catch (err) {
+      console.error('Ошибка при загрузке следующей страницы:', err);
+    } finally {
+      setIsLoading(false);
+    }
+  };
 
   useEffect(() => {
     const param = searchParams?.get ? searchParams.get('category') : null;
@@ -313,6 +350,13 @@ export const CatalogUserPage = () => {
             onIncrementQuantity={handleIncrementQuantity}
             onDecrementQuantity={handleDecrementQuantity}
           />
+          {hasMore && (
+            <div className={styles.loadMoreWrap}>
+              <button className={styles.loadMoreButton} onClick={loadNextPage} disabled={isLoading}>
+                {isLoading ? 'Загрузка...' : 'Загрузить ещё'}
+              </button>
+            </div>
+          )}
         </main>
       </div>
     </div>
