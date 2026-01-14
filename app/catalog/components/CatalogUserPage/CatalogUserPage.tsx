@@ -8,6 +8,9 @@ import { CatalogHeader } from './components/CatalogHeader/CatalogHeader';
 import { CatalogFilters as FiltersComponent } from './components/CatalogFilters/CatalogFilters';
 import { ProductGrid } from './components/ProductGrid/ProductGrid';
 import styles from './CatalogUserPage.module.css';
+import { useAppDispatch } from '@/hooks/useAppDispatch';
+import { useAppSelector } from '@/hooks/useAppSelector';
+import { addItem, removeItem, updateItem } from '@/store/slices/cartSlice';
 import { catalogApi } from '@/lib/api/catalogApi';
 import { categoriesApi } from '@/lib/api/categoriesApi';
 import { brandsApi } from '@/lib/api/brandsApi';
@@ -170,51 +173,119 @@ export const CatalogUserPage = () => {
     applyFilters();
   }, [products, appliedFilters]);
 
+  // keep products in sync with cart state so buttons reflect current cart
+  const { items: cartItems } = useAppSelector(s => s.cart);
+  useEffect(() => {
+    // run only after products are loaded to avoid race with fetchData
+    if (products.length === 0) return;
+
+    // if cart is empty, only update if any product currently shows inCart/quantity
+    if (!cartItems || cartItems.length === 0) {
+      const needUpdate = products.some(p => p.inCart || p.cartQuantity !== undefined);
+      if (needUpdate) {
+        setProducts(prev => prev.map(p => ({ ...p, inCart: false, cartQuantity: undefined })));
+      }
+      return;
+    }
+
+    const next = products.map(prod => {
+      const found = cartItems.find(ci => ci.productId === prod.id || ci.id === prod.id);
+      if (found) {
+        return { ...prod, inCart: true, cartQuantity: found.quantity };
+      }
+      return { ...prod, inCart: false, cartQuantity: undefined };
+    });
+
+    const changed = next.some((np, i) => {
+      const cur = products[i];
+      const curQty = cur.cartQuantity === undefined ? undefined : cur.cartQuantity;
+      const npQty = np.cartQuantity === undefined ? undefined : np.cartQuantity;
+      return np.inCart !== cur.inCart || npQty !== curQty;
+    });
+
+    if (changed) setProducts(next);
+  }, [cartItems, products.length]);
+
+  const dispatch = useAppDispatch();
+  const { user } = useAppSelector(s => s.auth);
+
   const handleAddToCart = (id: string) => {
-  setProducts(prev => prev.map(p => 
-    p.id === id 
-      ? { 
-          ...p, 
-          inCart: true, 
-          cartQuantity: 1
-        }
-      : p
-  ));
-};
+    // optimistic UI update
+    setProducts(prev => prev.map(p => 
+      p.id === id 
+        ? { 
+            ...p, 
+            inCart: true, 
+            cartQuantity: 1
+          }
+        : p
+    ));
+    const product = products.find(p => p.id === id);
+    dispatch(addItem({ productId: id, quantity: 1, name: product?.title, price: product?.price }));
+  };
 
-const handleRemoveFromCart = (id: string) => {
-  setProducts(prev => prev.map(p => 
-    p.id === id 
-      ? { 
-          ...p, 
-          inCart: false, 
-          cartQuantity: undefined
-        }
-      : p
-  ));
-};
+  const handleRemoveFromCart = (id: string) => {
+    setProducts(prev => prev.map(p => 
+      p.id === id 
+        ? { 
+            ...p, 
+            inCart: false, 
+            cartQuantity: undefined
+          }
+        : p
+    ));
+    // find cart item (could have backend id) and remove by its id when available
+    const cartItem = cartItems.find(ci => ci.productId === id || ci.id === id);
+    const removeId = cartItem ? cartItem.id : id;
+    dispatch(removeItem({ id: removeId }));
+  };
 
-const handleIncrementQuantity = (id: string) => {
-  setProducts(prev => prev.map(p => 
-    p.id === id && p.inCart
-      ? { 
-          ...p, 
-          cartQuantity: (p.cartQuantity || 1) + 1 
-        }
-      : p
-  ));
-};
+  const handleIncrementQuantity = (id: string) => {
+    setProducts(prev => prev.map(p => 
+      p.id === id && p.inCart
+        ? { 
+            ...p, 
+            cartQuantity: (p.cartQuantity || 1) + 1 
+          }
+        : p
+    ));
+    // dispatch update using cart item's id when available
+    const cartItem = cartItems.find(ci => ci.productId === id || ci.id === id);
+    if (cartItem) {
+      const newQty = (cartItem.quantity || 0) + 1;
+      dispatch(updateItem({ id: cartItem.id, quantity: newQty }));
+    } else {
+      // not in cart yet, add it
+      const product = products.find(p => p.id === id);
+      dispatch(addItem({ productId: id, quantity: 1, name: product?.title, price: product?.price }));
+    }
+  };
 
-const handleDecrementQuantity = (id: string) => {
-  setProducts(prev => prev.map(p => 
-    p.id === id && p.inCart
-      ? { 
-          ...p, 
-          cartQuantity: (p.cartQuantity || 1) - 1 
-        }
-      : p
-  ));
-};
+  const handleDecrementQuantity = (id: string) => {
+    // if current quantity is 1 -> remove; otherwise decrement
+    const cartItem = cartItems.find(ci => ci.productId === id || ci.id === id);
+    if (!cartItem) return;
+
+    if (cartItem.quantity <= 1) {
+      // optimistic UI
+      setProducts(prev => prev.map(p => 
+        p.id === id 
+          ? { ...p, inCart: false, cartQuantity: undefined } 
+          : p
+      ));
+      dispatch(removeItem({ id: cartItem.id }));
+      return;
+    }
+
+    // decrement
+    setProducts(prev => prev.map(p => 
+      p.id === id && p.inCart
+        ? { ...p, cartQuantity: (p.cartQuantity || 1) - 1 }
+        : p
+    ));
+    const newQty = Math.max(1, (cartItem.quantity || 1) - 1);
+    dispatch(updateItem({ id: cartItem.id, quantity: newQty }));
+  };
 
   return (
     <div className={styles.page}>

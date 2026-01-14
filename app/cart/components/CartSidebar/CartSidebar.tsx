@@ -8,12 +8,14 @@ interface CartSidebarProps {
   orderInfo: OrderInfo;
   selectedItems: CartItem[];
   onCheckout: () => void;
+  isAuth?: boolean;
 }
 
 export const CartSidebar = ({ 
   orderInfo, 
   selectedItems, 
   onCheckout 
+  , isAuth = false
 }: CartSidebarProps) => {
   return (
     <div className={styles.sidebar}>
@@ -57,7 +59,7 @@ export const CartSidebar = ({
       <Button
         className={styles.checkoutButton}
         onClick={onCheckout}
-        disabled={selectedItems.length === 0}
+        disabled={selectedItems.length === 0 || !isAuth}
       >
         Оформить заказ
       </Button>

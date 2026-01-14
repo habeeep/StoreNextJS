@@ -11,7 +11,7 @@ const API_BASE = '/backend/auth';
 const createMockUser = (email: string) => ({
   id: Date.now().toString(),
   email: email,
-  role: 'admin' as const,
+  role: 'user' as const,
 });
 
 export const authApi = {

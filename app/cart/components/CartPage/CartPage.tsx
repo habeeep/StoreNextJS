@@ -1,122 +1,81 @@
 'use client';
 
-import { useState } from 'react';
+import { useEffect } from 'react';
 import { CartSidebar } from '../CartSidebar/CartSidebar';
 import { CartItem } from '../CartItem/CartItem';
 import { CartItem as CartItemType } from '@/types/cart';
+import { useAppSelector } from '@/hooks/useAppSelector';
+import { useAppDispatch } from '@/hooks/useAppDispatch';
+import { initCart, updateItem, removeItem } from '@/store/slices/cartSlice';
 import styles from './CartPage.module.css';
 
 export const CartPage = () => {
-  const [cartItems, setCartItems] = useState<CartItemType[]>([
-    {
-      id: '1',
-      productId: 'p1',
-      name: 'Монстера',
-      price: 2500,
-      quantity: 2,
-      isSelected: true,
-      imageUrl: '/images/catalog/plants1.png'
-    },
-    {
-      id: '2',
-      productId: 'p2',
-      name: 'Фикус',
-      price: 1800,
-      quantity: 1,
-      isSelected: true,
-      imageUrl: '/images/catalog/plants1.png'
-    },
-    {
-      id: '3',
-      productId: 'p3',
-      name: 'Сансевиерия',
-      price: 1200,
-      quantity: 3,
-      isSelected: false,
-      imageUrl: '/images/catalog/plants1.png'
-    }
-  ]);
+  const dispatch = useAppDispatch();
+  const { items } = useAppSelector(s => s.cart);
+  const { user } = useAppSelector(s => s.auth);
 
-  const [orderInfo, setOrderInfo] = useState({
-    totalItems: 6,
-    totalPrice: 2500 * 2 + 1800 * 1 + 1200 * 3,
-    address: 'Москва, ул. Примерная, д. 1'
-  });
+  useEffect(() => {
+    dispatch(initCart());
+  }, [dispatch]);
 
-  const selectedItems = cartItems.filter(item => item.isSelected);
+  const selectedItems = items.filter(i => i.status !== 'NOT_SELECTED');
 
-  const updateOrderInfo = (items: CartItemType[]) => {
-    const selectedItems = items.filter(item => item.isSelected);
-    const totalItems = selectedItems.reduce((sum, item) => sum + item.quantity, 0);
-    const totalPrice = selectedItems.reduce((sum, item) => sum + (item.price * item.quantity), 0);
-    
-    setOrderInfo(prev => ({
-      ...prev,
-      totalItems,
-      totalPrice
-    }));
-    
-    return selectedItems;
-  };
-
-  const handleToggleSelect = (itemId: string) => {
-    const updatedItems = cartItems.map(item => 
-      item.id === itemId 
-        ? { ...item, isSelected: !item.isSelected }
-        : item
-    );
-    
-    setCartItems(updatedItems);
-    updateOrderInfo(updatedItems);
+  const orderInfo = {
+    totalItems: selectedItems.reduce((sum, it) => sum + it.quantity, 0),
+    totalPrice: selectedItems.reduce((sum, it) => sum + ((it.price || 0) * it.quantity), 0),
+    address: 'Не указан',
   };
 
   const handleQuantityChange = (itemId: string, newQuantity: number) => {
     if (newQuantity < 1) return;
-    
-    const updatedItems = cartItems.map(item => 
-      item.id === itemId 
-        ? { ...item, quantity: newQuantity }
-        : item
-    );
-    
-    setCartItems(updatedItems);
-    updateOrderInfo(updatedItems);
+    dispatch(updateItem({ id: itemId, quantity: newQuantity }));
+  };
+
+  const handleToggleSelect = (itemId: string) => {
+    const it = items.find(x => x.id === itemId || x.productId === itemId);
+    const newStatus = it?.status === 'SELECTED' ? 'NOT_SELECTED' : 'SELECTED';
+    dispatch(updateItem({ id: itemId, status: newStatus }));
   };
 
   const handleRemoveItem = (itemId: string) => {
-    const updatedItems = cartItems.filter(item => item.id !== itemId);
-    setCartItems(updatedItems);
-    updateOrderInfo(updatedItems);
+    dispatch(removeItem({ id: itemId }));
   };
 
   const handleCheckout = () => {
-    const selectedItems = cartItems.filter(item => item.isSelected);
-    if (selectedItems.length === 0) {
-      alert('Выберите хотя бы один товар');
+    if (!user) {
+      alert('Требуется авторизация для оформления заказа');
       return;
     }
-    
-    alert(`Заказ оформлен! Сумма: ${orderInfo.totalPrice} ₽`);
+    alert(`Оформление заказа — сумма: ${orderInfo.totalPrice} ₽`);
   };
 
   return (
-    <div className={styles.page}>      
+    <div className={styles.page}>
       <div className={styles.content}>
         <aside className={styles.sidebar}>
           <CartSidebar 
             orderInfo={orderInfo}
-            selectedItems={selectedItems}
+            selectedItems={selectedItems as unknown as CartItemType[]}
             onCheckout={handleCheckout}
+            isAuth={!!user}
           />
         </aside>
 
         <main className={styles.main}>
-          {cartItems.length > 0 ? (
+          {items.length > 0 ? (
             <div className={styles.itemsList}>
-              {cartItems.map(item => (
+              {items.map(item => (
                 <CartItem
                   key={item.id}
-                  item={item}
+                  item={{
+                    id: item.id,
+                    productId: item.productId,
+                    name: item.name || '',
+                    price: item.price || 0,
+                    quantity: item.quantity,
+                    isSelected: item.status !== 'NOT_SELECTED',
+                    imageUrl: '/images/catalog/plants1.png'
+                  }}
                   onToggleSelect={() => handleToggleSelect(item.id)}
                   onQuantityChange={(quantity) => handleQuantityChange(item.id, quantity)}
                   onRemove={() => handleRemoveItem(item.id)}

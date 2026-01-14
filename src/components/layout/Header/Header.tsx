@@ -18,6 +18,7 @@ import { CatalogIcon } from '@/components/ui/icons/CatalogIcon';
 
 export const Header = () => {
   const { user } = useAppSelector((state) => state.auth);
+  const cartCount = useAppSelector((state) => state.cart.items.length);
   
   const dispatch = useAppDispatch();
   const pathname = usePathname();
@@ -69,7 +70,7 @@ export const Header = () => {
               
               <Link href="/cart" className={`${styles.iconLink} ${styles.iconLinkCart}`} aria-label="Корзина">
                 <CartIcon size={24} />
-                <span className={styles.cartCount}>0</span>
+                <span className={styles.cartCount}>{cartCount}</span>
               </Link>
               
               <button
@@ -84,7 +85,7 @@ export const Header = () => {
             <>
               <Link href="/cart" className={`${styles.iconLink} ${styles.iconLinkCart}`} aria-label="Корзина">
                 <CartIcon size={24} />
-                <span className={styles.cartCount}>0</span>
+                <span className={styles.cartCount}>{cartCount}</span>
               </Link>
               
               <Link href="/auth/request-code" className={styles.iconLink} aria-label="Войти">

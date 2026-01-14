@@ -6,6 +6,7 @@ import { Input } from '@/components/ui/Input/Input';
 import { Button } from '@/components/ui/Button/Button';
 import { LinkButton } from '@/components/ui/LinkButton/LinkButton';
 import { verifyCode, resendCode } from '@/store/slices/authSlice';
+import { migrateLocalToBackend, initCart } from '@/store/slices/cartSlice';
 import { useAppSelector } from '@/hooks/useAppSelector';
 import { useAppDispatch } from '@/hooks/useAppDispatch';
 import styles from './page.module.css'
@@ -32,7 +33,14 @@ export default function LoginPage() {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    dispatch(verifyCode({ email, code }));
+    try {
+      await dispatch(verifyCode({ email, code })).unwrap();
+      // migrate local cart to backend and re-init cart from backend
+      await dispatch(migrateLocalToBackend()).unwrap();
+      await dispatch(initCart()).unwrap();
+    } catch (err) {
+      // error handled by slice
+    }
   };
 
   const handleResendCode = async () => {
@@ -48,6 +56,7 @@ export default function LoginPage() {
 
   useEffect(() => {
     if (user) {
+      // keep previous behaviour for other flows
       router.push('/');
     }
   }, [user, router]);
