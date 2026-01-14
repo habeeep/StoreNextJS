@@ -94,3 +94,7 @@ body {
 .main-content {
   margin-top: var(--header-height);
 }
+
+header.has-admin + .main-content {
+  margin-top: calc(var(--header-height) * 2);
+}

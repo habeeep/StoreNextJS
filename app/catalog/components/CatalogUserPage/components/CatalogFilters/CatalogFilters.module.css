@@ -84,7 +84,19 @@
     padding-right: var(--spacing-2xl);
 }
 
+.actionButtons {
+    display: flex;
+    flex-direction: column;
+    gap: var(--spacing-xs);
+}
+
 .applyButton {
+    font-size: var(--font-size-small);
+    line-height: var(--line-height-small);
+    width: 100%;
+}
+
+.resetButton {
     font-size: var(--font-size-small);
     line-height: var(--line-height-small);
     width: 100%;

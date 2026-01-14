@@ -5,11 +5,11 @@ import {
   CategoryNode 
 } from '@/types/category';
 
-const API_BASE = process.env.NEXT_PUBLIC_API_URL_CATALOG;
+const API_BASE = `${process.env.NEXT_PUBLIC_API_URL_CATALOG}/categories`;
 
 export const categoriesApi = {
   async getAllCategories(): Promise<ApiCategory[]> {
-    const response = await fetch(`${API_BASE}/categories`, {
+    const response = await fetch(API_BASE, {
       method: 'GET',
       headers: { 'Content-Type': 'application/json' },
     });
@@ -35,7 +35,7 @@ export const categoriesApi = {
   },
 
   async createCategory(data: CreateCategoryRequest): Promise<ApiCategory> {
-    const response = await fetch(`${API_BASE}/categories`, {
+    const response = await fetch(API_BASE, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify(data),

@@ -115,16 +115,19 @@ export default function EditBrandPage() {
   return (
     <Container>
       <div className={styles.page}>
-        <button 
-          className={styles.backButton}
-          onClick={handleCancel}
-          aria-label="Назад"
-          disabled={isSaving || isDeleting}
-        >
-          <CrossIcon size={24} />
-        </button>
+        <div className={styles.header} >
+          <h1 className={styles.title}>Редактирование бренда</h1>
+          <button 
+            className={styles.backButton}
+            onClick={handleCancel}
+            aria-label="Назад"
+            disabled={isSaving || isDeleting}
+          >
+            <CrossIcon size={40} />
+          </button>
+        </div>
 
-        <h1 className={styles.title}>Редактирование бренда</h1>
+        
 
         {saveError && (
           <div className={styles.saveError}>
@@ -141,6 +144,8 @@ export default function EditBrandPage() {
               required
               disabled={isSaving || isDeleting}
               placeholder="Введите название бренда"
+              showClearButton={title.length > 0}
+              onClear={() => setTitle('')}
             />
           </div>
 
@@ -152,6 +157,8 @@ export default function EditBrandPage() {
               required
               disabled={isSaving || isDeleting}
               placeholder="Введите страну"
+              showClearButton={country.length > 0}
+              onClear={() => setCountry('')}
             />
           </div>
 
@@ -173,26 +180,9 @@ export default function EditBrandPage() {
               type="submit" 
               variant="primary"
               disabled={isSaving || isDeleting}
+              className={styles.saveButton}
             >
               {isSaving ? 'Сохранение...' : 'Сохранить изменения'}
-            </Button>
-            
-            <Button 
-              type="button" 
-              variant="secondary"
-              onClick={handleCancel}
-              disabled={isSaving || isDeleting}
-            >
-              Отмена
-            </Button>
-            
-            <Button 
-              type="button"
-              onClick={handleDelete}
-              disabled={isSaving || isDeleting}
-              className={styles.deleteButton}
-            >
-              {isDeleting ? 'Удаление...' : 'Удалить бренд'}
             </Button>
           </div>
         </form>

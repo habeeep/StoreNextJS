@@ -1,0 +1,60 @@
+.page {
+    background-color: var(--color-primary-200);
+    border-radius: var(--radius-xl);
+    padding: var(--spacing-md);
+}
+
+.header {
+    display: flex;
+    justify-content: space-between;
+}
+
+.backButton {
+    background-color: transparent;
+    margin: 0;
+    padding: 0;
+    border: none;
+}
+
+.form {
+    display: flex;
+    flex-direction: column;
+    gap: var(--spacing-md);
+    max-width: 700px;
+}
+
+.field {
+    display: flex;
+    flex-direction: column;
+    gap: var(--spacing-xs);
+}
+
+.label {
+    font-size: var(--font-size-2xl);
+    line-height: var(--line-height-2xl);
+    font-weight: var(--font-weight-bold);
+}
+
+.textarea {
+    background-color: var(--color-primary-100);
+    border-radius: var(--radius-xl);
+    border: none;
+    outline: solid 1px var(--color-primary-500);
+    min-height: 70px;
+    padding: var(--spacing-md) var(--spacing-lg);
+    font-size: var(--font-size-large);
+    line-height: var(--line-height-large);
+    font-weight: var(--font-weight-semibold);
+    color: var(--color-grey-600)
+}
+
+.textarea::placeholder,
+.textarea::-webkit-input-placeholder,
+.textarea::-moz-placeholder,
+.textarea::-ms-input-placeholder {
+  color: var(--color-grey-400);
+}
+
+.saveButton {
+    width: 50%;
+}

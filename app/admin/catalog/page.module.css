@@ -15,3 +15,8 @@
     align-items: center;
 }
 
+.sidebarActions {
+    display: flex;
+    flex-direction: column;
+    gap: var(--spacing-xs);
+}

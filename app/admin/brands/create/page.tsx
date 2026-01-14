@@ -47,16 +47,19 @@ export default function CreateBrandPage() {
   return (
     <Container>
       <div className={styles.page}>
-        <button 
-          className={styles.backButton}
-          onClick={handleCancel}
-          aria-label="Назад"
-          disabled={isLoading}
-        >
-          <CrossIcon size={24} />
-        </button>
+        <div className={styles.header}>
+          <h1 className={styles.title}>Создание бренда</h1>
 
-        <h1 className={styles.title}>Создание бренда</h1>
+          <button 
+            className={styles.backButton}
+            onClick={handleCancel}
+            aria-label="Назад"
+            disabled={isLoading}
+          >
+            <CrossIcon size={40} />
+          </button>
+        </div>
+        
 
         {error && (
           <div className={styles.error}>
@@ -73,6 +76,8 @@ export default function CreateBrandPage() {
               placeholder="Введите название бренда"
               required
               disabled={isLoading}
+              showClearButton={title.length > 0}
+              onClear={() => setTitle('')}
             />
           </div>
 
@@ -84,6 +89,8 @@ export default function CreateBrandPage() {
               placeholder="Введите страну"
               required
               disabled={isLoading}
+              showClearButton={country.length > 0}
+              onClear={() => setCountry('')}
             />
           </div>
 
@@ -105,17 +112,9 @@ export default function CreateBrandPage() {
               type="submit" 
               variant="primary"
               disabled={isLoading}
+              className={styles.createButton}
             >
               {isLoading ? 'Создание...' : 'Создать бренд'}
-            </Button>
-            
-            <Button 
-              type="button" 
-              variant="secondary"
-              onClick={handleCancel}
-              disabled={isLoading}
-            >
-              Отмена
             </Button>
           </div>
         </form>

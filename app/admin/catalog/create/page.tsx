@@ -239,15 +239,6 @@ export default function CreateProductPage() {
             >
               {isSubmitting ? 'Создание...' : 'Создать товар'}
             </Button>
-            
-            <Button 
-              type="button" 
-              variant="secondary"
-              onClick={handleCancel}
-              disabled={isSubmitting}
-            >
-              Отмена
-            </Button>
           </div>
         </form>
       </div>

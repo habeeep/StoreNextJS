@@ -14,6 +14,8 @@ import { LoginIcon } from '@/components/ui/icons/LoginIcon';
 import { HomeIcon } from '@/components/ui/icons/HomeIcon';
 import { NewsIcon } from '@/components/ui/icons/NewsIcon';
 import { CatalogIcon } from '@/components/ui/icons/CatalogIcon';
+import { BriefcaseIcon } from '@/components/ui/icons/BriefcaseIcon';
+import { GridIcon } from '@/components/ui/icons/GridIcon';
 
 
 export const Header = () => {
@@ -29,6 +31,13 @@ export const Header = () => {
     { label: 'Товары', href: '/catalog', icon: CatalogIcon },
   ];
 
+  const adminNavItems = [
+    { label: 'Новости', href: '/admin/news', icon: NewsIcon },
+    { label: 'Товары', href: '/admin/catalog', icon: CatalogIcon },
+    { label: 'Бренды', href: '/admin/brands', icon: BriefcaseIcon },
+    { label: 'Категории', href: '/admin/categories', icon: GridIcon },
+  ];
+
   const isActive = (href: string) => {
     if (href === '/') {
       return pathname === '/';
@@ -40,8 +49,10 @@ export const Header = () => {
     dispatch(logout());
   };
 
+  const isAdmin = user?.role === 'admin';
+
   return (
-    <header className={styles.header}>
+    <header className={`${styles.header} ${isAdmin ? styles.headerWithAdmin : ''} ${isAdmin ? 'has-admin' : ''}`}>
       <div className={styles.container}>
         <div className={styles.logo}>
           <Link href="/" className={styles.logoLink}>
@@ -64,11 +75,11 @@ export const Header = () => {
         <div className={styles.iconsContainer}>
           {user ? (
             <>
-              <Link href="/profile" className={styles.iconLink} aria-label="Личный кабинет">
+              <Link href="/profile" className={`${styles.iconLink} ${isActive('/profile') ? styles.iconLinkActive : ''}`} aria-label="Личный кабинет">
                 <UserIcon size={24} />
               </Link>
               
-              <Link href="/cart" className={`${styles.iconLink} ${styles.iconLinkCart}`} aria-label="Корзина">
+              <Link href="/cart" className={`${styles.iconLink} ${styles.iconLinkCart} ${isActive('/cart') ? styles.iconLinkActive : ''}`} aria-label="Корзина">
                 <CartIcon size={24} />
                 <span className={styles.cartCount}>{cartCount}</span>
               </Link>
@@ -83,18 +94,37 @@ export const Header = () => {
             </>
           ) : (
             <>
-              <Link href="/cart" className={`${styles.iconLink} ${styles.iconLinkCart}`} aria-label="Корзина">
+              <Link href="/cart" className={`${styles.iconLink} ${styles.iconLinkCart} ${isActive('/cart') ? styles.iconLinkActive : ''}`} aria-label="Корзина">
                 <CartIcon size={24} />
                 <span className={styles.cartCount}>{cartCount}</span>
               </Link>
               
-              <Link href="/auth/request-code" className={styles.iconLink} aria-label="Войти">
+              <Link href="/auth/request-code" className={`${styles.iconLink} ${isActive('/auth') ? styles.iconLinkActive : ''}`} aria-label="Войти">
                 <LoginIcon size={24} />
               </Link>
             </>
           )}
         </div>
       </div>
+
+      {isAdmin && (
+        <div className={styles.adminRow} aria-label="Админ навигация">
+          <div className={styles.adminInner}>
+            <nav>
+              <ul className={styles.adminNavList}>
+                {adminNavItems.map((item) => (
+                  <li key={item.href}>
+                    <Link href={item.href} className={`${styles.adminNavLink} ${isActive(item.href) ? styles.adminNavLinkActive : ''}`}>
+                      <item.icon className={styles.adminNavIcon} />
+                      {item.label}
+                    </Link>
+                  </li>
+                ))}
+              </ul>
+            </nav>
+          </div>
+        </div>
+      )}
     </header>
   );
 };

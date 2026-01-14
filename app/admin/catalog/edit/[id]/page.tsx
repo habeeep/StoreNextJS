@@ -158,7 +158,7 @@ export default function CreateProductPage() {
     <Container>
       <div className={styles.page}>
         <div className={styles.header}>
-          <h1 className={styles.title}>Создать товар</h1>
+          <h1 className={styles.title}>Редактировать товар</h1>
           <button 
             className={styles.backButton}
             onClick={handleCancel}
@@ -269,15 +269,6 @@ export default function CreateProductPage() {
               disabled={isSubmitting}
             >
               {isSubmitting ? 'Создание...' : 'Создать товар'}
-            </Button>
-            
-            <Button 
-              type="button" 
-              variant="secondary"
-              onClick={handleCancel}
-              disabled={isSubmitting}
-            >
-              Отмена
             </Button>
           </div>
         </form>

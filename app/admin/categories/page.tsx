@@ -4,8 +4,10 @@ import { useState, useEffect, useMemo, useCallback } from 'react';
 import { Container } from '@/components/layout/Container/Container';
 import { Button } from '@/components/ui/Button/Button';
 import { InputSearch } from '@/components/ui/InputSearch/InputSearch';
+import { Input } from '@/components/ui/Input/Input';
 import { PlusIcon } from '@/components/ui/icons/PlusIcon';
 import { CategoryRow } from './components/CategoryRow/CategoryRow';
+import addStyles from './components/CategoryRow/CategoryRow.module.css';
 import { CategorySortHeader } from './components/CategorySortHeader/CategorySortHeader';
 import { CategoryNode, CategorySortOrder } from '@/types/category';
 import { categoriesApi } from '@/lib/api/categoriesApi';
@@ -19,6 +21,11 @@ export default function CategoriesTreePage() {
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [isAddingCategory, setIsAddingCategory] = useState(false);
+  const [newRootTitle, setNewRootTitle] = useState('');
+  const [newChildParentId, setNewChildParentId] = useState<string | null>(null);
+  const [isCreating, setIsCreating] = useState(false);
+  const [editingCategoryId, setEditingCategoryId] = useState<string | null>(null);
+  const [isUpdating, setIsUpdating] = useState(false);
 
   const fetchCategories = useCallback(async () => {
     setIsLoading(true);
@@ -54,12 +61,58 @@ export default function CategoriesTreePage() {
   }, [categories, searchQuery, sortOrder]);
 
   const handleAddSubcategory = (parentId: string) => {
-    console.log('Добавить подкатегорию для', parentId);
-    setIsAddingCategory(true);
+    // Open inline add-row under the given parent
+    setNewChildParentId(parentId);
+    // ensure parent is expanded so the new row is visible
+    setCategories(prev => {
+      const expandParent = (nodes: CategoryNode[]): CategoryNode[] =>
+        nodes.map(node => {
+          if (node.id === parentId) return { ...node, isExpanded: true };
+          if (node.children.length > 0) return { ...node, children: expandParent(node.children) };
+          return node;
+        });
+
+      return expandParent(prev);
+    });
+  };
+
+  const handleCancelAdd = () => setNewChildParentId(null);
+
+  const handleCreateSubcategory = async (parentId: string, title: string) => {
+    if (!title.trim()) return alert('Введите название категории');
+    setIsCreating(true);
+    try {
+      await categoriesApi.createCategory({ title: title.trim(), description: 'Описание', parentId });
+      setNewChildParentId(null);
+      await fetchCategories();
+    } catch (err) {
+      console.error('Ошибка создания категории:', err);
+      alert('Не удалось создать категорию');
+    } finally {
+      setIsCreating(false);
+    }
   };
 
   const handleEditCategory = (category: CategoryNode) => {
-    console.log('Редактировать категорию', category.id);
+    // open inline edit for this category
+    setEditingCategoryId(category.id);
+  };
+
+  const handleCancelEdit = () => setEditingCategoryId(null);
+
+  const handleUpdateCategory = async (categoryId: string, title: string, parentId: string | null) => {
+    if (!title.trim()) return alert('Введите название категории');
+    setIsUpdating(true);
+    try {
+      await categoriesApi.updateCategory(categoryId, { title: title.trim(), description: 'Описание', parentId });
+      setEditingCategoryId(null);
+      await fetchCategories();
+    } catch (err) {
+      console.error('Ошибка обновления категории:', err);
+      alert('Не удалось обновить категорию');
+    } finally {
+      setIsUpdating(false);
+    }
   };
 
   const handleDeleteCategory = async (categoryId: string) => {
@@ -91,8 +144,25 @@ export default function CategoriesTreePage() {
   };
 
   const handleAddRootCategory = () => {
-    console.log('Добавить корневую категорию');
+    // show inline add row at the top
+    setNewRootTitle('');
     setIsAddingCategory(true);
+  };
+
+  const handleCreateRoot = async (title: string) => {
+    if (!title.trim()) return alert('Введите название категории');
+    setIsCreating(true);
+    try {
+      await categoriesApi.createCategory({ title: title.trim(), description: 'Описание', parentId: null });
+      setIsAddingCategory(false);
+      setNewRootTitle('');
+      await fetchCategories();
+    } catch (err) {
+      console.error('Ошибка создания корневой категории:', err);
+      alert('Не удалось создать категорию');
+    } finally {
+      setIsCreating(false);
+    }
   };
 
   const handleSearch = (query: string) => {
@@ -110,10 +180,10 @@ export default function CategoriesTreePage() {
           <div className={styles.headerTop}>
             <h1 className={styles.title}>Дерево категорий товаров</h1>
             <div className={styles.topButtons}>
-              <Button onClick={handleRefresh} variant="secondary">
+              <Button className={styles.headerButton} onClick={handleRefresh} variant="secondary">
                 Обновить
               </Button>
-              <Button onClick={handleAddRootCategory}>
+              <Button className={styles.headerButton} onClick={handleAddRootCategory}>
                 <PlusIcon size={20} />
                 Добавить категорию
               </Button>
@@ -155,6 +225,30 @@ export default function CategoriesTreePage() {
             </div>
 
             <div className={styles.categoriesList}>
+              {/* Inline add row for new root category */}
+              {isAddingCategory && (
+                <div className={`${addStyles.row} ${addStyles.addRow}`}>
+                  <div style={{ width: 0 }} />
+                  <div className={addStyles.rowContent}>
+                    <Input
+                      showClearButton
+                      onClear={() => setNewRootTitle('')}
+                      className={addStyles.addInput}
+                      value={newRootTitle}
+                      onChange={(e) => setNewRootTitle(e.target.value)}
+                      placeholder="Название категории"
+                    />
+                    <div className={addStyles.addActions}>
+                      <Button className={addStyles.saveButton} onClick={() => handleCreateRoot(newRootTitle)} disabled={isCreating}>
+                        Сохранить
+                      </Button>
+                      <button className={addStyles.cancelButton} onClick={() => setIsAddingCategory(false)}>
+                        Отмена
+                      </button>
+                    </div>
+                  </div>
+                </div>
+              )}
               {processedCategories.length === 0 ? (
                 <div className={styles.emptyState}>
                   {searchQuery.trim()
@@ -166,25 +260,21 @@ export default function CategoriesTreePage() {
                   <CategoryRow
                     key={category.id}
                     category={category}
-                    onAddSubcategory={handleAddSubcategory}
+                      onAddSubcategory={handleAddSubcategory}
                     onEdit={handleEditCategory}
                     onDelete={handleDeleteCategory}
                     onToggleExpand={handleToggleExpand}
+                      newChildParentId={newChildParentId}
+                      onCreateSubcategory={handleCreateSubcategory}
+                      onCancelAdd={handleCancelAdd}
+                      isCreating={isCreating}
+                      editingCategoryId={editingCategoryId}
+                      onUpdateCategory={handleUpdateCategory}
+                      onCancelEdit={handleCancelEdit}
+                      isUpdating={isUpdating}
                   />
                 ))
               )}
-            </div>
-          </div>
-        )}
-
-        {isAddingCategory && (
-          <div className={styles.modalOverlay}>
-            <div className={styles.modal}>
-              <h3>Добавление категории</h3>
-              <p>Здесь будет форма для добавления категории...</p>
-              <Button onClick={() => setIsAddingCategory(false)}>
-                Закрыть
-              </Button>
             </div>
           </div>
         )}

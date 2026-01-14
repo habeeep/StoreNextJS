@@ -140,6 +140,19 @@ export const CatalogFilters = ({
     setBrandSearch('');
   };
 
+  const handleResetFilters = () => {
+    setExpandedCategories(new Set());
+    setIsBrandsExpanded(false);
+    setBrandSearch('');
+    onFiltersChange({
+      sortBy: 'price-asc',
+      searchQuery: '',
+      selectedCategories: [],
+      selectedBrands: [],
+      priceRange: { min: 0, max: 0 }
+    });
+  };
+
   const visibleBrands = isBrandsExpanded
     ? filteredAndSortedBrands
     : filteredAndSortedBrands.slice(0, 5);
@@ -282,9 +295,14 @@ export const CatalogFilters = ({
           </div>
         </div>
       </div>
-      <Button className={styles.applyButton} onClick={onApplyFilters}>
-        Применить фильтры
-      </Button>
+      <div className={styles.actionButtons}>
+        <Button className={styles.applyButton} onClick={onApplyFilters}>
+          Применить
+        </Button>
+        <Button className={styles.resetButton} variant="secondary" onClick={handleResetFilters}>
+          Сбросить
+        </Button>
+      </div>
     </div>
   );
 };

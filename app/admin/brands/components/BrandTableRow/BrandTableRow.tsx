@@ -45,33 +45,7 @@ export const BrandTableRow = ({
       </td>
       
       <td className={styles.td}>
-        <div className={styles.actions}>
-          <div className={styles.actionButtons}>
-            <button
-              className={styles.actionButton}
-              onClick={() => onView(brand.id)}
-              title="Просмотреть"
-            >
-              <EyeIcon size={18} />
-            </button>
-            
-            <button
-              className={styles.actionButton}
-              onClick={() => onEdit(brand)}
-              title="Редактировать"
-            >
-              <EditIcon size={18} />
-            </button>
-            
-            <button
-              className={styles.actionButton}
-              onClick={() => onDelete(brand.id)}
-              title="Удалить"
-            >
-              <TrashIcon size={18} />
-            </button>
-          </div>
-          
+        <div className={styles.actions}>          
           <div className={styles.menuContainer}>
             <button 
               className={styles.menuButton}
@@ -83,16 +57,6 @@ export const BrandTableRow = ({
             
             {showMenu && (
               <div className={styles.menu}>
-                <button 
-                  className={styles.menuItem}
-                  onClick={() => {
-                    onView(brand.id);
-                    setShowMenu(false);
-                  }}
-                >
-                  <EyeIcon size={16} />
-                  Просмотреть
-                </button>
                 
                 <button 
                   className={styles.menuItem}

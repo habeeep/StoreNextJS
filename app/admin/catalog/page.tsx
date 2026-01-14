@@ -245,20 +245,6 @@ export default function AdminCatalogPage() {
 
         <div className={styles.content}>
           <div className={styles.main}>
-            <div className={styles.tableHeader}>
-              <div className={styles.tableInfo}>
-                <span className={styles.productsCount}>
-                  Товаров: {filteredProducts.length}
-                </span>
-                <Button 
-                  onClick={handleRefresh}
-                  variant="secondary"
-                  className={styles.refreshButton}
-                >
-                  Обновить
-                </Button>
-              </div>
-            </div>
             
             <div className={styles.tableSection}>
               <ProductTable
@@ -290,6 +276,13 @@ export default function AdminCatalogPage() {
               >
                 <PlusIcon size={20} />
                 Создать товар
+              </Button>
+              <Button 
+                onClick={handleRefresh}
+                variant="secondary"
+                className={styles.refreshButton}
+              >
+                Обновить
               </Button>
             </div>
           </aside>

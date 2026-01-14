@@ -1,4 +1,3 @@
-
 .header {
     margin-bottom: var(--spacing-2xl);
 }
@@ -10,8 +9,17 @@
     align-items: center;
 }
 
+.headerButton {
+    padding: var(--spacing-xs) var(--spacing-md);
+}
+
 .headerTop {
     margin-bottom: var(--spacing-lg);
+}
+
+.topButtons {
+    display: flex;
+    gap: var(--spacing-xs);
 }
 
 .searchInput {
@@ -43,4 +51,8 @@
     bottom: 0;
     left: 0;
     background-color: var(--color-primary-500);
+}
+
+.emptyState {
+    padding: var(--spacing-lg);
 }

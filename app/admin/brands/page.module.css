@@ -1,0 +1,176 @@
+.page {
+	display: flex;
+	flex-direction: column;
+	gap: var(--spacing-lg);
+}
+
+.header {
+	display: flex;
+	justify-content: center;
+}
+
+.content {
+	display: flex;
+	gap: var(--spacing-sm);
+}
+
+.main {
+	width: 100%;
+}
+
+.tableHeader {
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
+	padding: var(--spacing-sm) 0;
+}
+
+.tableInfo {
+	display: flex;
+	gap: var(--spacing-md);
+	align-items: center;
+}
+
+.brandsCount {
+	font-weight: var(--font-weight-semibold);
+	color: var(--color-primary-800);
+}
+
+.resetFiltersButton {
+	background: none;
+	border: none;
+	color: var(--color-primary-500);
+	cursor: pointer;
+}
+
+.sidebar {
+	max-width: 315px;
+	display: flex;
+	flex-direction: column;
+	gap: var(--spacing-md);
+}
+
+.filtersContainer {
+	background: var(--color-primary-200);
+	border-radius: var(--radius-md);
+	padding: var(--spacing-md);
+	box-shadow: 0 1px 4px rgba(0,0,0,0.04);
+}
+
+.filterSection {
+	display: flex;
+	flex-direction: column;
+	gap: var(--spacing-sm);
+}
+
+.filterTitle {
+	margin: 0;
+	font-size: var(--font-size-base);
+	color: var(--color-primary-800);
+}
+
+.countryFilters {
+	display: flex;
+	flex-direction: column;
+	gap: var(--spacing-xs);
+}
+
+
+.checkboxItem,
+.countryFilter {
+	display: flex;
+	gap: var(--spacing-xs);
+	align-items: center;
+	font-size: var(--font-size-large);
+	line-height: var(--line-height-large);
+}
+
+.brandSearch div input {
+	background-color: var(--color-primary-100);
+	font-size: var(--font-size-base);
+}
+
+.brandsList {
+	display: flex;
+	flex-direction: column;
+	gap: var(--spacing-xs);
+	margin-top: var(--spacing-sm);
+}
+
+.brandName {
+	color: var(--color-primary-800);
+}
+
+.selected {
+	font-weight: var(--font-weight-semibold);
+}
+
+.noBrands {
+	color: var(--color-grey-600);
+}
+
+.controlsRow {
+	display: flex;
+	gap: var(--spacing-sm);
+	align-items: center;
+	margin-bottom: var(--spacing-sm);
+}
+
+.expandButton {
+	border: none;
+	background: transparent;
+	color: var(--color-primary-700);
+	cursor: pointer;
+	padding: 0;
+}
+
+.filterActions {
+	display: flex;
+    flex-direction: column;
+	gap: var(--spacing-sm);
+	margin-top: var(--spacing-sm);
+}
+
+.applyButton {
+	width: 100%;
+    padding: 8px 12px;
+}
+
+
+.active {
+	background: var(--color-primary-100);
+	border-color: var(--color-primary-300);
+}
+
+.sidebarActions {
+	display: flex;
+	flex-direction: column;
+	gap: var(--spacing-sm);
+}
+
+.createButton {
+	display: inline-flex;
+	align-items: center;
+	gap: var(--spacing-sm);
+    padding: 8px 12px;
+}
+
+.refreshButton {
+	padding: 8px 12px;
+}
+
+.resetButton {
+	padding: 8px 12px;
+}
+
+.loading {
+	padding: var(--spacing-md);
+	text-align: center;
+}
+
+.error {
+	padding: var(--spacing-md);
+	background: var(--color-functional-50);
+	border-radius: var(--radius-sm);
+}
+

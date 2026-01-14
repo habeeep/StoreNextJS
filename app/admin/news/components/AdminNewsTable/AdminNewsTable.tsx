@@ -3,6 +3,9 @@
 import { NewsItem } from '@/types/news';
 import { NewsTableRow } from '../NewsTableRow/NewsTableRow';
 import styles from './AdminNewsTable.module.css';
+import { HeartIcon } from '@/components/ui/icons/HeartIcon';
+import { EyeIcon } from '@/components/ui/icons/EyeIcon';
+import { CommentIcon } from '@/components/ui/icons/CommentIcon';
 
 interface AdminNewsTableProps {
   news: NewsItem[];
@@ -21,17 +24,18 @@ export const AdminNewsTable = ({ news, onDelete }: AdminNewsTableProps) => {
           <tr>
             <th className={styles.th}>#</th>
             <th className={styles.th}>Название</th>
+            <th className={styles.th}>Описание</th>
             <th className={styles.th}>
-              <span className={styles.iconColumn}>❤️</span>
+              <span className={styles.iconColumn}><HeartIcon /></span>
             </th>
             <th className={styles.th}>
-              <span className={styles.iconColumn}>👁️</span>
+              <span className={styles.iconColumn}><EyeIcon /></span>
             </th>
             <th className={styles.th}>
-              <span className={styles.iconColumn}>💬</span>
+              <span className={styles.iconColumn}><CommentIcon /></span>
             </th>
             <th className={styles.th}>Дата создания</th>
-            <th className={styles.th}>Действия</th>
+            <th className={styles.th}></th>
           </tr>
         </thead>
         <tbody>

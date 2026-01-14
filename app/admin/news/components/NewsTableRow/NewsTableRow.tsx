@@ -7,6 +7,7 @@ import { EyeIcon } from '@/components/ui/icons/EyeIcon';
 import { EditIcon } from '@/components/ui/icons/EditIcon';
 import { TrashIcon } from '@/components/ui/icons/TrashIcon';
 import styles from './NewsTableRow.module.css';
+import { DotsIcon } from '@/components/ui/icons/DotsIcon';
 
 interface NewsTableRowProps {
   news: NewsItem;
@@ -34,14 +35,11 @@ export const NewsTableRow = ({ news, index, onDelete }: NewsTableRowProps) => {
       <td className={styles.td}>{index}</td>
       
       <td className={styles.td}>
-        <div className={styles.titleCell}>
-          <Link href={`/admin/news/${news.id}`} className={styles.titleLink}>
             {news.title}
-          </Link>
-          <div className={styles.description}>
-            {news.text ? news.text.substring(0, 100) + '...' : 'Нет содержания'}
-          </div>
-        </div>
+      </td>
+
+      <td className={styles.td}>
+            {news.text ? news.text.substring(0, 600) + '...' : 'Нет содержания'}
       </td>
       
       <td className={styles.td}>
@@ -96,6 +94,43 @@ export const NewsTableRow = ({ news, index, onDelete }: NewsTableRowProps) => {
             </button>
           </div>
         </div>
+        {/* <div className={styles.actions}>
+          <button 
+            ref={buttonRef}
+            className={styles.menuButton}
+            onClick={toggleMenu}
+            aria-label="Действия"
+          >
+            <DotsIcon size={20} />
+          </button>
+          
+          {showMenu && (
+            <div 
+              ref={menuRef}
+              className={styles.menu}
+            >            
+              <button 
+                className={styles.menuItem}
+                onClick={() => {
+                  onEdit(product);
+                  setShowMenu(false);
+                }}
+              >
+                Редактировать
+              </button>
+              
+              <button 
+                className={styles.menuItem}
+                onClick={() => {
+                  onDelete(product.id);
+                  setShowMenu(false);
+                }}
+              >
+                Удалить
+              </button>
+            </div>
+          )}
+        </div> */}
       </td>
     </tr>
   );

@@ -69,6 +69,16 @@ export const authSlice = createSlice({
       state.user = null;
       state.token = null;
       state.error = null;
+      try {
+        localStorage.removeItem('auth_v1');
+      } catch {}
+    },
+    setCredentials: (state, action: PayloadAction<{ user: User; token: string }>) => {
+      state.user = action.payload.user;
+      state.token = action.payload.token;
+      try {
+        localStorage.setItem('auth_v1', JSON.stringify(action.payload));
+      } catch {}
     },
     clearError: (state) => {
       state.error = null;
@@ -97,6 +107,9 @@ export const authSlice = createSlice({
         if (action.payload.user && action.payload.token) {
           state.user = action.payload.user;
           state.token = action.payload.token;
+          try {
+            localStorage.setItem('auth_v1', JSON.stringify({ user: action.payload.user, token: action.payload.token }));
+          } catch {}
         }
       })
       .addCase(verifyCode.rejected, (state, action) => {
@@ -118,5 +131,5 @@ export const authSlice = createSlice({
   },
 });
 
-export const { logout, clearError } = authSlice.actions;
+export const { logout, clearError, setCredentials } = authSlice.actions;
 export default authSlice.reducer;

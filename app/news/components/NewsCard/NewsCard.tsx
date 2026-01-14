@@ -52,8 +52,8 @@ export const NewsCard = ({
     setShowComments(!showComments);
   };
 
-  const description = news.text.length > 150 
-    ? news.text.substring(0, 150) + '...' 
+  const description = news.text.length > 700 
+    ? news.text.substring(0, 700) + '...' 
     : news.text;
     
   const images = news.images && news.images.length > 0 

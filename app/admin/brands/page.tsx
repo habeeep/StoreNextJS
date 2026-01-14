@@ -1,6 +1,7 @@
 'use client';
 
 import { useState, useEffect, useMemo } from 'react';
+import { InputSearch } from '@/components/ui/InputSearch/InputSearch';
 import { useRouter } from 'next/navigation';
 import { Container } from '@/components/layout/Container/Container';
 import { Button } from '@/components/ui/Button/Button';
@@ -58,6 +59,31 @@ export default function AdminBrandsPage() {
     return Array.from(countrySet).sort();
   }, [apiBrands]);
 
+  const [countrySearch, setCountrySearch] = useState('');
+  const [isCountriesExpanded, setIsCountriesExpanded] = useState(false);
+  const [tempSelectedCountries, setTempSelectedCountries] = useState<string[]>([]);
+  const [appliedCountries, setAppliedCountries] = useState<string[]>([]);
+
+  const filteredCountries = useMemo(() => {
+    if (!countrySearch) return countries;
+    const q = countrySearch.toLowerCase();
+    return countries.filter(c => c.toLowerCase().includes(q));
+  }, [countries, countrySearch]);
+
+  const visibleCountries = useMemo(() => {
+    if (isCountriesExpanded) return filteredCountries;
+
+    const selected = tempSelectedCountries.filter(c => filteredCountries.includes(c));
+    if (selected.length === 0) {
+      return filteredCountries.slice(0, 5);
+    }
+
+    const others = filteredCountries.filter(c => !selected.includes(c));
+    const slots = Math.max(0, 5 - selected.length);
+    const fill = others.slice(0, slots);
+    return [...selected, ...fill];
+  }, [filteredCountries, isCountriesExpanded, tempSelectedCountries]);
+
   const filteredAndSortedBrands = useMemo(() => {
     let result = [...brands];
 
@@ -65,14 +91,14 @@ export default function AdminBrandsPage() {
       result = searchBrands(result, searchQuery);
     }
 
-    if (selectedCountry !== 'all') {
-      result = result.filter(brand => brand.country === selectedCountry);
+    if (appliedCountries.length > 0) {
+      result = result.filter(brand => appliedCountries.includes(brand.country));
     }
 
     result = sortBrands(result, sortField, sortOrder);
 
     return result;
-  }, [brands, searchQuery, selectedCountry, sortField, sortOrder]);
+  }, [brands, searchQuery, appliedCountries, sortField, sortOrder]);
 
   const handleSearch = (query: string) => {
     setSearchQuery(query);
@@ -119,13 +145,36 @@ export default function AdminBrandsPage() {
     fetchBrands();
   };
 
-  const handleCountryFilterChange = (country: string) => {
-    setSelectedCountry(country);
+  const handleTempToggleCountry = (country: string) => {
+    setTempSelectedCountries(prev =>
+      prev.includes(country) ? prev.filter(c => c !== country) : [...prev, country]
+    );
+  };
+
+  const handleSelectAllTemp = () => {
+    if (tempSelectedCountries.length === filteredCountries.length) {
+      setTempSelectedCountries([]);
+    } else {
+      setTempSelectedCountries(filteredCountries.slice());
+    }
+  };
+
+  const handleApplyCountryFilters = () => {
+    setAppliedCountries(tempSelectedCountries.slice());
+    setIsCountriesExpanded(false);
+  };
+
+  const handleResetCountryFilters = () => {
+    setTempSelectedCountries([]);
+    setAppliedCountries([]);
+    setCountrySearch('');
+    setIsCountriesExpanded(false);
   };
 
   const handleResetFilters = () => {
     setSearchQuery('');
     setSelectedCountry('all');
+    handleResetCountryFilters();
     setSortField('title');
     setSortOrder('asc');
   };
@@ -146,21 +195,6 @@ export default function AdminBrandsPage() {
 
         <div className={styles.content}>
           <div className={styles.main}>
-            <div className={styles.tableHeader}>
-              <div className={styles.tableInfo}>
-                <span className={styles.brandsCount}>
-                  Брендов: {filteredAndSortedBrands.length}
-                </span>
-                {(searchQuery || selectedCountry !== 'all') && (
-                  <button 
-                    onClick={handleResetFilters}
-                    className={styles.resetFiltersButton}
-                  >
-                    Сбросить фильтры
-                  </button>
-                )}
-              </div>
-            </div>
             
             <div className={styles.tableSection}>
               <BrandTable
@@ -176,22 +210,57 @@ export default function AdminBrandsPage() {
             <div className={styles.filtersContainer}>
               <div className={styles.filterSection}>
                 <h3 className={styles.filterTitle}>Страна</h3>
-                <div className={styles.countryFilters}>
-                  <button
-                    className={`${styles.countryFilter} ${selectedCountry === 'all' ? styles.active : ''}`}
-                    onClick={() => handleCountryFilterChange('all')}
-                  >
-                    Все страны
-                  </button>
-                  {countries.map(country => (
-                    <button
-                      key={country}
-                      className={`${styles.countryFilter} ${selectedCountry === country ? styles.active : ''}`}
-                      onClick={() => handleCountryFilterChange(country)}
-                    >
-                      {country}
+
+                <InputSearch
+                  initialValue={countrySearch}
+                  onSearch={(v) => setCountrySearch(v)}
+                  onClear={() => setCountrySearch('')}
+                  placeholder="Поиск страны..."
+                  className={styles.brandSearch}
+                />
+
+                <div className={styles.brandsList}>
+                  <div className={styles.controlsRow}>
+                    <button className={styles.expandButton} onClick={handleSelectAllTemp}>
+                      {tempSelectedCountries.length === filteredCountries.length ? 'Снять всё' : 'Выбрать все'}
                     </button>
-                  ))}
+                    {filteredCountries.length > 5 && (
+                      <button
+                        className={styles.expandButton}
+                        onClick={() => setIsCountriesExpanded(prev => !prev)}
+                        aria-label={isCountriesExpanded ? 'Свернуть список' : 'Развернуть список'}
+                      >
+                        {isCountriesExpanded ? 'Свернуть' : 'Показать все'}
+                      </button>
+                    )}
+                  </div>
+
+                  {visibleCountries.length > 0 ? (
+                    visibleCountries.map(country => (
+                      <label key={country} className={styles.checkboxItem}>
+                        <input
+                          type="checkbox"
+                          name="country"
+                          checked={tempSelectedCountries.includes(country)}
+                          onChange={() => handleTempToggleCountry(country)}
+                        />
+                        <span className={`${styles.brandName} ${tempSelectedCountries.includes(country) ? styles.selected : ''}`}>
+                          {country}
+                        </span>
+                      </label>
+                    ))
+                  ) : (
+                    <div className={styles.noBrands}>Страны не найдены</div>
+                  )}
+
+                  <div className={styles.filterActions}>
+                    <Button className={styles.applyButton} onClick={handleApplyCountryFilters}>
+                      Применить
+                    </Button>
+                    <Button variant="secondary" className={styles.resetButton} onClick={handleResetCountryFilters}>
+                      Сбросить
+                    </Button>
+                  </div>
                 </div>
               </div>
             </div>
@@ -211,14 +280,6 @@ export default function AdminBrandsPage() {
                 className={styles.refreshButton}
               >
                 Обновить
-              </Button>
-              
-              <Button 
-                onClick={handleResetFilters}
-                variant="secondary"
-                className={styles.resetButton}
-              >
-                Сбросить все
               </Button>
             </div>
           </aside>

@@ -121,16 +121,6 @@ export const ProductTableRow = ({
               >
                 Удалить
               </button>
-              
-              <button 
-                className={styles.menuItem}
-                onClick={() => {
-                  onView(product.id);
-                  setShowMenu(false);
-                }}
-              >
-                Просмотреть
-              </button>
             </div>
           )}
         </div>
