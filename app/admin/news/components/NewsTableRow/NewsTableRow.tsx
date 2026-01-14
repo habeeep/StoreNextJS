@@ -67,70 +67,47 @@ export const NewsTableRow = ({ news, index, onDelete }: NewsTableRowProps) => {
       </td>
       
       <td className={styles.td}>
-        <div className={styles.actionsCell}>
-          <div className={styles.actionButtons}>
-            <Link 
-              href={`/admin/news/${news.id}`}
-              className={styles.actionButton}
-              title="Просмотреть"
-            >
-              <EyeIcon size={18} />
-            </Link>
-            
-            <Link 
-              href={`/admin/news/${news.id}/edit`}
-              className={styles.actionButton}
-              title="Редактировать"
-            >
-              <EditIcon size={18} />
-            </Link>
-            
-            <button 
-              className={styles.actionButton}
-              onClick={() => onDelete(news.id)}
-              title="Удалить"
-            >
-              <TrashIcon size={18} />
-            </button>
-          </div>
-        </div>
-        {/* <div className={styles.actions}>
-          <button 
-            ref={buttonRef}
+        <div className={styles.actions}>
+          <button
             className={styles.menuButton}
             onClick={toggleMenu}
             aria-label="Действия"
+            type="button"
           >
             <DotsIcon size={20} />
           </button>
-          
+
           {showMenu && (
-            <div 
-              ref={menuRef}
-              className={styles.menu}
-            >            
-              <button 
+            <div className={styles.menu}>
+              <Link
+                href={`/admin/news/${news.id}`}
                 className={styles.menuItem}
-                onClick={() => {
-                  onEdit(product);
-                  setShowMenu(false);
-                }}
+                onClick={() => setShowMenu(false)}
+              >
+                Просмотреть
+              </Link>
+
+              <Link
+                href={`/admin/news/${news.id}/edit`}
+                className={styles.menuItem}
+                onClick={() => setShowMenu(false)}
               >
                 Редактировать
-              </button>
-              
-              <button 
+              </Link>
+
+              <button
                 className={styles.menuItem}
                 onClick={() => {
-                  onDelete(product.id);
+                  onDelete(news.id);
                   setShowMenu(false);
                 }}
+                type="button"
               >
                 Удалить
               </button>
             </div>
           )}
-        </div> */}
+        </div>
       </td>
     </tr>
   );

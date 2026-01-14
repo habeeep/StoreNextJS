@@ -60,16 +60,19 @@ export default function CreateNewsPage() {
   return (
     <Container>
       <div className={styles.page}>
-        <button 
-          className={styles.backButton}
-          onClick={handleCancel}
-          aria-label="Назад"
-          disabled={isLoading}
-        >
-          <CrossIcon size={24} />
-        </button>
+        <div className={styles.header}>
+          <h1 className={styles.title}>Создание новости</h1>
+          <button 
+            className={styles.backButton}
+            onClick={handleCancel}
+            aria-label="Назад"
+            disabled={isLoading}
+          >
+            <CrossIcon size={40} />
+          </button>
+        </div>
 
-        <h1 className={styles.title}>Создание новости</h1>
+        
 
         {error && (
           <div className={styles.error}>
@@ -133,32 +136,16 @@ export default function CreateNewsPage() {
               id="imageUpload"
               disabled={isLoading}
             />
-            <label htmlFor="imageUpload" className={styles.uploadButton}>
-              + Добавить изображения
-            </label>
-            <p className={styles.imageHint}>
-              Примечание: Загрузка изображений пока не поддерживается API
-            </p>
           </div>
 
-          <div className={styles.actions}>
-            <Button 
-              type="submit" 
-              variant="primary"
-              disabled={isLoading}
-            >
-              {isLoading ? 'Создание...' : 'Создать новость'}
-            </Button>
-            
-            <Button 
-              type="button" 
-              variant="secondary"
-              onClick={handleCancel}
-              disabled={isLoading}
-            >
-              Отмена
-            </Button>
-          </div>
+          <Button 
+            type="submit" 
+            variant="primary"
+            disabled={isLoading}
+            className={styles.createButton}
+          >
+            {isLoading ? 'Создание...' : 'Создать новость'}
+          </Button>
         </form>
       </div>
     </Container>

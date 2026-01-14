@@ -17,23 +17,23 @@ interface CardItem {
 export const CategoriesCards = () => {
   const initialCards: CardItem[] = [
     {
-      id: '156f10e2-a035-47a9-833c-96eb28879669',
+      id: 'b766aab7-db75-430e-b549-dae04c00340c',
       title: '',
-      href: '/catalog?category=156f10e2-a035-47a9-833c-96eb28879669',
+      href: '/catalog?category=b766aab7-db75-430e-b549-dae04c00340c',
       imagePath: '/images/home/plants1.png',
       buttonText: 'Выбрать'
     },
     {
-      id: '157385e3-5278-4b88-9e3a-5fb0df006c42',
+      id: '944e3be2-955a-4870-aa5d-aa1845f8bd5b',
       title: '',
-      href: '/catalog?category=157385e3-5278-4b88-9e3a-5fb0df006c42',
+      href: '/catalog?category=944e3be2-955a-4870-aa5d-aa1845f8bd5b',
       imagePath: '/images/home/plants2.png',
       buttonText: 'Выбрать'
     },
     {
-      id: 'd4a651f3-700f-4ffc-9e31-6bfd22ecc1e3',
+      id: '5441bbfe-7f60-4783-a132-194e7d9a327d',
       title: '',
-      href: '/catalog?category=d4a651f3-700f-4ffc-9e31-6bfd22ecc1e3',
+      href: '/catalog?category=5441bbfe-7f60-4783-a132-194e7d9a327d',
       imagePath: '/images/home/plants3.png',
       buttonText: 'Выбрать'
     },

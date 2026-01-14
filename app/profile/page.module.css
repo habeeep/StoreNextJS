@@ -2,18 +2,9 @@
     background-color: var(--color-primary-200);
     border-radius: var(--radius-xl);
     padding: var(--spacing-md);
-}
-
-.header {
     display: flex;
-    justify-content: space-between;
-}
-
-.backButton {
-    background-color: transparent;
-    margin: 0;
-    padding: 0;
-    border: none;
+    flex-direction: column;
+    gap: var(--spacing-md);
 }
 
 .form {
@@ -27,6 +18,13 @@
     display: flex;
     flex-direction: column;
     gap: var(--spacing-xs);
+}
+
+.form {
+    display: flex;
+    flex-direction: column;
+    gap: var(--spacing-md);
+    max-width: 700px;
 }
 
 .label {
@@ -55,6 +53,6 @@
   color: var(--color-grey-400);
 }
 
-.createButton {
+.saveButton {
     width: 50%;
 }

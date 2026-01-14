@@ -7,6 +7,9 @@ import { newsApi } from '@/lib/api/newsApi';
 import { Container } from '@/components/layout/Container/Container';
 import { Button } from '@/components/ui/Button/Button';
 import styles from './page.module.css';
+import { CommentIcon } from '@/components/ui/icons/CommentIcon';
+import { EyeIcon } from '@/components/ui/icons/EyeIcon';
+import { HeartIcon } from '@/components/ui/icons/HeartIcon';
 
 export default function NewsDetailPage() {
   const params = useParams();
@@ -76,12 +79,13 @@ export default function NewsDetailPage() {
     <Container>
       <div className={styles.page}>
         <div className={styles.header}>
-          <button 
+          <Button
             className={styles.backButton}
             onClick={() => router.push('/admin/news')}
+            variant='secondary'
           >
             ← Назад к списку
-          </button>
+          </Button>
           
           <div className={styles.headerActions}>
             <Button
@@ -89,14 +93,6 @@ export default function NewsDetailPage() {
               className={styles.editButton}
             >
               Редактировать
-            </Button>
-            
-            <Button
-              onClick={fetchNews}
-              variant="secondary"
-              className={styles.refreshButton}
-            >
-              Обновить
             </Button>
           </div>
         </div>
@@ -139,21 +135,18 @@ export default function NewsDetailPage() {
           
           <div className={styles.stats}>
             <div className={styles.statItem}>
-              <span className={styles.statIcon}>❤️</span>
+              <span className={styles.statIcon}><HeartIcon /></span>
               <span className={styles.statCount}>{news.likesCount}</span>
-              <span className={styles.statLabel}>лайков</span>
             </div>
             
             <div className={styles.statItem}>
-              <span className={styles.statIcon}>👁️</span>
+              <span className={styles.statIcon}><EyeIcon /></span>
               <span className={styles.statCount}>{news.watchCount}</span>
-              <span className={styles.statLabel}>просмотров</span>
             </div>
             
             <div className={styles.statItem}>
-              <span className={styles.statIcon}>💬</span>
+              <span className={styles.statIcon}><CommentIcon /></span>
               <span className={styles.statCount}>{news.commentsCount}</span>
-              <span className={styles.statLabel}>комментариев</span>
             </div>
           </div>
           

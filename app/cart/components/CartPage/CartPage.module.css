@@ -5,7 +5,7 @@
 }
 
 .sidebar {
-  flex: 0 0 320px;
+  flex: 0 0 420px;
   position: sticky;
   top: var(--header-height);
 }

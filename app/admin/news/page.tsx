@@ -67,14 +67,6 @@ export default function AdminNewsPage() {
     <Container>
       <div className={styles.page}>
         <div className={styles.header}>
-          <div className={styles.titleSection}>
-            <h1 className={styles.title}>Управление новостями</h1>
-            {pagination.totalCount > 0 && (
-              <div className={styles.count}>
-                Всего новостей: {pagination.totalCount}
-              </div>
-            )}
-          </div>
           
           <div className={styles.buttons}>
             <Button onClick={handleRefresh} variant="secondary">

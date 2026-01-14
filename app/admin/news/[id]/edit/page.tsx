@@ -207,15 +207,6 @@ export default function EditNewsPage() {
               id="imageUpload"
               disabled={isSaving || isDeleting}
             />
-            <label 
-              htmlFor="imageUpload" 
-              className={`${styles.uploadButton} ${(isSaving || isDeleting) ? styles.disabled : ''}`}
-            >
-              + Добавить изображения
-            </label>
-            <p className={styles.imageHint}>
-              Примечание: Загрузка изображений пока не поддерживается API
-            </p>
           </div>
 
           <div className={styles.actions}>
@@ -223,26 +214,9 @@ export default function EditNewsPage() {
               type="submit" 
               variant="primary"
               disabled={isSaving || isDeleting}
+              className={styles.saveButton}
             >
               {isSaving ? 'Сохранение...' : 'Сохранить изменения'}
-            </Button>
-            
-            <Button 
-              type="button" 
-              variant="secondary"
-              onClick={handleCancel}
-              disabled={isSaving || isDeleting}
-            >
-              Отмена
-            </Button>
-            
-            <Button 
-              type="button"
-              onClick={handleDelete}
-              disabled={isSaving || isDeleting}
-              className={styles.deleteButton}
-            >
-              {isDeleting ? 'Удаление...' : 'Удалить новость'}
             </Button>
           </div>
         </form>
