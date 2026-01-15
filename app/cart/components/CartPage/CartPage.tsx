@@ -8,8 +8,10 @@ import { useAppSelector } from '@/hooks/useAppSelector';
 import { useAppDispatch } from '@/hooks/useAppDispatch';
 import { initCart, updateItem, removeItem } from '@/store/slices/cartSlice';
 import styles from './CartPage.module.css';
+import { useCustomizer } from '@/hooks/useCustomizer';
 
 export const CartPage = () => {
+  const custom = useCustomizer();
   const dispatch = useAppDispatch();
   const { items } = useAppSelector(s => s.cart);
   const { user } = useAppSelector(s => s.auth);
@@ -61,7 +63,7 @@ export const CartPage = () => {
           />
         </aside>
 
-        <main className={styles.main}>
+        <main className={styles.main} style={{"--color-custom": `var(--color-${custom.theme}-200)`} as React.CSSProperties}>
           {items.length > 0 ? (
             <div className={styles.itemsList}>
               {items.map(item => (

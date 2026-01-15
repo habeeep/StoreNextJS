@@ -4,7 +4,7 @@
   left: 0;
   right: 0;
   z-index: 200;
-  background-color: var(--color-primary-100);
+  background-color: var(--color-custom) /* var(--color-primary-100) */;
   height: var(--header-height);
 }
 
@@ -27,7 +27,7 @@
 
   font-size: var(--font-size-3xl);
   line-height: var(--line-height-3xl);
-  color: var(--color-primary-800);
+  color: var(--color-custom) /* var(--color-primary-800) */;
   font-weight: var(--font-weight-bold);
 }
 
@@ -46,12 +46,12 @@
 
   font-size: var(--font-size-large);
   line-height: var(--line-height-large);
-  color: var(--color-primary-800);
+  color: var(--color-custom) /* var(--color-primary-800) */;
   font-weight: var(--font-weight-semibold);
 }
 
 .navLink:not(.navLinkActive):hover {
-  color: var(--color-primary-700);
+  color: var(--color-grey-700);
 }
 
 .navLinkActive {
@@ -65,7 +65,7 @@
   left: 0;
   width: 100%;
   height: 2px;
-  background-color: var(--color-primary-800);
+  background-color: var(--color-grey-800);
 }
 
 .navIcon {
@@ -83,7 +83,7 @@
   align-items: center;
   border-top: 1px solid rgba(0,0,0,0.04);
   padding: var(--spacing-md);
-  background-color: var(--color-primary-100);
+  background-color: var(--color-custom) /* var(--color-primary-100) */;
 }
 
 .adminInner {
@@ -106,7 +106,7 @@
   text-decoration: none;
   font-size: var(--font-size-large);
   line-height: var(--line-height-large);
-  color: var(--color-primary-800);
+  color: var(--color-custom) /* var(--color-primary-800) */;
   font-weight: var(--font-weight-semibold);
   padding-left: 25px;
 }
@@ -118,7 +118,7 @@
 }
 
 .adminNavLink:hover {
-  color: var(--color-primary-700);
+  color: var(--color-grey-700);
 }
 
 .adminNavLinkActive {
@@ -132,7 +132,7 @@
   left: 0;
   width: 100%;
   height: 1px;
-  background-color: var(--color-primary-800);
+  background-color: var(--color-grey-800)
 }
 
 .iconsContainer {
@@ -142,13 +142,13 @@
 
 .iconButton {
   background-color: transparent;
-  color: var(--color-primary-800);
+  color: var(--color-custom) /* var(--color-primary-800) */;
   border: none;
   padding: 0;
 }
 
 .iconLink {
-  color: var(--color-primary-800);
+  color: var(--color-custom) /* var(--color-primary-800) */;
   cursor: pointer;
   position: relative;
   line-height: 0;
@@ -156,7 +156,7 @@
 }
 
 .iconLink:hover {
-  color: var(--color-primary-700);
+  color: var(--color-grey-700);
 }
 
 .iconLinkCart {
@@ -174,7 +174,7 @@
   left: 0;
   width: 100%;
   height: 1.2px;
-  background-color: var(--color-primary-800);
+  background-color: var(--color-grey-800);
 }
 
 .cartCount {
@@ -188,9 +188,9 @@
   width: 14px;
   height: 14px;
   border-radius: 50%;
-  background-color: var(--color-primary-800);
+  background-color: var(--color-custom) /* var(--color-primary-800) */;
   
-  color: var(--color-primary-100);
+  color: var(--color-custom-c) /* var(--color-primary-100) */;
   font-size: 7px;
   font-weight: var(--font-weight-semibold);
   line-height: 1;

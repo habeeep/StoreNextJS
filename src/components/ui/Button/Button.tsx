@@ -1,5 +1,6 @@
 import { ButtonHTMLAttributes } from 'react';
 import styles from './Button.module.css';
+import { useCustomizer } from '@/hooks/useCustomizer';
 
 interface ButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
   variant?: 'primary' | 'secondary';
@@ -13,7 +14,7 @@ export const Button = ({
   children,
   ...props
 }: ButtonProps) => {
-  
+  const custom = useCustomizer();
   const buttonClasses = [
     styles.button,
     styles[variant],
@@ -28,6 +29,7 @@ export const Button = ({
       {...props}
       className={buttonClasses}
       disabled={props.disabled || isLoading}
+      style={{"--color-custom": `var(--color-${custom.theme}-600)`} as React.CSSProperties}
     >
       {children}
     </button>

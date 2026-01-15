@@ -17,8 +17,8 @@
     width: 26px;
     padding: 6px;
     border-radius: var(--radius-xl);
-    color: var(--color-primary-400);
-    background-color: var(--color-primary-900);
+    color: var(--color-custom) /* var(--color-primary-400) */;
+    background-color: var(--color-custom-bg) /* var(--color-primary-900) */;
 }
 
 .line {
@@ -28,7 +28,7 @@
     bottom: 0;
     transform: translateX(-50%);
     width: 2px;
-    background-color: var(--color-primary-900);
+    background-color: var(--color-custom) /* var(--color-primary-900) */;
     border-radius: var(--radius-md);
 }
 
@@ -70,5 +70,5 @@
     bottom: 0;
     width: 100%;
     height: 1px;
-    background-color: var(--color-primary-800);
+    background-color: var(--color-custom) /* var(--color-primary-800) */;
 }

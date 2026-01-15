@@ -5,6 +5,7 @@ import { ApiComment } from '@/types/news';
 import { newsApi } from '@/lib/api/newsApi';
 import { CommentCard } from '../CommentCard/CommentCard';
 import styles from './NewsCommentSection.module.css';
+import { useCustomizer } from '@/hooks/useCustomizer';
 
 interface NewsCommentSectionProps {
   newsId: string;
@@ -19,6 +20,7 @@ export const NewsCommentSection = ({
   currentUserEmail,
   className = '' 
 }: NewsCommentSectionProps) => {
+  const custom = useCustomizer();
   const [comments, setComments] = useState<ApiComment[]>(newsComments || []);
   const [newComment, setNewComment] = useState('');
   const [isLoading, setIsLoading] = useState(false);
@@ -56,7 +58,7 @@ export const NewsCommentSection = ({
   };
 
   return (
-    <div className={`${styles.commentSection} ${className}`}>
+    <div className={`${styles.commentSection} ${className}`} style={{"--color-custom": `var(--color-${custom.theme}-400)`} as React.CSSProperties}>
       <div className={styles.commentContent}>
         {error && (
           <div className={styles.error}>
@@ -82,11 +84,14 @@ export const NewsCommentSection = ({
             className={styles.textarea}
             required
             disabled={!currentUserEmail || isLoading}
+            style={{"--color-custom": `var(--color-${custom.theme}-100)`} as React.CSSProperties}
           />
           <button 
             type="submit" 
             className={styles.submitButton}
             disabled={isLoading || !newComment.trim() || !currentUserEmail}
+            style={{"--color-custom": `var(--color-${custom.theme}-600)`,
+          "--color-custom-100": `var(--color-${custom.theme}-100)`} as React.CSSProperties}
           >
             {isLoading ? '...' : '+'}
           </button>

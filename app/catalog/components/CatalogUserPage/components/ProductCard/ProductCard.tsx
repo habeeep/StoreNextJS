@@ -6,6 +6,7 @@ import { CartIcon } from '@/components/ui/icons/CartIcon';
 import { PlusIcon } from '@/components/ui/icons/PlusIcon';
 import { MinusIcon } from '@/components/ui/icons/MinusIcon';
 import styles from './ProductCard.module.css';
+import { useCustomizer } from '@/hooks/useCustomizer';
 
 interface ProductCardProps {
   product: Product;
@@ -22,6 +23,7 @@ export const ProductCard = ({
   onIncrementQuantity,
   onDecrementQuantity
 }: ProductCardProps) => {
+  const custom = useCustomizer();
   const handleAddToCart = () => {
     onAddToCart(product.id);
   };
@@ -39,7 +41,7 @@ export const ProductCard = ({
   };
 
   return (
-    <div className={styles.card}>
+    <div className={styles.card} style={{"--color-custom": `var(--color-${custom.theme}-100)`} as React.CSSProperties}>
       <div className={styles.imageContainer}>
         <Image
           src={product.images?.[0] || ''}
@@ -51,13 +53,13 @@ export const ProductCard = ({
         />
       </div>
       
-      <div className={styles.content}>
+      <div className={styles.content} style={{"--color-custom": `var(--color-${custom.theme}-700)`} as React.CSSProperties}>
         <div className={styles.header}>
           <h3 className={styles.name}>{product.title}</h3>
           <p className={styles.description}>{product.description}</p>
         </div>
         
-        <div className={styles.footer}>
+        <div className={styles.footer} style={{"--color-custom": `var(--color-${custom.theme}-100)`} as React.CSSProperties}>
           <div className={styles.price}>{product.price} ₽</div>
           {product.inCart ? (
             <div className={styles.quantityControls}>

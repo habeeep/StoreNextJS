@@ -5,6 +5,7 @@ import { SortAscIcon } from '@/components/ui/icons/SortAscIcon';
 import { SortDescIcon } from '@/components/ui/icons/SortDescIcon';
 import { InputSearch } from '@/components/ui/InputSearch/InputSearch';
 import styles from './AdminSortHeader.module.css';
+import { useCustomizer } from '@/hooks/useCustomizer';
 
 interface AdminSortHeaderProps {
   sortBy: AdminProductSortBy;
@@ -23,13 +24,14 @@ export const AdminSortHeader = ({
   onSearch,
   onClearSearch,
 }: AdminSortHeaderProps) => {
+  const custom = useCustomizer();
   const handleSortClick = (field: AdminProductSortBy) => {
     onSortChange(field);
   };
 
   return (
     <div className={styles.header}>
-      <div className={styles.sorting}>
+      <div className={styles.sorting} style={{"--color-custom": `var(--color-${custom.theme}-800)`} as React.CSSProperties}>
         <div className={styles.sortGroup}>
           <span className={styles.sortLabel}>Названию</span>
           <button
@@ -38,6 +40,8 @@ export const AdminSortHeader = ({
             }`}
             onClick={() => handleSortClick('title')}
             title="По названию (А-Я)"
+            style={{"--color-custom": `var(--color-${custom.theme}-300)`,
+          "--color-custom-act": `var(--color-${custom.theme}-600)`} as React.CSSProperties}
           >
             <SortAscIcon />
           </button>
@@ -47,6 +51,8 @@ export const AdminSortHeader = ({
             }`}
             onClick={() => handleSortClick('title')}
             title="По названию (Я-А)"
+            style={{"--color-custom": `var(--color-${custom.theme}-300)`,
+          "--color-custom-act": `var(--color-${custom.theme}-600)`} as React.CSSProperties}
           >
             <SortDescIcon />
           </button>
@@ -60,6 +66,8 @@ export const AdminSortHeader = ({
             }`}
             onClick={() => handleSortClick('brand')}
             title="По бренду (А-Я)"
+            style={{"--color-custom": `var(--color-${custom.theme}-300)`,
+          "--color-custom-act": `var(--color-${custom.theme}-600)`} as React.CSSProperties}
           >
             <SortAscIcon />
           </button>
@@ -69,6 +77,8 @@ export const AdminSortHeader = ({
             }`}
             onClick={() => handleSortClick('brand')}
             title="По бренду (Я-А)"
+            style={{"--color-custom": `var(--color-${custom.theme}-300)`,
+          "--color-custom-act": `var(--color-${custom.theme}-600)`} as React.CSSProperties}
           >
             <SortDescIcon />
           </button>
@@ -82,6 +92,8 @@ export const AdminSortHeader = ({
             }`}
             onClick={() => handleSortClick('category')}
             title="По категории (А-Я)"
+            style={{"--color-custom": `var(--color-${custom.theme}-300)`,
+          "--color-custom-act": `var(--color-${custom.theme}-600)`} as React.CSSProperties}
           >
             <SortAscIcon />
           </button>
@@ -91,6 +103,8 @@ export const AdminSortHeader = ({
             }`}
             onClick={() => handleSortClick('category')}
             title="По категории (Я-А)"
+            style={{"--color-custom": `var(--color-${custom.theme}-300)`,
+          "--color-custom-act": `var(--color-${custom.theme}-600)`} as React.CSSProperties}
           >
             <SortDescIcon />
           </button>
@@ -104,6 +118,8 @@ export const AdminSortHeader = ({
             }`}
             onClick={() => handleSortClick('price')}
             title="По возрастанию цены"
+            style={{"--color-custom": `var(--color-${custom.theme}-300)`,
+          "--color-custom-act": `var(--color-${custom.theme}-600)`} as React.CSSProperties}
           >
             <SortAscIcon />
           </button>
@@ -113,6 +129,8 @@ export const AdminSortHeader = ({
             }`}
             onClick={() => handleSortClick('price')}
             title="По убыванию цены"
+            style={{"--color-custom": `var(--color-${custom.theme}-300)`,
+          "--color-custom-act": `var(--color-${custom.theme}-600)`} as React.CSSProperties}
           >
             <SortDescIcon />
           </button>
@@ -126,6 +144,8 @@ export const AdminSortHeader = ({
             }`}
             onClick={() => handleSortClick('amount')}
             title="По возрастанию количества"
+            style={{"--color-custom": `var(--color-${custom.theme}-300)`,
+          "--color-custom-act": `var(--color-${custom.theme}-600)`} as React.CSSProperties}
           >
             <SortAscIcon />
           </button>
@@ -135,6 +155,8 @@ export const AdminSortHeader = ({
             }`}
             onClick={() => handleSortClick('amount')}
             title="По убыванию количества"
+            style={{"--color-custom": `var(--color-${custom.theme}-300)`,
+          "--color-custom-act": `var(--color-${custom.theme}-600)`} as React.CSSProperties}
           >
             <SortDescIcon />
           </button>

@@ -19,7 +19,7 @@
   border: none;
   padding: 0;
 
-  color: var(--color-primary-500);
+  color: var(--color-custom) /* var(--color-primary-500) */;
   cursor: pointer;
   
   width: 24px;
@@ -29,11 +29,11 @@
 .searchButton:hover,
 .searchButton:active,
 .searchButton:focus-visible {
-  color: var(--color-primary-600);
+  color: var(--color-grey-600);
 }
 
 .input {
-  background-color: var(--color-primary-200);
+  background-color: var(--color-custom) /* var(--color-primary-200) */;
   border: 1px solid transparent;
   border-radius: 25px;
   outline: none;
@@ -49,7 +49,7 @@
 
 .input:active,
 .input:focus {
-    border-color: var(--color-primary-500);
+    border-color: var(--color-grey-500);
 }
 
 .input::placeholder,
@@ -70,7 +70,7 @@
   border: none;
   padding: 0;
 
-  color: var(--color-primary-500);
+  color: var(--color-custom) /* var(--color-primary-500) */;
   cursor: pointer;
   
   width: 24px;
@@ -80,5 +80,5 @@
 .clearButton:hover,
 .clearButton:active,
 .clearButton:focus-visible {
-  color: var(--color-primary-600);
+  color: var(--color-grey-600);
 }

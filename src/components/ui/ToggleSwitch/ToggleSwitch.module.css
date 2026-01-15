@@ -17,7 +17,7 @@
   position: relative;
   width: 47px;
   height: 23px;
-  background: linear-gradient(to right, var(--color-primary-600) 0%, var(--color-primary-600) 50%, var(--color-primary-200) 50%, var(--color-primary-200) 100%);
+  background: linear-gradient(to right, var(--color-custom) /* var(--color-primary-600) */ 0%, var(--color-custom) /* var(--color-primary-600) */ 50%, var(--color-custom-200) /* var(--color-primary-200) */ 50%, var(--color-custom-200) /* var(--color-primary-200) */ 100%);
   background-size: 210% 100%;
   background-position: right bottom;
   border-radius: var(--radius-xl);
@@ -34,7 +34,7 @@
   left: 1.44px;
   width: 20px;
   height: 20px;
-  background-color: var(--color-primary-100);
+  background-color: var(--color-custom) /* var(--color-primary-100) */;
   border-radius: 50%;
   transition: transform 0.3s ease;
 }

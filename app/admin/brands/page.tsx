@@ -12,11 +12,13 @@ import { convertApiBrandsToBrands, searchBrands, sortBrands } from '@/lib/utils/
 import { BrandTable } from './components/BrandTable/BrandTable';
 import { BrandSortHeader } from './components/BrandSortHeader/BrandSortHeader';
 import styles from './page.module.css';
+import { useCustomizer } from '@/hooks/useCustomizer';
 
 type SortField = 'title' | 'country';
 type SortOrder = 'asc' | 'desc';
 
 export default function AdminBrandsPage() {
+  const custom = useCustomizer();
   const router = useRouter();
   
   const [brands, setBrands] = useState<Brand[]>([]);
@@ -207,9 +209,12 @@ export default function AdminBrandsPage() {
           </div>
 
           <aside className={styles.sidebar}>
-            <div className={styles.filtersContainer}>
+            <div className={styles.filtersContainer}
+            style={{"--color-custom": `var(--color-${custom.theme}-200)`} as React.CSSProperties}>
               <div className={styles.filterSection}>
-                <h3 className={styles.filterTitle}>Страна</h3>
+                <h3 className={styles.filterTitle}
+                style={{"--color-custom": `var(--color-${custom.theme}-800)`} as React.CSSProperties}
+                >Страна</h3>
 
                 <InputSearch
                   initialValue={countrySearch}
@@ -217,11 +222,12 @@ export default function AdminBrandsPage() {
                   onClear={() => setCountrySearch('')}
                   placeholder="Поиск страны..."
                   className={styles.brandSearch}
+                  style={{"--color-custom": `var(--color-${custom.theme}-100)`} as React.CSSProperties}
                 />
 
                 <div className={styles.brandsList}>
                   <div className={styles.controlsRow}>
-                    <button className={styles.expandButton} onClick={handleSelectAllTemp}>
+                    <button className={styles.expandButton} onClick={handleSelectAllTemp} style={{"--color-custom": `var(--color-${custom.theme}-700)`} as React.CSSProperties}>
                       {tempSelectedCountries.length === filteredCountries.length ? 'Снять всё' : 'Выбрать все'}
                     </button>
                     {filteredCountries.length > 5 && (
@@ -229,6 +235,7 @@ export default function AdminBrandsPage() {
                         className={styles.expandButton}
                         onClick={() => setIsCountriesExpanded(prev => !prev)}
                         aria-label={isCountriesExpanded ? 'Свернуть список' : 'Развернуть список'}
+                        style={{"--color-custom": `var(--color-${custom.theme}-700)`} as React.CSSProperties}
                       >
                         {isCountriesExpanded ? 'Свернуть' : 'Показать все'}
                       </button>
@@ -244,7 +251,8 @@ export default function AdminBrandsPage() {
                           checked={tempSelectedCountries.includes(country)}
                           onChange={() => handleTempToggleCountry(country)}
                         />
-                        <span className={`${styles.brandName} ${tempSelectedCountries.includes(country) ? styles.selected : ''}`}>
+                        <span className={`${styles.brandName} ${tempSelectedCountries.includes(country) ? styles.selected : ''}`}
+                        style={{"--color-custom": `var(--color-${custom.theme}-800)`} as React.CSSProperties}>
                           {country}
                         </span>
                       </label>

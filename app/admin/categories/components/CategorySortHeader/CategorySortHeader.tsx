@@ -4,6 +4,7 @@ import { CategorySortOrder } from '@/types/category';
 import { SortAscIcon } from '@/components/ui/icons/SortAscIcon';
 import { SortDescIcon } from '@/components/ui/icons/SortDescIcon';
 import styles from './CategorySortHeader.module.css';
+import { useCustomizer } from '@/hooks/useCustomizer';
 
 interface CategorySortHeaderProps {
   sortOrder: CategorySortOrder;
@@ -14,6 +15,7 @@ export const CategorySortHeader = ({
   sortOrder,
   onSortChange,
 }: CategorySortHeaderProps) => {
+  const custom = useCustomizer();
   const handleSortAsc = () => {
     onSortChange(sortOrder === 'asc' ? 'none' : 'asc');
   };
@@ -23,13 +25,15 @@ export const CategorySortHeader = ({
   };
 
   return (
-    <div className={styles.sorting}>
+    <div className={styles.sorting} style={{"--color-custom": `var(--color-${custom.theme}-800)`} as React.CSSProperties}>
       <div className={styles.sortButtons}>
         <span className={styles.filtersText}>Название категории</span>
         <button
           className={`${styles.sortButton} ${sortOrder === 'asc' ? styles.active : ''}`}
           onClick={handleSortAsc}
           title="По возрастанию"
+          style={{"--color-custom": `var(--color-${custom.theme}-300)`,
+          "--color-custom-act": `var(--color-${custom.theme}-600)`} as React.CSSProperties}
         >
           <SortAscIcon />
         </button>
@@ -37,6 +41,8 @@ export const CategorySortHeader = ({
           className={`${styles.sortButton} ${sortOrder === 'desc' ? styles.active : ''}`}
           onClick={handleSortDesc}
           title="По убыванию"
+          style={{"--color-custom": `var(--color-${custom.theme}-300)`,
+          "--color-custom-act": `var(--color-${custom.theme}-600)`} as React.CSSProperties}
         >
           <SortDescIcon />
         </button>

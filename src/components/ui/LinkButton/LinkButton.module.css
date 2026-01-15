@@ -1,7 +1,7 @@
 .linkButton {
     font-size: var(--font-size-small);
     line-height: var(--line-height-small);
-    color: var(--color-primary-500);
+    color: var(--color-custom) /* var(--color-primary-500) */;
 
     background-color: transparent;
     border: none;
@@ -11,10 +11,10 @@
     cursor: pointer;
 
     text-decoration: underline;
-    text-decoration-color: var(--color-primary-500);
+    text-decoration-color: var(--color-custom) /* var(--color-primary-500) */;
 }
 
 .linkButton:hover:not(:disabled) {
-    color: var(--color-primary-600);
-    text-decoration-color: var(--color-primary-600);
+    color: var(--color-grey-600);
+    text-decoration-color: var(--color-grey-600);
 }

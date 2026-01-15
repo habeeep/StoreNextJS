@@ -10,6 +10,7 @@ import { HeartIcon } from '@/components/ui/icons/HeartIcon';
 import { EyeIcon } from '@/components/ui/icons/EyeIcon';
 import { CommentIcon } from '@/components/ui/icons/CommentIcon';
 import { StarIcon } from '@/components/ui/icons/StarIcon';
+import { useCustomizer } from '@/hooks/useCustomizer';
 
 interface NewsCardProps {
   news: NewsItem & { isLiked?: boolean; isFavorite?: boolean };
@@ -24,6 +25,7 @@ export const NewsCard = ({
   onFavorite,
   currentUserEmail 
 }: NewsCardProps) => {
+  const custom = useCustomizer();
   const [showComments, setShowComments] = useState(false);
   
   const formattedDate = new Date(news.created).toLocaleDateString('ru-RU', {
@@ -75,7 +77,7 @@ export const NewsCard = ({
           {images.length > 0 && (
             <div className={styles.images}>
               {images.slice(0, 3).map((image, index) => (
-                <div key={index} className={styles.imageContainer}>
+                <div key={index} className={styles.imageContainer} style={{"--color-custom": `var(--color-${custom.theme}-500)`} as React.CSSProperties}>
                   <Image
                     src={image}
                     alt='Растение'
@@ -90,12 +92,13 @@ export const NewsCard = ({
           )}
 
           <div className={styles.stats}>
-            <div className={styles.buttonsRow}>
+            <div className={styles.buttonsRow} style={{"--color-custom": `var(--color-${custom.theme}-600)`} as React.CSSProperties}>
               <button 
                 className={`${styles.iconButton} ${styles.iconCounter} ${isLiked ? styles.liked : ''}`}
                 onClick={handleLikeClick}
                 aria-label="Лайк"
                 disabled={!currentUserEmail}
+                style={{"--color-custom": `var(--color-${custom.theme}-600)`} as React.CSSProperties}
               >
                 <HeartIcon isFilled={isLiked}/>
                 <span className={styles.count}>{news.likesCount}</span>
@@ -110,6 +113,7 @@ export const NewsCard = ({
                 className={`${styles.iconButton} ${styles.iconCounter} ${showComments ? styles.active : ''}`}
                 onClick={handleCommentClick}
                 aria-label="Комментарии"
+                style={{"--color-custom": `var(--color-${custom.theme}-600)`} as React.CSSProperties}
               >
                 <CommentIcon isFilled={showComments}/>
                 <span className={styles.count}>{news.commentsCount}</span>
@@ -120,6 +124,7 @@ export const NewsCard = ({
                 onClick={handleFavoriteClick}
                 aria-label="В избранное"
                 disabled={!currentUserEmail}
+                style={{"--color-custom": `var(--color-${custom.theme}-600)`} as React.CSSProperties}
               >
                 <StarIcon isFilled={isFavorite}/>
               </button>

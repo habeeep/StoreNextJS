@@ -3,6 +3,7 @@
 import { CartItem, OrderInfo } from '@/types/cart';
 import { Button } from '@/components/ui/Button/Button';
 import styles from './CartSidebar.module.css';
+import { useCustomizer } from '@/hooks/useCustomizer';
 
 interface CartSidebarProps {
   orderInfo: OrderInfo;
@@ -17,8 +18,9 @@ export const CartSidebar = ({
   onCheckout 
   , isAuth = false
 }: CartSidebarProps) => {
+  const custom = useCustomizer();
   return (
-    <div className={styles.sidebar}>
+    <div className={styles.sidebar} style={{"--color-custom": `var(--color-${custom.theme}-200)`} as React.CSSProperties}>
       <h2 className={styles.sidebarTitle}>Оформить заказ</h2>
       
       <div className={styles.orderDetails}>
@@ -31,7 +33,7 @@ export const CartSidebar = ({
                     <span className={styles.itemName}>{item.name}</span>
                     <span className={styles.itemQuantity}> × {item.quantity}</span>
                   </div>
-                  <div className={styles.dots}></div>
+                  <div className={styles.dots} style={{"--color-custom": `var(--color-${custom.theme}-800)`} as React.CSSProperties}></div>
                   <span className={styles.itemPrice}>
                     {item.price * item.quantity} ₽
                   </span>

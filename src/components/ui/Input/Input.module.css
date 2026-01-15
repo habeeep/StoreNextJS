@@ -9,8 +9,8 @@
 }
 
 .input {
-  background-color: var(--color-primary-100);
-  border: 1px solid var(--color-primary-500);
+  background-color: var(--color-custom) /* var(--color-primary-100) */;
+  border: 1px solid var(--color-custom-bor) /* var(--color-primary-500) */;
   border-radius: 25px;
   outline: none;
   
@@ -41,7 +41,7 @@
   border: none;
   padding: 0;
 
-  color: var(--color-primary-500);
+  color: var(--color-custom) /* var(--color-primary-500) */;
   cursor: pointer;
   
   width: 24px;
@@ -51,5 +51,5 @@
 .clearButton:hover,
 .clearButton:active,
 .clearButton:focus-visible {
-  color: var(--color-primary-600);
+  color: var(--color-grey-600);
 }

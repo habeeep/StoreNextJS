@@ -5,6 +5,7 @@ import { SortAscIcon } from '@/components/ui/icons/SortAscIcon';
 import { SortDescIcon } from '@/components/ui/icons/SortDescIcon';
 import { ToggleSwitch } from '@/components/ui/ToggleSwitch/ToggleSwitch';
 import styles from './NewsFilters.module.css';
+import { useCustomizer } from '@/hooks/useCustomizer';
 
 interface NewsFiltersProps {
   filters: FiltersType;
@@ -17,6 +18,7 @@ export const NewsFilters = ({
   onFiltersChange, 
   isLoggedIn = false 
 }: NewsFiltersProps) => {
+  const custom = useCustomizer();
   const handleSortChange = (sortBy: SortOption) => {
     onFiltersChange({ ...filters, sortBy });
   };
@@ -34,7 +36,7 @@ export const NewsFilters = ({
   };
 
   return (
-    <div className={styles.filters}>
+    <div className={styles.filters} style={{"--color-custom": `var(--color-${custom.theme}-800)`} as React.CSSProperties}>
       <div className={styles.sortButtons}>
         <div className={styles.sortLeft}>
           <span className={styles.filtersText}>По дате</span>
@@ -43,6 +45,8 @@ export const NewsFilters = ({
               filters.sortBy === 'date-asc' ? styles.active : ''
             }`}
             onClick={() => handleSortChange('date-asc')}
+            style={{"--color-custom": `var(--color-${custom.theme}-300)`,
+          "--color-custom-act": `var(--color-${custom.theme}-600)`} as React.CSSProperties}
           >
             <SortAscIcon/>
           </button>
@@ -51,6 +55,8 @@ export const NewsFilters = ({
               filters.sortBy === 'date-desc' ? styles.active : ''
             }`}
             onClick={() => handleSortChange('date-desc')}
+            style={{"--color-custom": `var(--color-${custom.theme}-300)`,
+          "--color-custom-act": `var(--color-${custom.theme}-600)`} as React.CSSProperties}
           >
             <SortDescIcon/>
           </button>
@@ -62,6 +68,8 @@ export const NewsFilters = ({
               filters.sortBy === 'popularity-asc' ? styles.active : ''
             }`}
             onClick={() => handleSortChange('popularity-asc')}
+            style={{"--color-custom": `var(--color-${custom.theme}-300)`,
+          "--color-custom-act": `var(--color-${custom.theme}-600)`} as React.CSSProperties}
           >
             <SortAscIcon/>
           </button>
@@ -70,6 +78,8 @@ export const NewsFilters = ({
               filters.sortBy === 'popularity-desc' ? styles.active : ''
             }`}
             onClick={() => handleSortChange('popularity-desc')}
+            style={{"--color-custom": `var(--color-${custom.theme}-300)`,
+          "--color-custom-act": `var(--color-${custom.theme}-600)`} as React.CSSProperties}
           >
             <SortDescIcon/>
           </button>

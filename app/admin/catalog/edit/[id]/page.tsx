@@ -14,6 +14,7 @@ import { categoriesApi } from '@/lib/api/categoriesApi';
 import { buildCategoryTree } from '@/lib/utils/categoryUtils';
 import CategoryTreeSelect from '../../components/CategoryTreeSelect/CategoryTreeSelect';
 import styles from './page.module.css';
+import { useCustomizer } from '@/hooks/useCustomizer';
 
 interface ProductFormData {
   title: string;
@@ -25,6 +26,7 @@ interface ProductFormData {
 }
 
 export default function CreateProductPage() {
+  const custom = useCustomizer();
   const router = useRouter();
   const params = useParams();
   const productId = params?.id as string | undefined;
@@ -156,7 +158,7 @@ export default function CreateProductPage() {
 
   return (
     <Container>
-      <div className={styles.page}>
+      <div className={styles.page} style={{"--color-custom": `var(--color-${custom.theme}-200)`} as React.CSSProperties}>
         <div className={styles.header}>
           <h1 className={styles.title}>Редактировать товар</h1>
           <button 
@@ -197,6 +199,8 @@ export default function CreateProductPage() {
               disabled={isSubmitting}
               rows={4}
               className={styles.textarea}
+              style={{"--color-custom": `var(--color-${custom.theme}-100)`,
+          "--color-custom-out": `var(--color-${custom.theme}-500)`} as React.CSSProperties}
             />
           </div>
 

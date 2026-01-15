@@ -82,13 +82,13 @@ body {
   min-width: var(--breakpoint-xs);
   overflow-x: auto;
 
-  background-color: var(--color-primary-100);
+  background-color: var(--color-grey-100);
 
   font-family: var(--font-family-primary);
   font-weight: var(--font-weight-normal);
   font-size: var(--font-size-base);
   line-height: var(--line-height-base);
-  color: var(--color-primary-800);
+  color: var(--color-grey-800);
 }
 
 .main-content {

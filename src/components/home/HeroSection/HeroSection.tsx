@@ -3,6 +3,7 @@
 import styles from './HeroSection.module.css';
 import Image from 'next/image';
 import { ImageContainer } from '@/components/ui/ImageContainer/ImageContainer';
+import { useCustomizer } from '@/hooks/useCustomizer';
 
 interface FeatureItem {
   id: number;
@@ -12,6 +13,7 @@ interface FeatureItem {
 }
 
 export const HeroSection = () => {
+  const custom = useCustomizer();
   const leftFeatures: FeatureItem[] = [
     { id: 1, number: 1, title: 'Низкие цены', description: 'Самые низкие цены на рынке зелени.' },
     { id: 2, number: 2, title: 'Помощь с уходом', description: 'Наши специалисты подскажут как правильно ухаживать за растениями.' },
@@ -31,7 +33,7 @@ export const HeroSection = () => {
         <div className={styles.featuresList}>
           {leftFeatures.map((feature) => (
             <div key={feature.id} className={styles.featureItem}>
-              <div className={styles.featureNumber}>{feature.number}</div>
+              <div className={styles.featureNumber} style={{"--color-custom": `var(--color-${custom.theme}-800)`} as React.CSSProperties}>{feature.number}</div>
               <div className={styles.featureContent}>
                 <h3 className={styles.featureTitle}>{feature.title}</h3>
                 <p className={styles.featureDescription}>{feature.description}</p>
@@ -57,7 +59,7 @@ export const HeroSection = () => {
         <div className={styles.featuresList}>
           {rightFeatures.map((feature) => (
             <div key={feature.id} className={styles.featureItem}>
-              <div className={styles.featureNumber}>{feature.number}</div>
+              <div className={styles.featureNumber} style={{"--color-custom": `var(--color-${custom.theme}-800)`} as React.CSSProperties}>{feature.number}</div>
               <div className={styles.featureContent}>
                 <h3 className={styles.featureTitle}>{feature.title}</h3>
                 <p className={styles.featureDescription}>{feature.description}</p>

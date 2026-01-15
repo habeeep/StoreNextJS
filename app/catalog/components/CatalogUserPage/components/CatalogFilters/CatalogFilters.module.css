@@ -1,5 +1,5 @@
 .sidebar {
-    background-color: var(--color-primary-200);
+    background-color: var(--color-custom) /* var(--color-primary-200) */;
     border-radius: var(--radius-xl);
     padding: var(--spacing-lg);
     min-width: 240px;
@@ -31,7 +31,7 @@
     align-items: center;
     font-size: var(--font-size-large);
     line-height: var(--line-height-large);
-    color: var(--color-primary-800);
+    color: var(--color-custom) /* var(--color-primary-800) */;
 }
 
 .chevron {
@@ -50,7 +50,7 @@
 
 .brandSearch div input,
 .priceInput {
-    background-color: var(--color-primary-100);
+    background-color: var(--color-custom) /* var(--color-primary-100) */;
     font-size: var(--font-size-base);
     line-height: var(--line-height-base);
 }

@@ -19,6 +19,7 @@ import { GridIcon } from '@/components/ui/icons/GridIcon';
 import { useCustomizer } from '@/hooks/useCustomizer';
 
 
+
 export const Header = () => {
   const custom = useCustomizer();
   const { user } = useAppSelector((state) => state.auth);
@@ -54,10 +55,10 @@ export const Header = () => {
   const isAdmin = user?.role === 'admin';
 
   return (
-    <header className={`${styles.header} ${isAdmin ? styles.headerWithAdmin : ''} ${isAdmin ? 'has-admin' : ''}`}>
+    <header className={`${styles.header} ${isAdmin ? styles.headerWithAdmin : ''} ${isAdmin ? 'has-admin' : ''}`} style={{"--color-custom": `var(--color-${custom.theme}-100)`} as React.CSSProperties}>
       <div className={styles.container}>
         <div className={styles.logo}>
-          <Link href="/" className={styles.logoLink}>
+          <Link href="/" className={styles.logoLink} style={{"--color-custom": `var(--color-${custom.theme}-800)`} as React.CSSProperties}>
             {custom.title}
           </Link>
         </div>
@@ -65,7 +66,7 @@ export const Header = () => {
           <ul className={styles.navList}>
             {navItems.map((item) => (
               <li key={item.href} className={styles.navItem}>
-                <Link href={item.href} className={`${styles.navLink} ${isActive(item.href) ? styles.navLinkActive : ''}`}>
+                <Link href={item.href} className={`${styles.navLink} ${isActive(item.href) ? styles.navLinkActive : ''}`} style={{"--color-custom": `var(--color-${custom.theme}-800)`} as React.CSSProperties}>
                   <item.icon className={styles.navIcon}/>
                   {item.label}
                 </Link>
@@ -77,31 +78,33 @@ export const Header = () => {
         <div className={styles.iconsContainer}>
           {user ? (
             <>
-              <Link href="/profile" className={`${styles.iconLink} ${isActive('/profile') ? styles.iconLinkActive : ''}`} aria-label="Личный кабинет">
+              <Link href="/profile" className={`${styles.iconLink} ${isActive('/profile') ? styles.iconLinkActive : ''}`} aria-label="Личный кабинет" style={{"--color-custom": `var(--color-${custom.theme}-800)`} as React.CSSProperties}>
                 <UserIcon size={24} />
               </Link>
               
-              <Link href="/cart" className={`${styles.iconLink} ${styles.iconLinkCart} ${isActive('/cart') ? styles.iconLinkActive : ''}`} aria-label="Корзина">
+              <Link href="/cart" className={`${styles.iconLink} ${styles.iconLinkCart} ${isActive('/cart') ? styles.iconLinkActive : ''}`} aria-label="Корзина" style={{"--color-custom": `var(--color-${custom.theme}-800)`} as React.CSSProperties}>
                 <CartIcon size={24} />
-                <span className={styles.cartCount}>{cartCount}</span>
+                <span className={styles.cartCount} style={{"--color-custom": `var(--color-${custom.theme}-800)`,
+          "--color-custom-c": `var(--color-${custom.theme}-100)`} as React.CSSProperties}>{cartCount}</span>
               </Link>
               
               <button
                 onClick={handleLogout}
                 className={`${styles.iconButton} ${styles.iconLink}`}
                 aria-label="Выйти"
+                style={{"--color-custom": `var(--color-${custom.theme}-800)`} as React.CSSProperties}
               >
                 <LogoutIcon size={24} />
               </button>
             </>
           ) : (
             <>
-              <Link href="/cart" className={`${styles.iconLink} ${styles.iconLinkCart} ${isActive('/cart') ? styles.iconLinkActive : ''}`} aria-label="Корзина">
+              <Link href="/cart" className={`${styles.iconLink} ${styles.iconLinkCart} ${isActive('/cart') ? styles.iconLinkActive : ''}`} aria-label="Корзина" style={{"--color-custom": `var(--color-${custom.theme}-800)`} as React.CSSProperties}>
                 <CartIcon size={24} />
                 <span className={styles.cartCount}>{cartCount}</span>
               </Link>
               
-              <Link href="/auth/request-code" className={`${styles.iconLink} ${isActive('/auth') ? styles.iconLinkActive : ''}`} aria-label="Войти">
+              <Link href="/auth/request-code" className={`${styles.iconLink} ${isActive('/auth') ? styles.iconLinkActive : ''}`} aria-label="Войти" style={{"--color-custom": `var(--color-${custom.theme}-800)`} as React.CSSProperties}>
                 <LoginIcon size={24} />
               </Link>
             </>
@@ -110,13 +113,13 @@ export const Header = () => {
       </div>
 
       {isAdmin && (
-        <div className={styles.adminRow} aria-label="Админ навигация">
+        <div className={styles.adminRow} aria-label="Админ навигация" style={{"--color-custom": `var(--color-${custom.theme}-100)`} as React.CSSProperties}>
           <div className={styles.adminInner}>
             <nav>
               <ul className={styles.adminNavList}>
                 {adminNavItems.map((item) => (
                   <li key={item.href}>
-                    <Link href={item.href} className={`${styles.adminNavLink} ${isActive(item.href) ? styles.adminNavLinkActive : ''}`}>
+                    <Link href={item.href} className={`${styles.adminNavLink} ${isActive(item.href) ? styles.adminNavLinkActive : ''}`} style={{"--color-custom": `var(--color-${custom.theme}-800)`} as React.CSSProperties}>
                       <item.icon className={styles.adminNavIcon} />
                       {item.label}
                     </Link>

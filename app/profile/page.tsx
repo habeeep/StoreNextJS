@@ -7,8 +7,10 @@ import { Container } from '@/components/layout/Container/Container';
 import { Input } from '@/components/ui/Input/Input';
 import styles from './page.module.css';
 import { Button } from '@/components/ui/Button/Button';
+import { useCustomizer } from '@/hooks/useCustomizer';
 
 export default function ProfilePage() {
+	const custom = useCustomizer();
 	const email = useAppSelector((s: any) => s.auth.user?.email) as string | undefined;
 	const [loading, setLoading] = useState(false);
 	const [saving, setSaving] = useState(false);
@@ -93,7 +95,7 @@ export default function ProfilePage() {
 
 	return (
         <Container>
-            <main className={styles.page}>
+            <main className={styles.page} style={{"--color-custom": `var(--color-${custom.theme}-200)`} as React.CSSProperties}>
                 <h1>Профиль</h1>
 
                 {loading ? (
@@ -132,7 +134,8 @@ export default function ProfilePage() {
 
                         <div className={styles.field}>
                             <label>Описание</label>
-                            <textarea className={styles.textarea} name="description" value={form.description} onChange={handleChange} />
+                            <textarea className={styles.textarea} name="description" value={form.description} onChange={handleChange} style={{"--color-custom": `var(--color-${custom.theme}-100)`,
+          "--color-custom-out": `var(--color-${custom.theme}-500)`} as React.CSSProperties}/>
                         </div>
 
                         <div>

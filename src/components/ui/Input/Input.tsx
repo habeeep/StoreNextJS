@@ -1,6 +1,7 @@
 import { InputHTMLAttributes, forwardRef } from 'react';
 import { CrossIcon } from '../icons/CrossIcon';
 import styles from './Input.module.css';
+import { useCustomizer } from '@/hooks/useCustomizer';
 
 interface InputProps extends InputHTMLAttributes<HTMLInputElement> {
   error?: string;
@@ -15,6 +16,7 @@ export const Input = forwardRef<HTMLInputElement, InputProps>(({
   className,
   ...props
 }, ref) => {
+  const custom = useCustomizer();
   
   const handleClear = () => {
     if (onClear) {
@@ -29,6 +31,8 @@ export const Input = forwardRef<HTMLInputElement, InputProps>(({
           ref={ref}
           {...props}
           className={`${styles.input} ${className || ''}`}
+          style={{"--color-custom": `var(--color-${custom.theme}-100)`,
+          "--color-custom-bor": `var(--color-${custom.theme}-500)`} as React.CSSProperties}
         />
         
         {showClearButton && props.value && (
@@ -37,6 +41,7 @@ export const Input = forwardRef<HTMLInputElement, InputProps>(({
             className={styles.clearButton}
             onClick={handleClear}
             aria-label="Очистить поле"
+            style={{"--color-custom": `var(--color-${custom.theme}-500)`} as React.CSSProperties}
           >
             <CrossIcon size={24} strokeWidth={7}/>
           </button>

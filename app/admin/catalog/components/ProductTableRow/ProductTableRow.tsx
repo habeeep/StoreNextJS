@@ -7,6 +7,7 @@ import { CategoryNode } from '@/types/category';
 import { DotsIcon } from '@/components/ui/icons/DotsIcon';
 import { getBrandNameForProduct, getCategoryNameForProduct } from '@/lib/utils/catalogUtils';
 import styles from './ProductTableRow.module.css';
+import { useCustomizer } from '@/hooks/useCustomizer';
 
 interface ProductTableRowProps {
   product: Product;
@@ -25,6 +26,7 @@ export const ProductTableRow = ({
   onDelete,
   onView,
 }: ProductTableRowProps) => {
+  const custom = useCustomizer();
   const [showMenu, setShowMenu] = useState(false);
   const menuRef = useRef<HTMLDivElement>(null);
   const buttonRef = useRef<HTMLButtonElement>(null);
@@ -55,8 +57,8 @@ export const ProductTableRow = ({
   }, [showMenu]);
 
   return (
-    <tr className={styles.row}>
-      <td className={styles.td}>
+    <tr className={styles.row} style={{"--color-custom": `var(--color-${custom.theme}-300)`} as React.CSSProperties}>
+      <td className={styles.td} style={{"--color-custom": `var(--color-${custom.theme}-300)`} as React.CSSProperties}>
         <div className={styles.productName}>
           {product.title}
         </div>
@@ -65,19 +67,19 @@ export const ProductTableRow = ({
         </div>
       </td>
       
-      <td className={styles.td}>
+      <td className={styles.td} style={{"--color-custom": `var(--color-${custom.theme}-300)`} as React.CSSProperties}>
         <div className={styles.brand}>
           {brandName}
         </div>
       </td>
       
-      <td className={styles.td}>
+      <td className={styles.td} style={{"--color-custom": `var(--color-${custom.theme}-300)`} as React.CSSProperties}>
         <div className={styles.categories}>
           {categoryName}
         </div>
       </td>
 
-      <td className={styles.td}>
+      <td className={styles.td} style={{"--color-custom": `var(--color-${custom.theme}-300)`} as React.CSSProperties}>
         <div className={styles.productPrice}>
           {product.price} ₽
         </div>
@@ -86,7 +88,7 @@ export const ProductTableRow = ({
         </div>
       </td>
       
-      <td className={styles.td}>
+      <td className={styles.td} style={{"--color-custom": `var(--color-${custom.theme}-300)`} as React.CSSProperties}>
         <div className={styles.actions}>
           <button 
             ref={buttonRef}
@@ -101,6 +103,7 @@ export const ProductTableRow = ({
             <div 
               ref={menuRef}
               className={styles.menu}
+              style={{"--color-custom": `var(--color-${custom.theme}-100)`} as React.CSSProperties}
             >            
               <button 
                 className={styles.menuItem}

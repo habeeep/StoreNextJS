@@ -1,5 +1,5 @@
 .page {
-    background-color: var(--color-primary-200);
+    background-color: var(--color-custom) /* var(--color-primary-200) */;
     border-radius: var(--radius-xl);
     padding: var(--spacing-md);
 }
@@ -36,10 +36,10 @@
 }
 
 .textarea {
-    background-color: var(--color-primary-100);
+    background-color: var(--color-custom) /* var(--color-primary-100) */;
     border-radius: var(--radius-xl);
     border: none;
-    outline: solid 1px var(--color-primary-500);
+    outline: solid 1px var(--color-custom-out) /* var(--color-primary-500) */;
     min-height: 500px;
     padding: var(--spacing-md) var(--spacing-lg);
     font-size: var(--font-size-large);

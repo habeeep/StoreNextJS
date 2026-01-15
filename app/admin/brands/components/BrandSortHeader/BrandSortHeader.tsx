@@ -4,6 +4,7 @@ import { SortAscIcon } from '@/components/ui/icons/SortAscIcon';
 import { SortDescIcon } from '@/components/ui/icons/SortDescIcon';
 import { InputSearch } from '@/components/ui/InputSearch/InputSearch';
 import styles from './BrandSortHeader.module.css';
+import { useCustomizer } from '@/hooks/useCustomizer';
 
 type SortField = 'title' | 'country';
 
@@ -24,22 +25,24 @@ export const BrandSortHeader = ({
   onSearch,
   onClearSearch,
 }: BrandSortHeaderProps) => {
+  const custom = useCustomizer();
   const handleSortClick = (field: SortField) => {
     onSortChange(field);
   };
 
   return (
     <div className={styles.header}>
-      <div className={styles.sorting}>
+      <div className={styles.sorting} style={{"--color-custom": `var(--color-${custom.theme}-800)`} as React.CSSProperties}>
         <div className={styles.sortContainer}>
           <div className={styles.sortGroup}>
-            <span className={styles.sortLabel}>Названию</span>
+            <span className={styles.sortLabel} style={{"--color-custom": `var(--color-${custom.theme}-700)`} as React.CSSProperties}>Названию</span>
             <button
               className={`${styles.sortButton} ${
                 sortField === 'title' && sortOrder === 'asc' ? styles.active : ''
               }`}
               onClick={() => handleSortClick('title')}
               title="По названию (А-Я)"
+              style={{"--color-custom": `var(--color-${custom.theme}-300)`} as React.CSSProperties}
             >
               <SortAscIcon />
             </button>
@@ -49,19 +52,21 @@ export const BrandSortHeader = ({
               }`}
               onClick={() => handleSortClick('title')}
               title="По названию (Я-А)"
+              style={{"--color-custom": `var(--color-${custom.theme}-300)`} as React.CSSProperties}
             >
               <SortDescIcon />
             </button>
           </div>
 
           <div className={styles.sortGroup}>
-            <span className={styles.sortLabel}>Стране</span>
+            <span className={styles.sortLabel} style={{"--color-custom": `var(--color-${custom.theme}-700)`} as React.CSSProperties}>Стране</span>
             <button
               className={`${styles.sortButton} ${
                 sortField === 'country' && sortOrder === 'asc' ? styles.active : ''
               }`}
               onClick={() => handleSortClick('country')}
               title="По стране (А-Я)"
+              style={{"--color-custom": `var(--color-${custom.theme}-300)`} as React.CSSProperties}
             >
               <SortAscIcon />
             </button>
@@ -71,6 +76,8 @@ export const BrandSortHeader = ({
               }`}
               onClick={() => handleSortClick('country')}
               title="По стране (Я-А)"
+              style={{"--color-custom": `var(--color-${custom.theme}-300)`,
+                "--color-custom-active": `var(--color-${custom.theme}-600)`} as React.CSSProperties}
             >
               <SortDescIcon />
             </button>

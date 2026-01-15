@@ -1,5 +1,5 @@
 .row:not(:last-child) {
-    border-bottom: 2px solid var(--color-primary-300);
+    border-bottom: 2px solid var(--color-custom) /* var(--color-primary-300) */;
 }
 
 .td {
@@ -13,12 +13,12 @@
 }
 
 .td:not(:last-child) {
-    border-right: 2px solid var(--color-primary-300);
+    border-right: 2px solid var(--color-custom) /* var(--color-primary-300) */;
 }
 
 .iconCell {
     text-align: center;
-    color: var(--color-primary-700);
+    color: var(--color-custom) /* var(--color-primary-700) */;
 }
 
 .dateCell {
@@ -40,7 +40,7 @@
     padding: 6px;
     border-radius: var(--radius-sm);
     cursor: pointer;
-    color: var(--color-primary-500);
+    color: var(--color-custom) /* var(--color-primary-500) */;
 }
 
 .actionButton:hover {
@@ -65,7 +65,7 @@
     top: calc(100% + 8px);
     right: 0;
     min-width: 160px;
-    background: var(--color-primary-100);
+    background: var(--color-custom) /* var(--color-primary-100) */;
     border: 1px solid var(--color-grey-200);
     box-shadow: 0 6px 18px rgba(16,24,40,0.08);
     border-radius: var(--radius-sm);

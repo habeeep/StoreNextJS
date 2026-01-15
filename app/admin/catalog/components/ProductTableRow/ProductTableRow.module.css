@@ -1,5 +1,5 @@
 .row:not(:last-child) {
-    border-bottom: 2px solid var(--color-primary-300);
+    border-bottom: 2px solid var(--color-custom) /* var(--color-primary-300) */;
 }
 
 .td {
@@ -13,7 +13,7 @@
 }
 
 .td:not(:last-child) {
-    border-right: 2px solid var(--color-primary-300);
+    border-right: 2px solid var(--color-custom) /* var(--color-primary-300) */;
 }
 
 .actions {
@@ -33,7 +33,7 @@
     bottom: 0;
     left: 0;
     transform: translateY(100%) translateX(-50%);
-    background-color: var(--color-primary-100);
+    background-color: var(--color-custom) /* var(--color-primary-100) */;
     padding: var(--spacing-xs) var(--spacing-md);
     z-index: var(--z-modal);
     border-radius: var(--radius-xl);

@@ -4,6 +4,7 @@ import { InputHTMLAttributes, useState, KeyboardEvent, useEffect } from 'react';
 import { CrossIcon } from '@/components/ui/icons/CrossIcon';
 import { SearchIcon } from '@/components/ui/icons/SearchIcon';
 import styles from './InputSearch.module.css';
+import { useCustomizer } from '@/hooks/useCustomizer';
 
 interface SearchInputProps extends Omit<InputHTMLAttributes<HTMLInputElement>, 'onChange'> {
   initialValue?: string;
@@ -21,6 +22,7 @@ export const InputSearch = ({
   placeholder = 'Поиск...',
   ...props
 }: SearchInputProps) => {
+  const custom = useCustomizer();
   const [value, setValue] = useState(initialValue);
   const [isFocused, setIsFocused] = useState(false);
 
@@ -68,6 +70,7 @@ export const InputSearch = ({
           onClick={handleSearchClick}
           aria-label="Найти"
           title="Найти"
+          style={{"--color-custom": `var(--color-${custom.theme}-500)`} as React.CSSProperties}
         >
           <SearchIcon size={20} />
         </button>
@@ -82,6 +85,7 @@ export const InputSearch = ({
           placeholder={placeholder}
           className={styles.input}
           aria-label="Поиск товаров"
+          style={{"--color-custom": `var(--color-${custom.theme}-200)`} as React.CSSProperties}
           {...props}
         />
 
@@ -92,6 +96,7 @@ export const InputSearch = ({
             onClick={handleClear}
             aria-label="Очистить поиск"
             title="Очистить"
+            style={{"--color-custom": `var(--color-${custom.theme}-500)`} as React.CSSProperties}
           >
             <CrossIcon size={20} />
           </button>

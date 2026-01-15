@@ -1,5 +1,5 @@
 .item {
-    background-color: var(--color-primary-100);
+    background-color: var(--color-custom) /* var(--color-primary-100) */;
     border-radius: var(--radius-xl);
     padding: var(--spacing-xs) var(--spacing-sm);
     display: flex;
@@ -20,13 +20,13 @@
   width: 30px;
   height: 30px;
   cursor: pointer;
-  border: 2px solid var(--color-primary-600);
+  border: 2px solid var(--color-custom) /* var(--color-primary-600) */;
   border-radius: var(--radius-sm);
   background-color: transparent;
 }
 
 .checkbox:checked {
-  background-color: var(--color-primary-600);
+  background-color: var(--color-grey-600);
 }
 
 .checkboxIcon {
@@ -35,7 +35,7 @@
     left: 50%;
     transform: translateX(-50%) translateY(-50%);
     pointer-events: none; 
-    color: var(--color-primary-100);
+    color: var(--color-custom) /* var(--color-primary-100) */;
 }
 
 .imageWrapper {
@@ -44,7 +44,7 @@
     height: 112px;
     width: 150px;
     margin-right: var(--spacing-sm);
-    background-color: var(--color-primary-600);
+    background-color: var(--color-custom) /* var(--color-primary-600) */;
     border-radius: var(--radius-md);
 }
 
@@ -71,7 +71,7 @@
 .quantityButton,
 .removeButton {
     background-color: transparent;
-    color: var(--color-primary-600);
+    color: var(--color-custom) /* var(--color-primary-600) */;
     border: none;
     padding: 0;
     line-height: 0;

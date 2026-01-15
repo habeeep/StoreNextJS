@@ -8,8 +8,10 @@ import { NewsCard } from '../NewsCard/NewsCard';
 import { NewsFilters } from '../NewsFilters/NewsFilters';
 import { SliderSection } from '../SliderSection/SliderSection';
 import styles from './NewsUserPage.module.css';
+import { useCustomizer } from '@/hooks/useCustomizer';
 
 export const NewsUserPage = () => {
+  const custom = useCustomizer();
   const [filters, setFilters] = useState<NewsFiltersType>({
     sortBy: 'date-desc',
     showFavoritesOnly: false
@@ -186,7 +188,7 @@ export const NewsUserPage = () => {
           <div className={styles.loading}>Загрузка избранных...</div>
         )}
         
-        <div className={styles.newsList}>
+        <div className={styles.newsList} style={{"--color-custom": `var(--color-${custom.theme}-200)`} as React.CSSProperties}>
           {filteredAndSortedNews.length > 0 ? (
             filteredAndSortedNews.map((newsItem) => (
               <NewsCard

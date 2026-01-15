@@ -31,18 +31,6 @@
 	align-items: center;
 }
 
-.brandsCount {
-	font-weight: var(--font-weight-semibold);
-	color: var(--color-primary-800);
-}
-
-.resetFiltersButton {
-	background: none;
-	border: none;
-	color: var(--color-primary-500);
-	cursor: pointer;
-}
-
 .sidebar {
 	max-width: 315px;
 	display: flex;
@@ -51,7 +39,7 @@
 }
 
 .filtersContainer {
-	background: var(--color-primary-200);
+	background: var(--color-custom);
 	border-radius: var(--radius-md);
 	padding: var(--spacing-md);
 	box-shadow: 0 1px 4px rgba(0,0,0,0.04);
@@ -66,7 +54,7 @@
 .filterTitle {
 	margin: 0;
 	font-size: var(--font-size-base);
-	color: var(--color-primary-800);
+	color: var(--color-custom);
 }
 
 .countryFilters {
@@ -86,7 +74,7 @@
 }
 
 .brandSearch div input {
-	background-color: var(--color-primary-100);
+	background-color: var(--color-custom);
 	font-size: var(--font-size-base);
 }
 
@@ -98,7 +86,7 @@
 }
 
 .brandName {
-	color: var(--color-primary-800);
+	color: var(--color-custom);
 }
 
 .selected {
@@ -119,7 +107,7 @@
 .expandButton {
 	border: none;
 	background: transparent;
-	color: var(--color-primary-700);
+	color: var(--color-custom) /* var(--color-primary-700) */;
 	cursor: pointer;
 	padding: 0;
 }
@@ -138,8 +126,8 @@
 
 
 .active {
-	background: var(--color-primary-100);
-	border-color: var(--color-primary-300);
+	background: var(--color-custom) /* var(--color-primary-100) */;
+	border-color: var(--color-custom) /* var(--color-primary-300) */;
 }
 
 .sidebarActions {

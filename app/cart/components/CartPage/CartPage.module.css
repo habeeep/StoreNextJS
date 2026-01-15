@@ -12,7 +12,7 @@
 
 .main {
   flex: 1;
-  background-color: var(--color-primary-200);
+  background-color: var(--color-custom) /* var(--color-primary-200) */;
   border-radius: var(--radius-xl);
   padding: var(--spacing-2xl) var(--spacing-md) 250px;
 }

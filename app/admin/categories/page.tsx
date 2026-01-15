@@ -13,8 +13,10 @@ import { CategoryNode, CategorySortOrder } from '@/types/category';
 import { categoriesApi } from '@/lib/api/categoriesApi';
 import { buildCategoryTree, searchInCategoryTree, sortCategoryTree } from '@/lib/utils/categoryUtils';
 import styles from './page.module.css';
+import { useCustomizer } from '@/hooks/useCustomizer';
 
 export default function CategoriesTreePage() {
+  const custom = useCustomizer();
   const [categories, setCategories] = useState<CategoryNode[]>([]);
   const [searchQuery, setSearchQuery] = useState('');
   const [sortOrder, setSortOrder] = useState<CategorySortOrder>('none');
@@ -218,7 +220,7 @@ export default function CategoriesTreePage() {
         )}
 
         {!isLoading && !error && (
-          <div className={styles.treeContainer}>
+          <div className={styles.treeContainer} style={{"--color-custom": `var(--color-${custom.theme}-200)`} as React.CSSProperties}>
             <div className={styles.columnsHeader}>
               <div className={styles.columnName}>Название категории</div>
               <div className={styles.columnActions}>Действия</div>

@@ -7,6 +7,7 @@ import { EditIcon } from '@/components/ui/icons/EditIcon';
 import { TrashIcon } from '@/components/ui/icons/TrashIcon';
 import { EyeIcon } from '@/components/ui/icons/EyeIcon';
 import styles from './BrandTableRow.module.css';
+import { useCustomizer } from '@/hooks/useCustomizer';
 
 interface BrandTableRowProps {
   brand: Brand;
@@ -21,6 +22,7 @@ export const BrandTableRow = ({
   onDelete,
   onView,
 }: BrandTableRowProps) => {
+  const custom = useCustomizer();
   const [showMenu, setShowMenu] = useState(false);
 
   const toggleMenu = () => {
@@ -28,9 +30,9 @@ export const BrandTableRow = ({
   };
 
   return (
-    <tr className={styles.row}>
-      <td className={styles.td}>
-        <div className={styles.brandName}>
+    <tr className={styles.row} style={{"--color-custom": `var(--color-${custom.theme}-300)`} as React.CSSProperties}>
+      <td className={styles.td} style={{"--color-custom": `var(--color-${custom.theme}-300)`} as React.CSSProperties}>
+        <div className={styles.brandName} style={{"--color-custom": `var(--color-${custom.theme}-800)`} as React.CSSProperties}>
           {brand.title}
         </div>
         <div className={styles.brandDescription}>
@@ -38,13 +40,13 @@ export const BrandTableRow = ({
         </div>
       </td>
       
-      <td className={styles.td}>
-        <div className={styles.country}>
+      <td className={styles.td} style={{"--color-custom": `var(--color-${custom.theme}-300)`} as React.CSSProperties}>
+        <div className={styles.country} style={{"--color-custom": `var(--color-${custom.theme}-800)`} as React.CSSProperties}>
           {brand.country}
         </div>
       </td>
       
-      <td className={styles.td}>
+      <td className={styles.td} style={{"--color-custom": `var(--color-${custom.theme}-300)`} as React.CSSProperties}>
         <div className={styles.actions}>          
           <div className={styles.menuContainer}>
             <button 
@@ -56,7 +58,7 @@ export const BrandTableRow = ({
             </button>
             
             {showMenu && (
-              <div className={styles.menu}>
+              <div className={styles.menu} style={{"--color-custom": `var(--color-${custom.theme}-100)`} as React.CSSProperties}>
                 
                 <button 
                   className={styles.menuItem}

@@ -10,8 +10,10 @@ import styles from './page.module.css';
 import { CommentIcon } from '@/components/ui/icons/CommentIcon';
 import { EyeIcon } from '@/components/ui/icons/EyeIcon';
 import { HeartIcon } from '@/components/ui/icons/HeartIcon';
+import { useCustomizer } from '@/hooks/useCustomizer';
 
 export default function NewsDetailPage() {
+  const custom = useCustomizer();
   const params = useParams();
   const router = useRouter();
   const [news, setNews] = useState<NewsItem | null>(null);
@@ -77,7 +79,7 @@ export default function NewsDetailPage() {
 
   return (
     <Container>
-      <div className={styles.page}>
+      <div className={styles.page} style={{"--color-custom": `var(--color-${custom.theme}-200)`} as React.CSSProperties}>
         <div className={styles.header}>
           <Button
             className={styles.backButton}

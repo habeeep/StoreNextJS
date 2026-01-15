@@ -3,6 +3,7 @@
 import { Product } from '@/types/catalog';
 import { ProductCard } from '../ProductCard/ProductCard';
 import styles from './ProductGrid.module.css';
+import { useCustomizer } from '@/hooks/useCustomizer';
 
 interface ProductGridProps {
   products: Product[];
@@ -19,12 +20,13 @@ export const ProductGrid = ({
   onIncrementQuantity, 
   onDecrementQuantity 
 }: ProductGridProps) => {
+  const custom = useCustomizer();
   if (products.length === 0) {
     return <div className={styles.noProducts}>Товары не найдены</div>;
   }
 
   return (
-    <div className={styles.grid}>
+    <div className={styles.grid} style={{"--color-custom": `var(--color-${custom.theme}-200)`} as React.CSSProperties}>
       {products.map(product => (
         <ProductCard
           key={product.id}

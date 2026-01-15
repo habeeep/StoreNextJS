@@ -9,6 +9,7 @@ import { Input } from '@/components/ui/Input/Input';
 import { InputSearch } from '@/components/ui/InputSearch/InputSearch';
 import { Button } from '@/components/ui/Button/Button';
 import styles from './CatalogFilters.module.css';
+import { useCustomizer } from '@/hooks/useCustomizer';
 
 interface BrandOption {
   value: string;
@@ -31,6 +32,7 @@ export const CatalogFilters = ({
   onFiltersChange,
   onApplyFilters,
 }: CatalogFiltersProps) => {
+  const custom = useCustomizer();
   const [expandedCategories, setExpandedCategories] = useState<Set<string>>(new Set());
   const [isBrandsExpanded, setIsBrandsExpanded] = useState(false);
   const [brandSearch, setBrandSearch] = useState('');
@@ -166,7 +168,7 @@ export const CatalogFilters = ({
     if (isLeaf) {
       return (
         <div key={node.id} className={containerClass}>
-          <label className={styles.checkboxItem}>
+          <label className={styles.checkboxItem} style={{"--color-custom": `var(--color-${custom.theme}-800)`} as React.CSSProperties}>
             <input
               type="checkbox"
               checked={filters.selectedCategories.includes(node.id)}
@@ -183,6 +185,7 @@ export const CatalogFilters = ({
         <div
           className={styles.categoryHeader}
           onClick={() => toggleCategory(node.id)}
+          style={{"--color-custom": `var(--color-${custom.theme}-800)`} as React.CSSProperties}
         >
           <span>{node.title}</span>
           <ChevronDownIcon
@@ -192,7 +195,7 @@ export const CatalogFilters = ({
 
         {isExpanded && (
           <div className={styles.subCategories}>
-            <label className={styles.checkboxItem}>
+            <label className={styles.checkboxItem} style={{"--color-custom": `var(--color-${custom.theme}-800)`} as React.CSSProperties}>
               <input
                 type="checkbox"
                 checked={filters.selectedCategories.includes(node.id)}
@@ -209,7 +212,7 @@ export const CatalogFilters = ({
   };
 
   return (
-    <div className={styles.sidebar}>
+    <div className={styles.sidebar} style={{"--color-custom": `var(--color-${custom.theme}-200)`} as React.CSSProperties}>
       <div className={styles.filters}>
         <div className={styles.section}>
           <h3 className={styles.sectionTitle}>Категории</h3>
@@ -227,13 +230,14 @@ export const CatalogFilters = ({
             onClear={clearBrandSearch}
             placeholder="Поиск бренда..."
             className={styles.brandSearch}
+            style={{"--color-custom": `var(--color-${custom.theme}-100)`} as React.CSSProperties}
           />
           
           <div className={styles.brandsList}>
             {visibleBrands.length > 0 ? (
               <>
                 {visibleBrands.map(b => (
-                  <label key={b.value} className={styles.checkboxItem}>
+                  <label key={b.value} className={styles.checkboxItem} style={{"--color-custom": `var(--color-${custom.theme}-800)`} as React.CSSProperties}>
                     <input
                       type="checkbox"
                       checked={filters.selectedBrands.includes(b.value)}
@@ -253,6 +257,7 @@ export const CatalogFilters = ({
                     className={styles.expandButton}
                     onClick={() => setIsBrandsExpanded(!isBrandsExpanded)}
                     aria-label={isBrandsExpanded ? 'Свернуть список' : 'Развернуть список'}
+                    style={{"--color-custom": `var(--color-${custom.theme}-800)`} as React.CSSProperties}
                   >
                     {isBrandsExpanded ? 'Свернуть' : 'Показать все'}
                     <ChevronDownIcon 
@@ -280,6 +285,7 @@ export const CatalogFilters = ({
               onClear={() => clearPrice('min')}
               min={0}
               aria-label="Минимальная цена"
+              style={{"--color-custom": `var(--color-${custom.theme}-100)`} as React.CSSProperties}
             />
             <Input
               type="number"
@@ -291,6 +297,7 @@ export const CatalogFilters = ({
               onClear={() => clearPrice('max')}
               min={0}
               aria-label="Максимальная цена"
+              style={{"--color-custom": `var(--color-${custom.theme}-100)`} as React.CSSProperties}
             />
           </div>
         </div>

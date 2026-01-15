@@ -9,8 +9,10 @@ import { CrossIcon } from '@/components/ui/icons/CrossIcon';
 import { newsApi } from '@/lib/api/newsApi';
 import { NewsItem } from '@/types/news';
 import styles from './page.module.css';
+import { useCustomizer } from '@/hooks/useCustomizer';
 
 export default function EditNewsPage() {
+  const custom = useCustomizer();
   const params = useParams();
   const router = useRouter();
   const newsId = params.id as string;
@@ -133,7 +135,7 @@ export default function EditNewsPage() {
 
   return (
     <Container>
-      <div className={styles.page}>
+      <div className={styles.page} style={{"--color-custom": `var(--color-${custom.theme}-200)`} as React.CSSProperties}>
         <button 
           className={styles.backButton}
           onClick={handleCancel}
@@ -173,6 +175,8 @@ export default function EditNewsPage() {
               rows={8}
               className={styles.textarea}
               placeholder="Введите текст новости"
+              style={{"--color-custom": `var(--color-${custom.theme}-100)`,
+          "--color-custom-out": `var(--color-${custom.theme}-500)`} as React.CSSProperties}
             />
           </div>
 

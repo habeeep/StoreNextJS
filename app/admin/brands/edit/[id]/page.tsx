@@ -8,8 +8,10 @@ import { Button } from '@/components/ui/Button/Button';
 import { CrossIcon } from '@/components/ui/icons/CrossIcon';
 import { brandsApi } from '@/lib/api/brandsApi';
 import styles from './page.module.css';
+import { useCustomizer } from '@/hooks/useCustomizer';
 
 export default function EditBrandPage() {
+  const custom = useCustomizer();
   const params = useParams();
   const router = useRouter();
   const brandId = params.id as string;
@@ -114,7 +116,7 @@ export default function EditBrandPage() {
 
   return (
     <Container>
-      <div className={styles.page}>
+      <div className={styles.page} style={{"--color-custom": `var(--color-${custom.theme}-200)`} as React.CSSProperties}>
         <div className={styles.header} >
           <h1 className={styles.title}>Редактирование бренда</h1>
           <button 
@@ -172,6 +174,8 @@ export default function EditBrandPage() {
               rows={6}
               className={styles.textarea}
               placeholder="Введите описание бренда"
+              style={{"--color-custom": `var(--color-${custom.theme}-100)`,
+          "--color-custom-out": `var(--color-${custom.theme}-500)`} as React.CSSProperties}
             />
           </div>
 

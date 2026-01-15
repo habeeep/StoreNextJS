@@ -1,6 +1,6 @@
 .card {
     position: relative;
-    color: var(--color-primary-100);
+    color: var(--color-custom) /* var(--color-primary-100) */;
 }
 
 .imageContainer {
@@ -14,7 +14,7 @@
 }
 
 .content {
-    background-color: var(--color-primary-700);
+    background-color: var(--color-custom) /* var(--color-primary-700) */;
     margin-top: var(--spacing-4xl);
     padding: var(--spacing-md);
     padding-top: calc(var(--spacing-4xl) * 2);
@@ -60,7 +60,7 @@
 
 .footer button {
     background-color: transparent;
-    color: var(--color-primary-100);
+    color: var(--color-custom) /* var(--color-primary-100) */;
     border: none;
     padding: 0;
     line-height: 0;

@@ -9,6 +9,7 @@ import { ChevronDownIcon } from '@/components/ui/icons/ChevronDownIcon';
 import styles from './CategoryRow.module.css';
 import { Button } from '@/components/ui/Button/Button';
 import { Input } from '@/components/ui/Input/Input';
+import { useCustomizer } from '@/hooks/useCustomizer';
 
 interface CategoryRowProps {
   category: CategoryNode;
@@ -41,6 +42,7 @@ export const CategoryRow = ({
   onCancelEdit,
   isUpdating = false,
 }: CategoryRowProps) => {
+  const custom = useCustomizer();
   const indent = category.level * 24;
   const [newTitle, setNewTitle] = useState('');
   const [editTitle, setEditTitle] = useState('');
@@ -59,7 +61,7 @@ export const CategoryRow = ({
 
   return (
     <>
-      <div className={`${styles.row} ${category.level > 0 ? styles.rowChild : ''}`}>
+      <div className={`${styles.row} ${category.level > 0 ? styles.rowChild : ''}`} style={{"--color-custom": `var(--color-${custom.theme}-400)`} as React.CSSProperties}>
         <div style={{ width: indent }} />
         <div className={styles.rowContent}>
           <div className={styles.name}>{category.title}</div>
@@ -69,6 +71,7 @@ export const CategoryRow = ({
               <button
                 onClick={() => onAddSubcategory(category.id)}
                 className={styles.actionButton}
+                style={{"--color-custom": `var(--color-${custom.theme}-800)`} as React.CSSProperties}
                 title="Добавить подкатегорию"
               >
                 <PlusIcon size={24} />
@@ -77,6 +80,7 @@ export const CategoryRow = ({
               <button
                 onClick={() => onEdit(category)}
                 className={styles.actionButton}
+                style={{"--color-custom": `var(--color-${custom.theme}-800)`} as React.CSSProperties}
                 title="Редактировать"
               >
                 <EditIcon size={24} />
@@ -85,6 +89,7 @@ export const CategoryRow = ({
               <button
                 onClick={() => onDelete(category.id)}
                 className={styles.actionButton}
+                style={{"--color-custom": `var(--color-${custom.theme}-800)`} as React.CSSProperties}
                 title="Удалить"
               >
                 <TrashIcon size={24} />
@@ -94,6 +99,7 @@ export const CategoryRow = ({
             {category.children.length > 0 ? (
               <button
                 className={`${styles.expandButton} ${styles.actionButton}`}
+                style={{"--color-custom": `var(--color-${custom.theme}-800)`} as React.CSSProperties}
                 onClick={() => onToggleExpand(category.id)}
                 aria-label={category.isExpanded ? 'Свернуть' : 'Развернуть'}
                 title={category.isExpanded ? 'Свернуть' : 'Развернуть'}
@@ -130,7 +136,7 @@ export const CategoryRow = ({
               <Button className={styles.saveButton} onClick={() => onCreateSubcategory && onCreateSubcategory(category.id, newTitle)} disabled={isCreating}>
                 Сохранить
               </Button>
-              <button className={styles.cancelButton} onClick={() => onCancelAdd && onCancelAdd()}>
+              <button className={styles.cancelButton} onClick={() => onCancelAdd && onCancelAdd()} style={{"--color-custom": `var(--color-${custom.theme}-700)`} as React.CSSProperties}>
                 Отмена
               </button>
             </div>
@@ -155,7 +161,7 @@ export const CategoryRow = ({
               <Button className={styles.saveButton} onClick={() => onUpdateCategory && onUpdateCategory(category.id, editTitle, category.parentId)} disabled={isUpdating}>
                 Сохранить
               </Button>
-              <button className={styles.cancelButton} onClick={() => onCancelEdit && onCancelEdit()}>
+              <button className={styles.cancelButton} onClick={() => onCancelEdit && onCancelEdit()} style={{"--color-custom": `var(--color-${custom.theme}-700)`} as React.CSSProperties}>
                 Отмена
               </button>
             </div>

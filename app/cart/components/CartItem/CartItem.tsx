@@ -7,6 +7,7 @@ import { MinusIcon } from '@/components/ui/icons/MinusIcon';
 import { PlusIcon } from '@/components/ui/icons/PlusIcon';
 import { TrashIcon } from '@/components/ui/icons/TrashIcon';
 import styles from './CartItem.module.css';
+import { useCustomizer } from '@/hooks/useCustomizer';
 
 interface CartItemProps {
   item: CartItemType;
@@ -21,6 +22,7 @@ export const CartItem = ({
   onQuantityChange,
   onRemove 
 }: CartItemProps) => {
+  const custom = useCustomizer();
   
   const handleIncrement = () => {
     onQuantityChange(item.quantity + 1);
@@ -33,7 +35,7 @@ export const CartItem = ({
   };
 
   return (
-    <div className={`${styles.item} ${item.isSelected ? styles.selected : ''}`}>
+    <div className={`${styles.item} ${item.isSelected ? styles.selected : ''}`} style={{"--color-custom": `var(--color-${custom.theme}-100)`} as React.CSSProperties}>
       <label className={styles.checkboxWrapper}>
         <input
           type="checkbox"
@@ -41,17 +43,19 @@ export const CartItem = ({
           onChange={onToggleSelect}
           className={styles.checkbox}
           aria-label={`Выбрать ${item.name}`}
+          style={{"--color-custom": `var(--color-${custom.theme}-600)`} as React.CSSProperties}
         />
         {item.isSelected && (
           <CheckIcon
             size={24}
             strokeWidth={5}
             className={styles.checkboxIcon}
+            style={{"--color-custom": `var(--color-${custom.theme}-100)`} as React.CSSProperties}
           />
         )}
       </label>
       
-      <div className={styles.imageWrapper}>
+      <div className={styles.imageWrapper} style={{"--color-custom": `var(--color-${custom.theme}-600)`} as React.CSSProperties}>
         <div className={styles.imageContainer}>
           <Image
             src={item.imageUrl}
@@ -74,6 +78,7 @@ export const CartItem = ({
           className={styles.quantityButton}
           onClick={handleDecrement}
           aria-label="Уменьшить количество"
+          style={{"--color-custom": `var(--color-${custom.theme}-600)`} as React.CSSProperties}
         >
           <MinusIcon size={24} />
         </button>
@@ -84,6 +89,7 @@ export const CartItem = ({
           className={styles.quantityButton}
           onClick={handleIncrement}
           aria-label="Увеличить количество"
+          style={{"--color-custom": `var(--color-${custom.theme}-600)`} as React.CSSProperties}
         >
           <PlusIcon size={24} />
         </button>
@@ -93,6 +99,7 @@ export const CartItem = ({
         className={styles.removeButton}
         onClick={onRemove}
         aria-label="Удалить товар"
+        style={{"--color-custom": `var(--color-${custom.theme}-600)`} as React.CSSProperties}
       >
         <TrashIcon size={24} />
       </button>

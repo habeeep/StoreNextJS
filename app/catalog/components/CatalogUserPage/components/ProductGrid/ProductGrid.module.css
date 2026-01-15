@@ -2,7 +2,7 @@
   display: grid;
   gap: var(--spacing-lg);
   grid-template-columns: repeat(1, 1fr);
-  background-color: var(--color-primary-200);
+  background-color: var(--color-custom) /* var(--color-primary-200) */;
   padding: var(--spacing-lg);
   border-radius: var(--radius-xl);
   height: 100%;

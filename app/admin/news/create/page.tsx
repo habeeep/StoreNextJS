@@ -8,8 +8,10 @@ import { Button } from '@/components/ui/Button/Button';
 import { CrossIcon } from '@/components/ui/icons/CrossIcon';
 import { newsApi } from '@/lib/api/newsApi';
 import styles from './page.module.css';
+import { useCustomizer } from '@/hooks/useCustomizer';
 
 export default function CreateNewsPage() {
+  const custom = useCustomizer();
   const router = useRouter();
   const [title, setTitle] = useState('');
   const [text, setText] = useState('');
@@ -59,7 +61,7 @@ export default function CreateNewsPage() {
 
   return (
     <Container>
-      <div className={styles.page}>
+      <div className={styles.page} style={{"--color-custom": `var(--color-${custom.theme}-200)`} as React.CSSProperties}>
         <div className={styles.header}>
           <h1 className={styles.title}>Создание новости</h1>
           <button 
@@ -102,6 +104,8 @@ export default function CreateNewsPage() {
               disabled={isLoading}
               rows={6}
               className={styles.textarea}
+              style={{"--color-custom": `var(--color-${custom.theme}-100)`,
+          "--color-custom-out": `var(--color-${custom.theme}-500)`} as React.CSSProperties}
             />
           </div>
 
