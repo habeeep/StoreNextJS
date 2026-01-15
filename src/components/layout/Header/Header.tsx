@@ -16,9 +16,11 @@ import { NewsIcon } from '@/components/ui/icons/NewsIcon';
 import { CatalogIcon } from '@/components/ui/icons/CatalogIcon';
 import { BriefcaseIcon } from '@/components/ui/icons/BriefcaseIcon';
 import { GridIcon } from '@/components/ui/icons/GridIcon';
+import { useCustomizer } from '@/hooks/useCustomizer';
 
 
 export const Header = () => {
+  const custom = useCustomizer();
   const { user } = useAppSelector((state) => state.auth);
   const cartCount = useAppSelector((state) => state.cart.items.length);
   
@@ -56,7 +58,7 @@ export const Header = () => {
       <div className={styles.container}>
         <div className={styles.logo}>
           <Link href="/" className={styles.logoLink}>
-            Plants Market
+            {custom.title}
           </Link>
         </div>
         <nav aria-label="Основная навигация">

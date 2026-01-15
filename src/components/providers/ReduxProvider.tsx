@@ -3,6 +3,7 @@
 import React from 'react';
 import { Provider } from 'react-redux';
 import { store } from '@/store';
+import { fetchCustomizations } from '@/store/slices/customizerSlice';
 
 interface ReduxProviderProps {
   children: React.ReactNode;
@@ -18,6 +19,13 @@ export function ReduxProvider({ children }: ReduxProviderProps) {
         store.dispatch({ type: 'auth/setCredentials', payload: parsed });
       }
     } catch {}
+    
+    // Initialize customizer data
+    try {
+      store.dispatch(fetchCustomizations() as any);
+    } catch (error) {
+      console.error('Failed to initialize customizer:', error);
+    }
   }, []);
 
   return <Provider store={store}>{children}</Provider>;
