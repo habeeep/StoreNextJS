@@ -6,7 +6,9 @@ import {
   BaseResponse 
 } from '@/types/auth';
 
-const API_BASE = '/backend/auth';
+const API_BASE = process.env.NODE_ENV === 'development' 
+  ? '/backend/auth' 
+  : process.env.NEXT_PUBLIC_API_URL_AUTH;
 
 const createMockUser = (email: string) => ({
   id: Date.now().toString(),
